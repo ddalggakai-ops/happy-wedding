@@ -70,7 +70,7 @@ src="https://maps.google.com/maps?q=예식장이름 또는 도로명주소&z=16&
 1. https://app.netlify.com/drop 접속
 2. `wedding-invitation` **폴더를 통째로** 드래그&드롭
 3. 몇 초 뒤 `https://랜덤이름.netlify.app` 주소가 생성됩니다 → 이 링크를 카톡으로 공유
-4. (선택) 무료 회원가입 후 사이트 이름을 `minjun-seoyeon` 처럼 바꿀 수 있습니다.
+4. (선택) 무료 회원가입 후 사이트 이름을 `hyeongkyu-hyunjin` 처럼 바꿀 수 있습니다.
 
 ### 방법 B — Vercel
 1. https://vercel.com 가입 → **Add New → Project**
