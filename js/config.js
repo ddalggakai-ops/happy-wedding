@@ -7,9 +7,9 @@ const WEDDING_CONFIG = {
   /* ---------- 신랑 · 신부 정보 ---------- */
   groom: {
     name: "김형규",
-    english: "Kim Hyeon Kyu",
+    english: "Kim Hyeong Kyu",
     firstName: "형규",          // 부모님 소개란에 "아들 형규" 처럼 표기
-    order: "아들",              // 장남 / 차남 / 아들 등으로 수정 가능
+    order: "차남",              // 장남 / 차남 / 아들 등으로 수정 가능
     father: "김정수",
     mother: "정인선",
     phone: "010-6383-1547",
@@ -18,7 +18,7 @@ const WEDDING_CONFIG = {
     name: "방현진",
     english: "Bang Hyun Jin",
     firstName: "현진",
-    order: "딸",                // 장녀 / 차녀 / 딸 등으로 수정 가능
+    order: "차녀",                // 장녀 / 차녀 / 딸 등으로 수정 가능
     father: "방제연",
     mother: "곽명임",
     phone: "010-3198-2090",
