@@ -59,7 +59,7 @@ def build() -> str:
     # <link rel="stylesheet" href="css/style.css"> -> 인라인 <style>
     style_block = f"\n  <style>\n{css}\n  </style>"
     html = re.sub(
-        r'\s*<link rel="stylesheet" href="css/style\.css"\s*/?>',
+        r'\s*<link rel="stylesheet" href="css/style\.css(?:\?[^"]*)?"\s*/?>',
         lambda _m: style_block,
         html,
     )
@@ -76,9 +76,9 @@ def build() -> str:
     )
     script_block = "\n" + bundle
     html = re.sub(
-        r'\s*<script src="js/config\.js"></script>\s*'
-        r'<script src="js/storage\.js"></script>\s*'
-        r'<script src="js/main\.js"></script>',
+        r'\s*<script src="js/config\.js(?:\?[^"]*)?"></script>\s*'
+        r'<script src="js/storage\.js(?:\?[^"]*)?"></script>\s*'
+        r'<script src="js/main\.js(?:\?[^"]*)?"></script>',
         lambda _m: script_block,
         html,
     )
