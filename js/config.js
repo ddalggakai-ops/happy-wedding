@@ -38,7 +38,7 @@ const WEDDING_CONFIG = {
   venue: {
     name: "명동성당",
     hall: "파밀리아 채플",
-    english: "MYEONGDONG CATHEDRAL, FAMILIA CHAPEL",   // 커버 하단 영문 표기
+    english: "MYEONGDONG CATHEDRAL, FAMILIA CHAPEL",   // (현재 미사용 — 커버는 한글 장소 표기)
     address: "서울특별시 중구 명동길 74",
     // 명동대성당 좌표 (지도 앱 연동용)
     lat: 37.563646,

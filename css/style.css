@@ -198,8 +198,8 @@ body {
 .intro__invited {
   font-family: var(--en);
   font-size: 12.5px;
-  letter-spacing: .42em;
-  text-indent: .42em;      /* 자간으로 밀린 중심 보정 */
+  letter-spacing: .28em;
+  text-indent: .28em;      /* 자간으로 밀린 중심 보정 */
   color: #efe5e8;
   margin-bottom: 4px;
 }
@@ -212,22 +212,33 @@ body {
   text-shadow: 0 4px 28px rgba(0,0,0,.5);
   margin-bottom: 14px;
 }
+/* 날짜·장소: 샘플처럼 고딕(Pretendard) + 아이콘 */
+.intro__date,
+.intro__venue {
+  font-family: var(--kr);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #fff;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
 .intro__date {
-  font-family: var(--en);
-  font-size: 15.5px;
+  font-size: 16.5px;
   font-weight: 600;
-  letter-spacing: .2em;
-  text-indent: .2em;
-  color: var(--accent-deep);
 }
 .intro__venue {
-  font-family: var(--en);
-  font-size: 11.5px;
-  letter-spacing: .16em;
-  text-indent: .16em;
-  color: var(--blush-soft);
-  margin-top: 5px;
-  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 9px;
+  color: rgba(255,255,255,.92);
+}
+.intro__icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  opacity: .95;
 }
 
 /* ═══════════ 2. 인사말 ═══════════ */

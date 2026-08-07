@@ -55,19 +55,19 @@
   }
 
   /* ═══════════ 1. 인트로 (풀블리드 커버) ═══════════ */
-  const DAY_EN = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  const DAY_EN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   function renderIntro() {
     const h = C.wedding.hour;
     const ampm = h < 12 ? "AM" : "PM";
     const h12 = h % 12 === 0 ? 12 : h % 12;
-    // 예: 2026.11.15. SUN 11:00 AM
+    // 예: 2026. 11. 15. Sun. 11:00 AM
     $("#intro-date-en").textContent =
-      `${C.wedding.year}.${pad(C.wedding.month)}.${pad(C.wedding.day)}. ` +
-      `${DAY_EN[weddingDate.getDay()]} ${h12}:${pad(C.wedding.minute)} ${ampm}`;
+      `${C.wedding.year}. ${C.wedding.month}. ${C.wedding.day}. ` +
+      `${DAY_EN[weddingDate.getDay()]}. ${h12}:${pad(C.wedding.minute)} ${ampm}`;
     $("#intro-groom").textContent = C.groom.name;
     $("#intro-bride").textContent = C.bride.name;
-    $("#intro-venue-en").textContent = C.venue.english || "";
+    $("#intro-venue-kr").textContent = `${C.venue.name} ${C.venue.hall}`;
     $("#footer-names").textContent = `${C.groom.name} ♥ ${C.bride.name}`;
   }
 
