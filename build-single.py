@@ -32,6 +32,8 @@ def read(rel: str) -> str:
 def build() -> str:
     html = read("index.html")
     css = read("css/style.css")
+    # CSS를 HTML에 인라인하면 기준 경로가 css/ 에서 문서 위치로 바뀌므로 보정
+    css = css.replace('url("../assets/', 'url("assets/')
     config_js = read("js/config.js")
     storage_js = read("js/storage.js")
     main_js = read("js/main.js")

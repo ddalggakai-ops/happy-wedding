@@ -164,29 +164,30 @@ body {
     rgba(0,0,0,0) 45%, rgba(0,0,0,.55) 74%, rgba(0,0,0,.92) 100%);
   pointer-events: none;
 }
+/* 영화 포스터 출연진 크레딧 느낌 — 작은 역할 표기 + 명조 볼드 이름을 한 줄에 */
 .intro__side {
   position: absolute;
   top: 68px;   /* 우상단 BGM 버튼과 겹치지 않도록 살짝 아래 */
   z-index: 2;
-  text-align: center;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
   color: #fff;
+  text-shadow: 0 1px 12px rgba(0,0,0,.55);
 }
-.intro__side--left  { left: 30px; }
-.intro__side--right { right: 30px; }
+.intro__side--left  { left: 28px; }
+.intro__side--right { right: 28px; }
 .intro__side-role {
-  display: block;
-  font-size: 12.5px;
-  letter-spacing: .2em;
-  color: rgba(255,255,255,.82);
-  margin-bottom: 7px;
-  text-shadow: 0 1px 10px rgba(0,0,0,.5);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .02em;
+  color: rgba(255,255,255,.78);
 }
 .intro__side-name {
-  display: block;
-  font-size: 17.5px;
-  font-weight: 600;
-  letter-spacing: .06em;
-  text-shadow: 0 1px 12px rgba(0,0,0,.55);
+  font-family: "Nanum Myeongjo", serif;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: .08em;
 }
 .intro__bottom {
   position: absolute;
@@ -242,7 +243,10 @@ body {
 }
 
 /* ═══════════ 2. 인사말 ═══════════ */
-.greeting { background: var(--bg); }
+/* 구겨진 종이 질감 배경 (assets/paper-dark.jpg — 직접 생성한 텍스처) */
+.greeting {
+  background: #171216 url("../assets/paper-dark.jpg") center / cover no-repeat;
+}
 .greeting__message {
   font-family: var(--serif);
   font-size: 16.5px;
