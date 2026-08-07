@@ -14,9 +14,12 @@
   <meta property="og:type" content="website" />
 
   <!-- 폰트 -->
+  <!-- 한글 본문: Pretendard (모던 고딕) / 영문 라벨·날짜: Cormorant Garamond
+       커버 스크립트체: Pinyon Script / 손편지: Nanum Pen Script -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -31,19 +34,27 @@
 
   <div class="invitation">
 
-    <!-- ═══════════ 1. 인트로 ═══════════ -->
+    <!-- ═══════════ 1. 인트로 (풀블리드 커버) ═══════════ -->
+    <!-- 신부/신랑 위치는 사진 속 두 분의 위치에 맞춰 좌우를 바꾸면 됩니다.
+         (아래 intro__side--left / --right 블록을 서로 교체) -->
     <section class="intro">
-      <p class="intro__date-label reveal" id="intro-date-en"></p>
-      <h1 class="intro__names reveal">
-        <span id="intro-groom"></span>
-        <span class="intro__amp">그리고</span>
-        <span id="intro-bride"></span>
-      </h1>
-      <p class="intro__english reveal" id="intro-english"></p>
-      <div class="intro__photo reveal">
-        <img src="assets/cover.jpg" alt="신랑 신부 메인 사진" />
+      <div class="intro__stage">
+        <img class="intro__bg" src="assets/cover.jpg" alt="신랑 신부 메인 사진" />
+        <div class="intro__side intro__side--left">
+          <span class="intro__side-role">신부</span>
+          <span class="intro__side-name" id="intro-bride"></span>
+        </div>
+        <div class="intro__side intro__side--right">
+          <span class="intro__side-role">신랑</span>
+          <span class="intro__side-name" id="intro-groom"></span>
+        </div>
+        <div class="intro__bottom">
+          <p class="intro__invited reveal">YOU'RE INVITED TO</p>
+          <h1 class="intro__script reveal">Our Wedding</h1>
+          <p class="intro__date reveal" id="intro-date-en"></p>
+          <p class="intro__venue reveal" id="intro-venue-en"></p>
+        </div>
       </div>
-      <p class="intro__info reveal" id="intro-info"></p>
     </section>
 
     <!-- ═══════════ 2. 인사말 · 가족 소개 ═══════════ -->

@@ -22,11 +22,17 @@
   --paper: #fffdfa;         /* 편지지는 흰 종이 그대로 (대비 포인트) */
   --paper-ink: #2b2226;     /* 편지지 위 글씨 */
   --paper-line: #ecdfd2;    /* 편지지 줄 색 */
-  --serif: "Gowun Batang", "Nanum Myeongjo", serif;
-  --myeongjo: "Nanum Myeongjo", serif;
-  --en: "Cormorant Garamond", serif;     /* 영문·라벨 */
-  --sans: "Noto Sans KR", sans-serif;
-  --hand: "Nanum Pen Script", cursive;   /* 손글씨 폰트 */
+  /* ---- 폰트 ----
+   * 한글은 전부 Pretendard(모던 고딕)로 통일했습니다.
+   * 명조로 되돌리려면 --kr 값을 "Gowun Batang", serif 로 바꾸고
+   * index.html의 폰트 링크에 Gowun Batang을 다시 추가하세요. */
+  --kr: "Pretendard Variable", Pretendard, "Noto Sans KR", -apple-system, sans-serif;
+  --serif: var(--kr);
+  --myeongjo: var(--kr);
+  --sans: var(--kr);
+  --en: "Cormorant Garamond", serif;        /* 영문·라벨·날짜 */
+  --script: "Pinyon Script", cursive;       /* 커버 Our Wedding 스크립트체 */
+  --hand: "Nanum Pen Script", cursive;      /* 손글씨 폰트 */
   --max-w: 480px;
 }
 
@@ -130,72 +136,98 @@ body {
   font-weight: 500;
 }
 
-/* ═══════════ 1. 인트로 ═══════════ */
+/* ═══════════ 1. 인트로 (풀블리드 커버 — 샘플 포스터 스타일) ═══════════ */
 .intro {
-  padding: 80px 28px 72px;
-  text-align: center;
-  background: linear-gradient(180deg, #000 0%, var(--bg) 100%);
+  background: #000;
 }
-.intro__date-label {
-  font-family: var(--en);
-  font-size: 16px;
-  letter-spacing: .3em;
-  color: var(--accent);
-  margin-bottom: 18px;
-}
-.intro__names {
-  font-family: var(--myeongjo);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: .05em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-bottom: 36px;
-}
-.intro__amp {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--accent);
-}
-.intro__english {
-  font-family: var(--en);
-  font-size: 14px;
-  letter-spacing: .18em;
-  color: var(--ink-light);
-  text-transform: uppercase;
-  margin: -26px 0 36px;
-}
-.intro__photo {
-  /* 담백한 풀와이드 사진 (모서리만 살짝 둥글게) */
+.intro__stage {
   position: relative;
-  border-radius: 8px;
   overflow: hidden;
-  margin: 0 auto 32px;
-  box-shadow: 0 12px 40px rgba(0,0,0,.6);
+  height: min(96svh, 780px);
 }
-/* 원본 커버처럼 흑백 처리 — 컬러로 쓰려면 이 한 줄만 지우세요 */
-.intro__photo img {
+.intro__bg {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  display: block;
-  filter: grayscale(1) contrast(1.06) brightness(1.02);
+  height: 100%;
+  object-fit: cover;
+  /* 샘플처럼 살짝 톤 다운된 컬러. 흑백을 원하면 grayscale(1)로 교체 */
+  filter: saturate(.82) contrast(1.03) brightness(.96);
 }
-/* 사진 아래를 블랙으로 자연스럽게 흐리기 */
-.intro__photo::after {
+/* 위·아래 어두운 그라데이션 — 글씨가 사진 위에서 또렷하게 보이도록 */
+.intro__stage::after {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 34%;
-  background: linear-gradient(180deg, rgba(17,17,17,0) 0%, var(--bg) 94%);
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,.42) 0%, rgba(0,0,0,.06) 26%,
+    rgba(0,0,0,0) 45%, rgba(0,0,0,.55) 74%, rgba(0,0,0,.92) 100%);
   pointer-events: none;
 }
-.intro__info {
-  font-family: var(--serif);
-  font-size: 16px;
-  line-height: 2;
-  color: var(--ink);
-  white-space: pre-line;
+.intro__side {
+  position: absolute;
+  top: 68px;   /* 우상단 BGM 버튼과 겹치지 않도록 살짝 아래 */
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+}
+.intro__side--left  { left: 30px; }
+.intro__side--right { right: 30px; }
+.intro__side-role {
+  display: block;
+  font-size: 12.5px;
+  letter-spacing: .2em;
+  color: rgba(255,255,255,.82);
+  margin-bottom: 7px;
+  text-shadow: 0 1px 10px rgba(0,0,0,.5);
+}
+.intro__side-name {
+  display: block;
+  font-size: 17.5px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-shadow: 0 1px 12px rgba(0,0,0,.55);
+}
+.intro__bottom {
+  position: absolute;
+  left: 0; right: 0; bottom: 40px;
+  z-index: 2;
+  text-align: center;
+  padding: 0 22px;
+}
+.intro__invited {
+  font-family: var(--en);
+  font-size: 12.5px;
+  letter-spacing: .42em;
+  text-indent: .42em;      /* 자간으로 밀린 중심 보정 */
+  color: #efe5e8;
+  margin-bottom: 4px;
+}
+.intro__script {
+  font-family: var(--script);
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 1.25;
+  color: var(--accent);
+  text-shadow: 0 4px 28px rgba(0,0,0,.5);
+  margin-bottom: 14px;
+}
+.intro__date {
+  font-family: var(--en);
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-indent: .2em;
+  color: var(--accent-deep);
+}
+.intro__venue {
+  font-family: var(--en);
+  font-size: 11.5px;
+  letter-spacing: .16em;
+  text-indent: .16em;
+  color: var(--blush-soft);
+  margin-top: 5px;
+  white-space: nowrap;
 }
 
 /* ═══════════ 2. 인사말 ═══════════ */

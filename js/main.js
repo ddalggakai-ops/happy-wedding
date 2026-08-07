@@ -54,17 +54,20 @@
     }[ch]));
   }
 
-  /* ═══════════ 1. 인트로 ═══════════ */
+  /* ═══════════ 1. 인트로 (풀블리드 커버) ═══════════ */
+  const DAY_EN = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
   function renderIntro() {
+    const h = C.wedding.hour;
+    const ampm = h < 12 ? "AM" : "PM";
+    const h12 = h % 12 === 0 ? 12 : h % 12;
+    // 예: 2026.11.15. SUN 11:00 AM
     $("#intro-date-en").textContent =
-      `${C.wedding.year}. ${pad(C.wedding.month)}. ${pad(C.wedding.day)}`;
+      `${C.wedding.year}.${pad(C.wedding.month)}.${pad(C.wedding.day)}. ` +
+      `${DAY_EN[weddingDate.getDay()]} ${h12}:${pad(C.wedding.minute)} ${ampm}`;
     $("#intro-groom").textContent = C.groom.name;
     $("#intro-bride").textContent = C.bride.name;
-    $("#intro-english").textContent =
-      C.groom.english && C.bride.english
-        ? `${C.groom.english} · ${C.bride.english}` : "";
-    $("#intro-info").textContent =
-      `${formatKoreanDate()}\n${C.venue.name} ${C.venue.hall}`;
+    $("#intro-venue-en").textContent = C.venue.english || "";
     $("#footer-names").textContent = `${C.groom.name} ♥ ${C.bride.name}`;
   }
 
