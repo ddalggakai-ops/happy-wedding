@@ -505,10 +505,11 @@
 
   /* ═══════════ 봉투에서 편지 꺼내기 (스크롤 연동 애니메이션) ═══════════ */
   function initEnvelopeScroll() {
-    // 진행 기준을 인사말 섹션 전체로: 제목(INVITATION)이 보이기 시작할 때부터 편지가 올라옴
-    const sec = document.querySelector(".greeting") || document.querySelector(".envelope");
+    // 시작: 인사말 제목이 화면에 들어올 때 / 완료: 봉투가 화면 중앙쯤 올 때
+    const sec = document.querySelector(".greeting");
+    const img = document.querySelector(".envelope__img") || document.querySelector(".envelope");
     const letter = document.querySelector(".envelope__letter");
-    if (!sec || !letter) return;
+    if (!sec || !img || !letter) return;
 
     const HIDDEN = 76; // 편지가 봉투 속에 숨어 있을 때의 이동량(%)
     const REST = 19;   // 다 올라왔을 때 남는 이동량(%) — 편지가 3/4 정도만 나온 상태
@@ -522,10 +523,14 @@
     let ticking = false;
     function update() {
       ticking = false;
-      const r = sec.getBoundingClientRect();
+      const sr = sec.getBoundingClientRect();
+      const ir = img.getBoundingClientRect();
       const vh = window.innerHeight;
-      // 섹션 제목이 화면에 들어오면 0에서 시작, 한 화면 남짓 스크롤하는 동안 1까지
-      let p = (vh * 0.9 - r.top) / (vh * 1.1);
+      // 섹션 제목이 화면 하단(90%)에 들어오면 0 → 봉투가 화면 45% 지점에 오면 1
+      const offset = ir.top - sr.top;               // 섹션 상단 ~ 봉투 사이 거리
+      const startImgTop = vh * 0.9 + offset;        // 시작 시점의 봉투 위치
+      const endImgTop = vh * 0.45;                  // 완료 시점의 봉투 위치
+      let p = (startImgTop - ir.top) / Math.max(1, startImgTop - endImgTop);
       p = Math.max(0, Math.min(1, p));
       // 살짝 부드러운 가속 (ease-out)
       const eased = 1 - Math.pow(1 - p, 2);
