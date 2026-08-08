@@ -123,37 +123,39 @@
     <!-- ═══════════ 6. 오시는 길 ═══════════ -->
     <section class="section location">
       <!-- 상단: 성당 일러스트 (영문 캡션 포함) + 아래에 한글 이름·주소 -->
+      <!-- 상단(크림): 제목 → 이름·주소 → 지도 → 지도앱 버튼 → 일러스트 -->
       <div class="location__hero">
         <p class="section__label reveal">LOCATION</p>
         <h2 class="section__title reveal">오시는 길</h2>
-        <img class="location__illust reveal" src="assets/venue-bg.jpg" alt="명동성당 일러스트" />
         <p class="location__venue reveal" id="venue-name"></p>
         <p class="location__address reveal" id="venue-address"></p>
+
+        <!-- 실제 지도 (네이버 지도 — config의 naverClientId 사용) -->
+        <div class="location__map reveal">
+          <iframe id="map-embed" title="예식장 지도" loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+
+        <div class="location__map-btns reveal">
+          <a class="map-btn" id="map-naver" target="_blank" rel="noopener">
+            <span class="map-btn__dot map-btn__dot--naver">N</span>네이버지도
+          </a>
+          <a class="map-btn" id="map-kakao" target="_blank" rel="noopener">
+            <span class="map-btn__dot map-btn__dot--kakao">K</span>카카오맵
+          </a>
+          <a class="map-btn" id="map-tmap" target="_blank" rel="noopener">
+            <span class="map-btn__dot map-btn__dot--tmap">T</span>티맵
+          </a>
+        </div>
+        <button class="btn btn--outline reveal" id="copy-address">주소 복사하기</button>
+
+        <img class="location__illust reveal" src="assets/venue-bg.jpg" alt="명동성당 일러스트" />
       </div>
 
-      <!-- 하단: 지도·교통편 (블러시 톤 배경) -->
+      <!-- 하단(블러시): 지하철·버스·주차 -->
       <div class="location__body">
-      <!-- 실제 지도 (구글 지도 임베드 — 키 없이 동작. 네이버 지도 API 키가 생기면 교체 가능) -->
-      <div class="location__map reveal">
-        <iframe id="map-embed" title="예식장 지도" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        <div class="location__transit reveal" id="transit-list"></div>
       </div>
-
-      <div class="location__map-btns reveal">
-        <a class="map-btn" id="map-naver" target="_blank" rel="noopener">
-          <span class="map-btn__dot map-btn__dot--naver">N</span>네이버지도
-        </a>
-        <a class="map-btn" id="map-kakao" target="_blank" rel="noopener">
-          <span class="map-btn__dot map-btn__dot--kakao">K</span>카카오맵
-        </a>
-        <a class="map-btn" id="map-tmap" target="_blank" rel="noopener">
-          <span class="map-btn__dot map-btn__dot--tmap">T</span>티맵
-        </a>
-      </div>
-      <button class="btn btn--outline reveal" id="copy-address">주소 복사하기</button>
-
-      <div class="location__transit reveal" id="transit-list"></div>
-      </div><!-- /location__body -->
     </section>
 
     <!-- ═══════════ 7. 마음 전하실 곳 ═══════════ -->

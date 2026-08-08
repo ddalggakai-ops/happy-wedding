@@ -570,22 +570,23 @@ body {
   padding: 0;   /* 상단/하단 블록이 각자 여백을 가짐 */
   color: #33272c;
 }
-/* 상단: 성당 일러스트(영문 캡션 포함)를 본문 흐름에 배치, 한글 이름·주소는 그 아래 */
+/* 상단(크림): 제목 → 이름·주소 → 지도 → 버튼 → 일러스트 */
 .location__hero {
-  padding: 72px 0 36px;
-  background: #fdf9f6;   /* 일러스트 여백과 같은 크림색 — 경계가 티 안 나게 */
-}
-.location__illust {
-  display: block;
-  width: 100%;
-  margin: -6px 0 2px;
+  padding: 72px 28px 0;
+  background: #fdf9f6;   /* 일러스트 여백과 같은 크림색 */
 }
 .location__hero .location__address { color: #5a4a51; }
-/* 하단: 지도·교통편 — 은은한 블러시 핑크 배경 */
+.location__illust {
+  display: block;
+  width: calc(100% + 56px);   /* 좌우 패딩 밖까지 꽉 차게 */
+  margin: 20px -28px 0;
+}
+/* 하단(블러시): 지하철·버스·주차 */
 .location__body {
-  padding: 28px 28px 68px;
+  padding: 10px 28px 68px;
   background: #f6e3e8;
 }
+.location__body .location__transit { margin-top: 12px; border-top: none; }
 .location .section__label { color: #c9566f; }
 .location .section__title { color: #2c2126; }
 .location .section__title::after { background: #c9566f; }
