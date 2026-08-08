@@ -167,7 +167,7 @@ body {
 /* 영화 포스터 출연진 크레딧 느낌 — 작은 역할 표기 + 명조 볼드 이름을 한 줄에 */
 .intro__side {
   position: absolute;
-  top: 68px;   /* 우상단 BGM 버튼과 겹치지 않도록 살짝 아래 */
+  top: 48px;   /* 옆 간격(48px)과 동일하게 */
   z-index: 2;
   display: flex;
   align-items: baseline;
@@ -302,7 +302,7 @@ body {
   --env-tilt: 0deg;       /* 봉투 이미지 기울기 (이미지가 이미 기울어져 있으면 0) */
   position: relative;
   width: min(100%, 340px);
-  margin: 30px auto 40px;
+  margin: 14px auto 36px;
 }
 /* 편지가 이 틀 안에서만 보이므로, 내려가 있을 땐 봉투 속에 숨어 있는 것처럼 보임 */
 .envelope__slot {
@@ -310,6 +310,8 @@ body {
   z-index: 1;
   overflow: hidden;
   padding: 14px 20px 0;
+  /* 편지가 3/4만 나오면서 위쪽에 생기는 빈 공간을 당겨 올림 */
+  margin-top: -100px;
   margin-bottom: -84px;   /* 편지 아랫부분이 봉투 뒤로 겹치는 깊이 */
 }
 .envelope__letter {
