@@ -136,7 +136,7 @@ const WEDDING_CONFIG = {
   // 네이버클라우드에서 발급받은 Maps Client ID(ncpKeyId)를 넣으면
   // "오시는 길"의 지도가 네이버 지도로 바뀝니다. 비워두면 구글 지도로 표시됩니다.
   map: {
-    naverClientId: "",
+    naverClientId: "ghcz3edbu0",
   },
 
   /* ---------- 배경음악 ---------- */
