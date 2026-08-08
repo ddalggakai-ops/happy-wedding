@@ -292,9 +292,32 @@
     $("#venue-name").textContent = `${v.name} ${v.hall}`;
     $("#venue-address").textContent = v.address;
 
-    // 실제 지도 임베드 (구글 지도 — 키 불필요)
-    $("#map-embed").src =
-      `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
+    // 실제 지도: 네이버 Client ID가 있으면 네이버 지도, 없으면 구글 지도
+    const naverKey = (C.map && C.map.naverClientId || "").trim();
+    if (naverKey) {
+      const box = document.querySelector(".location__map");
+      box.innerHTML = '<div id="naver-map" style="width:100%;height:240px"></div>';
+      const s = document.createElement("script");
+      s.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(naverKey)}`;
+      s.onload = () => {
+        const pos = new naver.maps.LatLng(v.lat, v.lng);
+        const map = new naver.maps.Map("naver-map", {
+          center: pos,
+          zoom: 16,
+          scrollWheel: false,   // 페이지 스크롤 중 지도 확대 방지
+        });
+        new naver.maps.Marker({ position: pos, map });
+      };
+      s.onerror = () => {
+        // 키 오류 등으로 네이버 지도를 못 불러오면 구글 지도로 대체
+        box.innerHTML = '<iframe id="map-embed" title="예식장 지도" loading="lazy" style="display:block;width:100%;height:240px;border:0"></iframe>';
+        $("#map-embed").src = `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
+      };
+      document.head.appendChild(s);
+    } else {
+      $("#map-embed").src =
+        `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
+    }
 
     const q = encodeURIComponent(v.name);
     // 지도 앱/웹 연동
