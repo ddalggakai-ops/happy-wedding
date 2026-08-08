@@ -313,11 +313,12 @@ body {
   margin-bottom: -84px;   /* 편지 아랫부분이 봉투 뒤로 겹치는 깊이 */
 }
 .envelope__letter {
-  background: var(--paper);
   color: var(--paper-ink);
-  border-radius: 6px;
-  padding: 34px 22px 110px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+  /* 레이스 편지지 (letter.png) — 테두리는 그대로 두고 가운데만 늘어나도록 border-image 사용 */
+  border: 44px solid transparent;
+  border-image: url("../assets/letter.png") 70 fill stretch;
+  padding: 4px 2px 100px;   /* 아래 여유는 봉투에 꽂히는 부분 */
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, .45));
   transform: translateY(76%) rotate(var(--letter-tilt));
   will-change: transform;
 }
@@ -338,10 +339,10 @@ body {
 .envelope__seal {
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: 30%;              /* 봉투 대비 실링 크기 — 취향에 따라 조절 */
+  top: 71%;                /* 봉투 플랩(덮개) 꼭짓점 위치 */
+  width: 20%;              /* 봉투 대비 실링 크기 */
   transform: translate(-50%, -50%) rotate(-3deg);
-  filter: drop-shadow(0 5px 12px rgba(0, 0, 0, .4));
+  filter: drop-shadow(0 4px 9px rgba(0, 0, 0, .4));
   pointer-events: none;
 }
 .greeting__message {
