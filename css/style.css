@@ -245,6 +245,7 @@ body {
 
 /* ═══════════ 2.5 다이어리 꾸미기 (스크랩북 이미지) ═══════════ */
 .scrapbook {
+  position: relative;
   background: var(--bg);
   font-size: 0;   /* 이미지 아래 여백 제거 */
 }
@@ -252,6 +253,21 @@ body {
   width: 100%;
   display: block;
 }
+/* 위·아래 찢어진 종이 가장자리 */
+.scrapbook::before,
+.scrapbook::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 30px;
+  z-index: 2;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1080 56' preserveAspectRatio='none'%3E%3Cpolygon points='0,8.3 63,14.0 120,8.3 160,4.6 220,8.7 259,3.3 306,4.0 368,13.3 398,10.3 451,15.5 489,10.7 550,2.9 580,4.7 623,10.4 680,6.6 720,9.3 766,9.0 799,8.4 844,7.7 907,15.9 940,11.9 988,12.6 1048,6.0 1080,9.9 1080,8 1080,39.6 1035,37.0 1015,53.0 970,46.4 946,35.0 927,41.3 887,39.5 867,43.6 843,48.7 817,38.1 790,38.0 759,48.2 738,33.2 698,32.4 679,41.2 646,34.3 611,34.5 577,34.6 536,48.5 505,45.4 484,39.5 460,30.0 415,53.3 372,44.2 326,30.5 303,39.5 258,44.4 222,32.4 200,35.1 174,30.2 137,37.9 110,39.3 90,32.2 54,45.3 36,44.4 7,44.9 0,40' fill='%23f7f3ec'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .4));
+  pointer-events: none;
+}
+.scrapbook::before { top: -8px; }
+.scrapbook::after  { bottom: -8px; transform: scaleY(-1) scaleX(-1); }
 
 /* ═══════════ 2. 인사말 ═══════════ */
 /* 구겨진 종이 질감 배경 + 검은 반투명 레이어 (밝은 텍스처를 어둡게 눌러줌) */
@@ -264,7 +280,7 @@ body {
   position: absolute;
   inset: 0;
   /* 어둡기 조절은 아래 알파값만 바꾸면 됩니다 (낮을수록 종이 질감이 잘 보임) */
-  background: rgba(10, 7, 9, .70);
+  background: rgba(10, 7, 9, .62);
   pointer-events: none;
 }
 .greeting > * { position: relative; z-index: 1; }
