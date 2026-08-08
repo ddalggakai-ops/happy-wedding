@@ -291,7 +291,7 @@ body {
   position: absolute;
   inset: 0;
   /* 어둡기 조절은 아래 알파값만 바꾸면 됩니다 (낮을수록 종이 질감이 잘 보임) */
-  background: rgba(10, 7, 9, .75);
+  background: rgba(10, 7, 9, .82);
   pointer-events: none;
 }
 .greeting > * { position: relative; z-index: 1; }
