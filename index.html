@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Nanum+Pen+Script&family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -63,12 +63,21 @@
       </div>
     </section>
 
-    <!-- ═══════════ 2. 인사말 · 가족 소개 ═══════════ -->
+    <!-- ═══════════ 2. 인사말 · 가족 소개 (봉투에서 나온 편지) ═══════════ -->
     <section class="section greeting">
       <p class="section__label reveal">INVITATION</p>
       <h2 class="section__title reveal" id="greeting-title"></h2>
-      <p class="greeting__message reveal" id="greeting-message"></p>
-      <div class="greeting__divider reveal"><span>♥</span></div>
+
+      <!-- 봉투에서 편지가 나오는 구성: 편지지가 봉투 주머니 뒤로 들어가 보임 -->
+      <div class="envelope reveal">
+        <div class="envelope__letter">
+          <p class="greeting__message" id="greeting-message"></p>
+        </div>
+        <div class="envelope__pocket">
+          <span class="envelope__seal">♥</span>
+        </div>
+      </div>
+
       <div class="greeting__family reveal" id="greeting-family"></div>
       <button class="btn btn--outline reveal" id="contact-open">연락하기</button>
     </section>
