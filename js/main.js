@@ -176,19 +176,18 @@
   let lightboxIndex = 0;
 
   function renderGallery() {
-    const { images, firstVisible } = C.gallery;
+    const { images } = C.gallery;
     $("#gallery-grid").innerHTML = images.map((src, i) => `
-      <a href="${src}" data-index="${i}" class="${i >= firstVisible ? "is-hidden" : ""}">
+      <a href="${src}" data-index="${i}">
         <img src="${src}" alt="갤러리 사진 ${i + 1}" loading="lazy" />
       </a>`).join("");
 
-    // 더보기
-    const moreBtn = $("#gallery-more");
-    if (images.length <= firstVisible) moreBtn.style.display = "none";
-    moreBtn.addEventListener("click", () => {
-      document.querySelectorAll("#gallery-grid a.is-hidden")
-        .forEach((a) => a.classList.remove("is-hidden"));
-      moreBtn.style.display = "none";
+    // 6줄(16장) 이상이면 5줄 반까지만 보여주고 "더보기"로 펼침
+    const wrap = $("#gallery-wrap");
+    const rows = Math.ceil(images.length / 3);
+    if (rows > 5.5) wrap.classList.add("is-collapsed");
+    $("#gallery-more").addEventListener("click", () => {
+      wrap.classList.remove("is-collapsed");
     });
 
     // 라이트박스 열기
@@ -198,6 +197,12 @@
       e.preventDefault();
       openLightbox(Number(a.dataset.index));
     });
+
+    // 핀치 줌 방지 (iOS 사파리는 viewport 설정만으로는 안 막힘)
+    ["gesturestart", "gesturechange", "gestureend"].forEach((t) =>
+      document.addEventListener(t, (e) => e.preventDefault(), { passive: false })
+    );
+    $("#lightbox-img").addEventListener("dblclick", (e) => e.preventDefault());
 
     $("#lightbox-close").addEventListener("click", closeLightbox);
     $("#lightbox-prev").addEventListener("click", () => moveLightbox(-1));

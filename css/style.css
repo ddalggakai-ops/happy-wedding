@@ -38,7 +38,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; touch-action: manipulation; /* 더블탭 줌 방지 */ }
 
 body {
   font-family: var(--serif);
@@ -175,8 +175,8 @@ body {
   color: #fff;
   text-shadow: 0 1px 12px rgba(0,0,0,.55);
 }
-.intro__side--left  { left: 28px; }
-.intro__side--right { right: 28px; }
+.intro__side--left  { left: 48px; }
+.intro__side--right { right: 48px; }
 .intro__side-role {
   font-size: 12px;
   font-weight: 400;
@@ -450,27 +450,60 @@ body {
 .letter-card--image { padding: 12px; background: var(--paper); }
 .letter-card--image img { width: 100%; display: block; border-radius: 2px; }
 
-/* ═══════════ 4. 갤러리 ═══════════ */
+/* ═══════════ 4. 갤러리 (풀블리드 바둑판) ═══════════ */
+.gallery {
+  background: var(--bg);
+}
+.gallery__wrap { position: relative; }
 .gallery__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  margin-bottom: 28px;
+  gap: 2px;
 }
+/* 사진이 6줄 이상일 때: 5줄 반까지만 보이고 아래는 그라데이션 + 더보기 */
+.gallery__wrap.is-collapsed .gallery__grid {
+  /* 한 칸 = (화면폭 - 간격 4px) / 3, 5.5줄 + 간격 */
+  max-height: calc((min(100vw, var(--max-w)) - 4px) / 3 * 5.5 + 10px);
+  overflow: hidden;
+}
+.gallery__wrap.is-collapsed::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 150px;
+  background: linear-gradient(180deg, rgba(17,17,17,0) 0%, var(--bg) 92%);
+  pointer-events: none;
+}
+.gallery__more {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-family: var(--sans);
+  font-size: 14px;
+  padding: 11px 30px;
+  border-radius: 999px;
+  border: 1px solid rgba(250,137,163,.5);
+  background: rgba(17,17,17,.72);
+  color: var(--accent-deep);
+  cursor: pointer;
+  backdrop-filter: blur(3px);
+  -webkit-tap-highlight-color: transparent;
+}
+.gallery__wrap.is-collapsed .gallery__more { display: inline-flex; }
 .gallery__grid a {
   display: block;
   aspect-ratio: 1;
   overflow: hidden;
-  border-radius: 6px;
 }
 .gallery__grid img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform .4s;
 }
-.gallery__grid a:active img { transform: scale(1.05); }
 .gallery__grid a.is-hidden { display: none; }
 
 /* ═══════════ 5. 달력 ═══════════ */
@@ -831,6 +864,7 @@ textarea { resize: none; }
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: none;   /* 라이트박스에서 핀치줌·스크롤 방지 */
 }
 .lightbox[hidden] { display: none; }
 .lightbox img {
