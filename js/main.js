@@ -505,9 +505,10 @@
 
   /* ═══════════ 봉투에서 편지 꺼내기 (스크롤 연동 애니메이션) ═══════════ */
   function initEnvelopeScroll() {
-    const env = document.querySelector(".envelope__img") || document.querySelector(".envelope");
+    // 진행 기준을 인사말 섹션 전체로: 제목(INVITATION)이 보이기 시작할 때부터 편지가 올라옴
+    const sec = document.querySelector(".greeting") || document.querySelector(".envelope");
     const letter = document.querySelector(".envelope__letter");
-    if (!env || !letter) return;
+    if (!sec || !letter) return;
 
     const HIDDEN = 76; // 편지가 봉투 속에 숨어 있을 때의 이동량(%)
     const REST = 19;   // 다 올라왔을 때 남는 이동량(%) — 편지가 3/4 정도만 나온 상태
@@ -521,10 +522,10 @@
     let ticking = false;
     function update() {
       ticking = false;
-      const r = env.getBoundingClientRect();
+      const r = sec.getBoundingClientRect();
       const vh = window.innerHeight;
-      // 봉투가 화면 아래쪽에 나타나기 시작하면 0, 화면 가운데쯤 도달하면 1
-      let p = (vh * 0.92 - r.top) / (vh * 0.45);
+      // 섹션 제목이 화면에 들어오면 0에서 시작, 한 화면 남짓 스크롤하는 동안 1까지
+      let p = (vh * 0.9 - r.top) / (vh * 1.1);
       p = Math.max(0, Math.min(1, p));
       // 살짝 부드러운 가속 (ease-out)
       const eased = 1 - Math.pow(1 - p, 2);
