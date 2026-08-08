@@ -68,18 +68,19 @@
       <p class="section__label reveal">INVITATION</p>
       <h2 class="section__title reveal" id="greeting-title"></h2>
 
-      <!-- 봉투에서 편지가 나오는 구성: 편지지가 봉투 주머니 뒤로 들어가 보임 -->
+      <!-- 봉투에서 편지가 나오는 구성 (스크롤에 따라 편지가 올라옵니다)
+           봉투 이미지는 assets/envelope.jpg 를 원하는 파일로 교체하면 됩니다.
+           기울기 조절: css/style.css 의 --letter-tilt / --env-tilt -->
       <div class="envelope reveal">
-        <div class="envelope__letter">
-          <p class="greeting__message" id="greeting-message"></p>
+        <div class="envelope__slot">
+          <div class="envelope__letter">
+            <p class="greeting__message" id="greeting-message"></p>
+          </div>
         </div>
-        <div class="envelope__pocket">
-          <span class="envelope__seal">♥</span>
-        </div>
+        <img class="envelope__img" src="assets/envelope.jpg" alt="편지 봉투" />
       </div>
 
       <div class="greeting__family reveal" id="greeting-family"></div>
-      <button class="btn btn--outline reveal" id="contact-open">연락하기</button>
     </section>
 
     <!-- ═══════════ 3. 러브레터 ═══════════ -->
@@ -137,6 +138,7 @@
       <h2 class="section__title reveal">마음 전하실 곳</h2>
       <p class="accounts__desc reveal">참석이 어려우신 분들을 위해<br/>계좌번호를 기재하였습니다.<br/>너그러운 마음으로 양해 부탁드립니다.</p>
       <div id="accounts-list" class="reveal"></div>
+      <button class="btn btn--outline reveal" id="contact-open">연락하기</button>
     </section>
 
     <!-- ═══════════ 8. 참석 의사 전달 (RSVP) ═══════════ -->

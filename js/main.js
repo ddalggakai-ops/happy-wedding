@@ -462,6 +462,41 @@
     document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
   }
 
+  /* ═══════════ 봉투에서 편지 꺼내기 (스크롤 연동 애니메이션) ═══════════ */
+  function initEnvelopeScroll() {
+    const env = document.querySelector(".envelope__img") || document.querySelector(".envelope");
+    const letter = document.querySelector(".envelope__letter");
+    if (!env || !letter) return;
+
+    const HIDDEN = 76; // 편지가 봉투 속에 숨어 있을 때의 이동량(%)
+
+    // 접근성: 모션 최소화 설정 시 애니메이션 없이 꺼내진 상태로 고정
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      letter.style.transform = "translateY(0) rotate(var(--letter-tilt))";
+      return;
+    }
+
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const r = env.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 봉투가 화면 아래쪽에 나타나기 시작하면 0, 화면 가운데쯤 도달하면 1
+      let p = (vh * 0.92 - r.top) / (vh * 0.45);
+      p = Math.max(0, Math.min(1, p));
+      // 살짝 부드러운 가속 (ease-out)
+      const eased = 1 - Math.pow(1 - p, 2);
+      letter.style.transform =
+        `translateY(${((1 - eased) * HIDDEN).toFixed(2)}%) rotate(var(--letter-tilt))`;
+    }
+    function onScroll() {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  }
+
   /* ═══════════ 초기화 ═══════════ */
   document.addEventListener("DOMContentLoaded", () => {
     document.title = `${C.groom.name} ♥ ${C.bride.name} 결혼합니다`;
@@ -478,5 +513,6 @@
     initShare();
     initBgm();
     initReveal();   // 동적 요소 생성 후 마지막에 실행
+    initEnvelopeScroll();
   });
 })();
