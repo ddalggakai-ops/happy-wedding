@@ -324,7 +324,7 @@ body {
 .envelope__frame {
   position: relative;
   z-index: 2;
-  border-radius: 7px;
+  border-radius: 14px;
   transform: rotate(var(--env-tilt));
   /* 바깥쪽으로 지는 그림자 */
   box-shadow: 0 20px 44px rgba(0, 0, 0, .6), 0 6px 16px rgba(0, 0, 0, .4);
