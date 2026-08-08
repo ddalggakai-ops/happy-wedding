@@ -182,10 +182,10 @@
         <img src="${src}" alt="갤러리 사진 ${i + 1}" loading="lazy" />
       </a>`).join("");
 
-    // 6줄(16장) 이상이면 5줄 반까지만 보여주고 "더보기"로 펼침
+    // 4줄(10장) 이상이면 3줄 반까지만 보여주고, 4번째 줄부터 그라데이션 + 펼침
     const wrap = $("#gallery-wrap");
     const rows = Math.ceil(images.length / 3);
-    if (rows > 5.5) wrap.classList.add("is-collapsed");
+    if (rows > 3.5) wrap.classList.add("is-collapsed");
     $("#gallery-more").addEventListener("click", () => {
       wrap.classList.remove("is-collapsed");
     });
@@ -291,6 +291,10 @@
     const v = C.venue;
     $("#venue-name").textContent = `${v.name} ${v.hall}`;
     $("#venue-address").textContent = v.address;
+
+    // 실제 지도 임베드 (구글 지도 — 키 불필요)
+    $("#map-embed").src =
+      `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
 
     const q = encodeURIComponent(v.name);
     // 지도 앱/웹 연동

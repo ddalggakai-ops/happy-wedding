@@ -105,7 +105,7 @@
     <section class="gallery">
       <div class="gallery__wrap" id="gallery-wrap">
         <div class="gallery__grid" id="gallery-grid"></div>
-        <button class="gallery__more" id="gallery-more">더보기</button>
+        <button class="gallery__more" id="gallery-more" aria-label="사진 더보기"></button>
       </div>
     </section>
 
@@ -126,6 +126,12 @@
       <h2 class="section__title reveal">오시는 길</h2>
       <p class="location__venue reveal" id="venue-name"></p>
       <p class="location__address reveal" id="venue-address"></p>
+
+      <!-- 실제 지도 (구글 지도 임베드 — 키 없이 동작. 네이버 지도 API 키가 생기면 교체 가능) -->
+      <div class="location__map reveal">
+        <iframe id="map-embed" title="예식장 지도" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
 
       <div class="location__map-btns reveal">
         <a class="map-btn" id="map-naver" target="_blank" rel="noopener">
