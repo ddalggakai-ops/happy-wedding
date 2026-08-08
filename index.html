@@ -122,11 +122,16 @@
 
     <!-- ═══════════ 6. 오시는 길 ═══════════ -->
     <section class="section location">
-      <p class="section__label reveal">LOCATION</p>
-      <h2 class="section__title reveal">오시는 길</h2>
-      <p class="location__venue reveal" id="venue-name"></p>
-      <p class="location__address reveal" id="venue-address"></p>
+      <!-- 상단: 성당 일러스트 배경 (주소까지) -->
+      <div class="location__hero">
+        <p class="section__label reveal">LOCATION</p>
+        <h2 class="section__title reveal">오시는 길</h2>
+        <p class="location__venue reveal" id="venue-name"></p>
+        <p class="location__address reveal" id="venue-address"></p>
+      </div>
 
+      <!-- 하단: 지도·교통편 (블러시 톤 배경) -->
+      <div class="location__body">
       <!-- 실제 지도 (구글 지도 임베드 — 키 없이 동작. 네이버 지도 API 키가 생기면 교체 가능) -->
       <div class="location__map reveal">
         <iframe id="map-embed" title="예식장 지도" loading="lazy"
@@ -147,6 +152,7 @@
       <button class="btn btn--outline reveal" id="copy-address">주소 복사하기</button>
 
       <div class="location__transit reveal" id="transit-list"></div>
+      </div><!-- /location__body -->
     </section>
 
     <!-- ═══════════ 7. 마음 전하실 곳 ═══════════ -->

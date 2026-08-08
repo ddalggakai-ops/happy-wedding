@@ -566,21 +566,31 @@ body {
 .calendar__dday b { color: var(--accent-deep); }
 
 /* ═══════════ 6. 오시는 길 ═══════════ */
-/* 성당 일러스트 배경 (assets/venue-bg.jpg) — 밝은 배경이라 글자는 어두운 색으로 */
 .location {
-  position: relative;
-  background: #f7f1e8 url("../assets/venue-bg.jpg") center / cover no-repeat;
+  padding: 0;   /* 상단/하단 블록이 각자 여백을 가짐 */
   color: #33272c;
 }
-.location::before {
+/* 상단: 성당 일러스트 배경 (주소까지만) */
+.location__hero {
+  position: relative;
+  padding: 72px 28px 34px;
+  background: #f7f1e8 url("../assets/venue-bg.jpg") center 22% / cover no-repeat;
+}
+.location__hero::before {
   content: "";
   position: absolute;
   inset: 0;
   /* 일러스트가 은은하게 비치도록 크림색 반투명 레이어 */
-  background: rgba(250, 246, 239, .58);
+  background: rgba(250, 246, 239, .5);
   pointer-events: none;
 }
-.location > * { position: relative; z-index: 1; }
+.location__hero > * { position: relative; z-index: 1; }
+.location__hero .location__address { color: #5a4a51; }
+/* 하단: 지도·교통편 — 은은한 블러시 핑크 배경 */
+.location__body {
+  padding: 28px 28px 68px;
+  background: #f6e3e8;
+}
 .location .section__label { color: #c9566f; }
 .location .section__title { color: #2c2126; }
 .location .section__title::after { background: #c9566f; }
