@@ -306,7 +306,17 @@
           zoom: 16,
           scrollWheel: false,   // 페이지 스크롤 중 지도 확대 방지
         });
-        new naver.maps.Marker({ position: pos, map });
+        const marker = new naver.maps.Marker({
+          position: pos, map, title: "명동성당 파밀리아 채플",
+        });
+        // 핀 위에 "파밀리아 채플" 라벨 말풍선
+        const iw = new naver.maps.InfoWindow({
+          content: '<div style="padding:6px 12px;font-size:12.5px;font-weight:600;color:#333;">파밀리아 채플</div>',
+          borderWidth: 1,
+          borderColor: "#e5d7db",
+          disableAnchor: false,
+        });
+        iw.open(map, marker);
       };
       s.onerror = () => {
         // 키 오류 등으로 네이버 지도를 못 불러오면 구글 지도로 대체

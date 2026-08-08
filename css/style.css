@@ -468,15 +468,7 @@ body {
   max-height: calc(min(100vw, var(--max-w)) / 3 * 4 / 3 * 3.5);
   overflow: hidden;
 }
-.gallery__wrap.is-collapsed::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 160px;
-  background: linear-gradient(180deg, rgba(17,17,17,0) 0%, var(--bg) 92%);
-  pointer-events: none;
-}
-/* 더보기: 버튼 대신 핑크 일직선 그라데이션 (누르면 전체 펼침) */
+/* 더보기: 핑크색 그라데이션 띠 + "더보기" 글자 (누르면 전체 펼침) */
 .gallery__more {
   display: none;
   position: absolute;
@@ -484,25 +476,24 @@ body {
   right: 0;
   bottom: 0;
   z-index: 2;
-  height: 72px;
+  height: 130px;
   border: none;
-  background: transparent;
   cursor: pointer;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 16px;
+  background: linear-gradient(180deg,
+    rgba(250, 137, 163, 0) 0%,
+    rgba(250, 137, 163, .45) 55%,
+    rgba(250, 137, 163, .96) 100%);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #47121f;
   -webkit-tap-highlight-color: transparent;
 }
-.gallery__more::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 26px;
-  transform: translateX(-50%);
-  width: 74%;
-  height: 3px;
-  border-radius: 3px;
-  background: linear-gradient(90deg,
-    rgba(250,137,163,0) 0%, var(--accent) 50%, rgba(250,137,163,0) 100%);
-}
-.gallery__wrap.is-collapsed .gallery__more { display: block; }
+.gallery__wrap.is-collapsed .gallery__more { display: flex; }
 .gallery__grid a {
   display: block;
   aspect-ratio: 3 / 4;   /* 세로를 늘려 사진이 더 많이 보이도록 */
@@ -575,6 +566,43 @@ body {
 .calendar__dday b { color: var(--accent-deep); }
 
 /* ═══════════ 6. 오시는 길 ═══════════ */
+/* 성당 일러스트 배경 (assets/venue-bg.jpg) — 밝은 배경이라 글자는 어두운 색으로 */
+.location {
+  position: relative;
+  background: #f7f1e8 url("../assets/venue-bg.jpg") center / cover no-repeat;
+  color: #33272c;
+}
+.location::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* 일러스트가 은은하게 비치도록 크림색 반투명 레이어 */
+  background: rgba(250, 246, 239, .58);
+  pointer-events: none;
+}
+.location > * { position: relative; z-index: 1; }
+.location .section__label { color: #c9566f; }
+.location .section__title { color: #2c2126; }
+.location .section__title::after { background: #c9566f; }
+.location__address,
+.location .transit-item__text { color: #6e5c63; }
+.location .btn--outline {
+  background: rgba(255, 255, 255, .88);
+  color: #4a353c;
+  border-color: rgba(201, 86, 111, .45);
+}
+.location .map-btn {
+  background: rgba(255, 255, 255, .92);
+  color: #33272c;
+  border: 1px solid rgba(0, 0, 0, .08);
+}
+.location .location__transit,
+.location .transit-item { border-color: rgba(0, 0, 0, .1); }
+.location .transit-item__icon { background: rgba(201, 86, 111, .12); }
+.location .location__map {
+  border-color: rgba(0, 0, 0, .1);
+  box-shadow: 0 8px 22px rgba(60, 40, 30, .18);
+}
 .location__venue {
   font-family: var(--myeongjo);
   font-size: 19px;
