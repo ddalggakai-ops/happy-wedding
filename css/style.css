@@ -317,7 +317,7 @@ body {
   /* 레이스 편지지 (letter.png) — 테두리는 그대로 두고 가운데만 늘어나도록 border-image 사용 */
   border: 44px solid transparent;
   border-image: url("../assets/letter.png") 70 fill stretch;
-  padding: 4px 2px 100px;   /* 아래 여유는 봉투에 꽂히는 부분 */
+  padding: 4px 2px 170px;   /* 아래 여유 = 봉투 속에 남는 부분 (편지가 3/4만 나오므로 넉넉히) */
   filter: drop-shadow(0 10px 24px rgba(0, 0, 0, .45));
   transform: translateY(76%) rotate(var(--letter-tilt));
   will-change: transform;
@@ -347,8 +347,8 @@ body {
 }
 .greeting__message {
   font-family: var(--serif);
-  font-size: 15.5px;
-  line-height: 2.1;
+  font-size: 14.5px;
+  line-height: 2.05;
   white-space: pre-line;
   color: var(--paper-ink);
   text-align: center;

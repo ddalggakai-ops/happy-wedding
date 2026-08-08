@@ -505,10 +505,11 @@
     if (!env || !letter) return;
 
     const HIDDEN = 76; // 편지가 봉투 속에 숨어 있을 때의 이동량(%)
+    const REST = 19;   // 다 올라왔을 때 남는 이동량(%) — 편지가 3/4 정도만 나온 상태
 
     // 접근성: 모션 최소화 설정 시 애니메이션 없이 꺼내진 상태로 고정
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      letter.style.transform = "translateY(0) rotate(var(--letter-tilt))";
+      letter.style.transform = `translateY(${REST}%) rotate(var(--letter-tilt))`;
       return;
     }
 
@@ -523,7 +524,7 @@
       // 살짝 부드러운 가속 (ease-out)
       const eased = 1 - Math.pow(1 - p, 2);
       letter.style.transform =
-        `translateY(${((1 - eased) * HIDDEN).toFixed(2)}%) rotate(var(--letter-tilt))`;
+        `translateY(${(REST + (1 - eased) * (HIDDEN - REST)).toFixed(2)}%) rotate(var(--letter-tilt))`;
     }
     function onScroll() {
       if (!ticking) { ticking = true; requestAnimationFrame(update); }
