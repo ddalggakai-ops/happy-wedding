@@ -334,6 +334,16 @@ body {
   width: 100%;
   border-radius: 3px;
 }
+/* 봉투 중앙 왁스 실링 */
+.envelope__seal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30%;              /* 봉투 대비 실링 크기 — 취향에 따라 조절 */
+  transform: translate(-50%, -50%) rotate(-3deg);
+  filter: drop-shadow(0 5px 12px rgba(0, 0, 0, .4));
+  pointer-events: none;
+}
 .greeting__message {
   font-family: var(--serif);
   font-size: 15.5px;
