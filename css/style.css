@@ -243,6 +243,16 @@ body {
   opacity: .95;
 }
 
+/* ═══════════ 2.5 다이어리 꾸미기 (스크랩북 이미지) ═══════════ */
+.scrapbook {
+  background: var(--bg);
+  font-size: 0;   /* 이미지 아래 여백 제거 */
+}
+.scrapbook img {
+  width: 100%;
+  display: block;
+}
+
 /* ═══════════ 2. 인사말 ═══════════ */
 /* 구겨진 종이 질감 배경 + 검은 반투명 레이어 (밝은 텍스처를 어둡게 눌러줌) */
 .greeting {
@@ -254,7 +264,7 @@ body {
   position: absolute;
   inset: 0;
   /* 어둡기 조절은 아래 알파값만 바꾸면 됩니다 (낮을수록 종이 질감이 잘 보임) */
-  background: rgba(10, 7, 9, .70);
+  background: rgba(10, 7, 9, .62);
   pointer-events: none;
 }
 .greeting > * { position: relative; z-index: 1; }

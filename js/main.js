@@ -78,12 +78,12 @@
 
     $("#greeting-family").innerHTML = `
       <p class="family-row">
-        <b>${C.groom.father}</b> · <b>${C.groom.mother}</b>
-        <span class="family-rel">의 ${C.groom.order}</span><b>${C.groom.firstName}</b>
-      </p>
-      <p class="family-row">
         <b>${C.bride.father}</b> · <b>${C.bride.mother}</b>
         <span class="family-rel">의 ${C.bride.order}</span><b>${C.bride.firstName}</b>
+      </p>
+      <p class="family-row">
+        <b>${C.groom.father}</b> · <b>${C.groom.mother}</b>
+        <span class="family-rel">의 ${C.groom.order}</span><b>${C.groom.firstName}</b>
       </p>`;
   }
 
