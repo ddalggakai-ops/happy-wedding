@@ -570,31 +570,17 @@ body {
   padding: 0;   /* 상단/하단 블록이 각자 여백을 가짐 */
   color: #33272c;
 }
-/* 상단: 성당 일러스트 배경 — 제목과 예식장 이름 사이를 비워 일러스트가 보이도록 */
+/* 상단: 성당 일러스트(영문 캡션 포함)를 본문 흐름에 배치, 한글 이름·주소는 그 아래 */
 .location__hero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 620px;
-  padding: 72px 28px 34px;
-  background: #f7f1e8 url("../assets/venue-bg.jpg") center bottom / cover no-repeat;
+  padding: 72px 0 36px;
+  background: #fdf9f6;   /* 일러스트 여백과 같은 크림색 — 경계가 티 안 나게 */
 }
-.location__hero .location__venue { margin-top: auto; }  /* 이름·주소를 하단으로 */
-.location__hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  /* 일러스트가 은은하게 비치도록 크림색 반투명 레이어 */
-  background: rgba(250, 246, 239, .5);
-  pointer-events: none;
+.location__illust {
+  display: block;
+  width: 100%;
+  margin: -6px 0 2px;
 }
-.location__hero > * { position: relative; z-index: 1; }
 .location__hero .location__address { color: #5a4a51; }
-/* 일러스트 위 글자가 또렷하게 보이도록 흰 광 */
-.location__hero .location__venue,
-.location__hero .location__address {
-  text-shadow: 0 0 6px rgba(255,252,247,.95), 0 0 14px rgba(255,252,247,.85);
-}
 /* 하단: 지도·교통편 — 은은한 블러시 핑크 배경 */
 .location__body {
   padding: 28px 28px 68px;
