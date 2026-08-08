@@ -71,6 +71,28 @@
     $("#footer-names").textContent = `${C.groom.name} ♥ ${C.bride.name}`;
   }
 
+  /* ═══════════ 1.5 커버 꽃잎 흩날리기 ═══════════ */
+  function initPetals() {
+    const stage = document.querySelector(".intro__stage");
+    if (!stage) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const COUNT = 14;
+    for (let i = 0; i < COUNT; i++) {
+      const p = document.createElement("span");
+      p.className = "petal";
+      const size = 8 + Math.random() * 11;              // 8~19px
+      p.style.width = `${size.toFixed(1)}px`;
+      p.style.height = `${(size * 0.85).toFixed(1)}px`;
+      p.style.left = `${(Math.random() * 100).toFixed(1)}%`;
+      p.style.opacity = (0.45 + Math.random() * 0.45).toFixed(2);
+      p.style.setProperty("--fall", `${(8 + Math.random() * 8).toFixed(1)}s`);
+      p.style.setProperty("--fall-delay", `${(-Math.random() * 16).toFixed(1)}s`);
+      p.style.setProperty("--sway", `${(2.4 + Math.random() * 2.2).toFixed(1)}s`);
+      p.style.setProperty("--sway-delay", `${(-Math.random() * 4).toFixed(1)}s`);
+      stage.appendChild(p);
+    }
+  }
+
   /* ═══════════ 2. 인사말 · 가족 소개 ═══════════ */
   // URL로 받는 손님 이름:  ...?to=김철수  또는  ...#김철수
   // (GitHub Pages 같은 정적 호스팅은 /이름 형태의 경로를 지원하지 않아
@@ -528,5 +550,6 @@
     initBgm();
     initReveal();   // 동적 요소 생성 후 마지막에 실행
     initEnvelopeScroll();
+    initPetals();
   });
 })();
