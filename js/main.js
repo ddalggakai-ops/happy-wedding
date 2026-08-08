@@ -72,8 +72,22 @@
   }
 
   /* ═══════════ 2. 인사말 · 가족 소개 ═══════════ */
+  // URL로 받는 손님 이름:  ...?to=김철수  또는  ...#김철수
+  // (GitHub Pages 같은 정적 호스팅은 /이름 형태의 경로를 지원하지 않아
+  //  쿼리(?to=)와 해시(#) 두 가지를 지원합니다)
+  function getGuestName() {
+    try {
+      const q = new URLSearchParams(location.search).get("to");
+      if (q && q.trim()) return q.trim();
+      const h = decodeURIComponent(location.hash.replace(/^#/, "")).trim();
+      if (h) return h;
+    } catch (e) { /* 잘못된 인코딩은 무시 */ }
+    return "";
+  }
+
   function renderGreeting() {
-    $("#greeting-title").textContent = C.greeting.title;
+    const guest = getGuestName();
+    $("#greeting-title").textContent = guest ? `Dear. ${guest}` : C.greeting.title;
     $("#greeting-message").textContent = C.greeting.message;
 
     $("#greeting-family").innerHTML = `
