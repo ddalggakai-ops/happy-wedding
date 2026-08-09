@@ -370,26 +370,28 @@
       { title: "신랑측 계좌번호", rows: C.accounts.groomSide },
       { title: "신부측 계좌번호", rows: C.accounts.brideSide },
     ];
-    $("#accounts-list").innerHTML = groups.map((g, gi) => `
-      <div class="acc-group" data-group="${gi}">
-        <button type="button" class="acc-group__head">${g.title}</button>
-        <div class="acc-group__body">
-          ${g.rows.map((r) => `
-            <div class="acc-row">
-              <div class="acc-row__info">
-                <div class="acc-row__name">${r.holder} <span class="family-rel">(${r.relation})</span></div>
-                <div class="acc-row__num">${r.bank} ${r.number}</div>
-              </div>
-              <button type="button" class="acc-row__copy"
-                data-copy="${r.bank} ${r.number}">복사</button>
-            </div>`).join("")}
-        </div>
-      </div>`).join("");
+    const PHONE_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.25 1.02z"/></svg>`;
+    const COPY_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h9"/></svg>`;
+    const PAY_SVG = `<svg viewBox="0 0 24 24" width="13" height="13"><path fill="#FEE500" d="M12 3C6.48 3 2 6.54 2 10.9c0 2.8 1.86 5.25 4.64 6.64-.2.75-.74 2.72-.85 3.14-.13.52.19.51.4.37.17-.11 2.62-1.78 3.68-2.5.68.1 1.39.15 2.13.15 5.52 0 10-3.54 10-7.9S17.52 3 12 3z"/></svg>`;
 
-    document.querySelectorAll(".acc-group__head").forEach((btn) =>
-      btn.addEventListener("click", () => btn.parentElement.classList.toggle("is-open")));
+    $("#accounts-list").innerHTML = groups.map((g) => `
+      <p class="acc-side">${g.title}</p>
+      ${g.rows.map((r) => `
+        <div class="acc-card">
+          <div class="acc-card__top">
+            <span class="acc-card__role">${r.relation}</span>
+            <b class="acc-card__name">${r.holder}</b>
+            ${r.phone ? `<a class="acc-card__tel" href="tel:${r.phone}" aria-label="${r.holder}에게 전화하기">${PHONE_SVG}</a>` : ""}
+            ${r.kakaopay ? `<a class="acc-card__pay" href="${r.kakaopay}" target="_blank" rel="noopener">${PAY_SVG}pay</a>` : ""}
+          </div>
+          <button type="button" class="acc-card__num" data-copy="${r.bank} ${r.number}">
+            <span>${r.bank} ${r.number}</span>
+            ${COPY_SVG}
+          </button>
+        </div>`).join("")}
+      `).join("");
 
-    document.querySelectorAll(".acc-row__copy").forEach((btn) =>
+    document.querySelectorAll(".acc-card__num").forEach((btn) =>
       btn.addEventListener("click", () =>
         copyText(btn.dataset.copy, "계좌번호가 복사되었습니다")));
   }
@@ -591,6 +593,44 @@
     update();
   }
 
+  /* ═══════════ 9.5 게스트 스냅 (하객 사진 → 구글 드라이브) ═══════════ */
+  function initSnap() {
+    const url = (C.snap && C.snap.appsScriptUrl || "").trim();
+    if (!url) return;                       // URL이 없으면 섹션 숨김 유지
+    $("#snap-section").hidden = false;
+
+    const input = $("#snap-input");
+    const status = $("#snap-status");
+    const MAX_FILES = 10;
+    const MAX_SIZE = 20 * 1024 * 1024;      // 파일당 20MB
+
+    input.addEventListener("change", async () => {
+      const files = Array.from(input.files).slice(0, MAX_FILES);
+      if (!files.length) return;
+      let ok = 0;
+      for (let i = 0; i < files.length; i++) {
+        const f = files[i];
+        status.textContent = `업로드 중... (${i + 1}/${files.length})`;
+        if (f.size > MAX_SIZE) continue;
+        try {
+          const base64 = await new Promise((res, rej) => {
+            const fr = new FileReader();
+            fr.onload = () => res(String(fr.result).split(",")[1]);
+            fr.onerror = rej;
+            fr.readAsDataURL(f);
+          });
+          const body = new URLSearchParams({ data: base64, name: f.name, type: f.type });
+          // Apps Script 웹앱은 CORS 응답이 없어 no-cors로 전송 (성공 여부는 낙관적으로 처리)
+          await fetch(url, { method: "POST", mode: "no-cors", body });
+          ok++;
+        } catch (e) { /* 다음 파일 계속 */ }
+      }
+      status.textContent = "";
+      input.value = "";
+      toast(ok > 0 ? `사진 ${ok}장이 전달되었습니다. 감사합니다 ♥` : "업로드에 실패했습니다. 다시 시도해주세요");
+    });
+  }
+
   /* ═══════════ 초기화 ═══════════ */
   document.addEventListener("DOMContentLoaded", () => {
     document.title = `${C.groom.name} ♥ ${C.bride.name} 결혼합니다`;
@@ -606,6 +646,7 @@
     initGuestbook();
     initShare();
     initBgm();
+    initSnap();
     initReveal();   // 동적 요소 생성 후 마지막에 실행
     initEnvelopeScroll();
     initPetals();

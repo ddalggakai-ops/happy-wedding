@@ -121,17 +121,27 @@ const WEDDING_CONFIG = {
 
   /* ---------- 마음 전하실 곳 (계좌번호) ---------- */
   // ★ 계좌번호는 아직 전달받지 못해 예시입니다. 은행명과 번호를 채워주세요.
+  // phone    : 넣으면 이름 옆에 전화 아이콘이 생깁니다 (비우면 숨김)
+  // kakaopay : 카카오페이 송금 링크(https://qr.kakaopay.com/...)를 넣으면 pay 버튼이 생깁니다
+  //            (카카오페이 앱 → 송금·이체 → 내 송금코드/QR → 링크 복사)
   accounts: {
     groomSide: [
-      { holder: "김형규", relation: "신랑", bank: "은행명", number: "계좌번호 입력" },
-      { holder: "김정수", relation: "신랑 아버지", bank: "은행명", number: "계좌번호 입력" },
-      { holder: "정인선", relation: "신랑 어머니", bank: "은행명", number: "계좌번호 입력" },
+      { holder: "김형규", relation: "신랑", bank: "은행명", number: "계좌번호 입력", phone: "010-6383-1547", kakaopay: "" },
+      { holder: "김정수", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
+      { holder: "정인선", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
     ],
     brideSide: [
-      { holder: "방현진", relation: "신부", bank: "은행명", number: "계좌번호 입력" },
-      { holder: "방제연", relation: "신부 아버지", bank: "은행명", number: "계좌번호 입력" },
-      { holder: "곽명임", relation: "신부 어머니", bank: "은행명", number: "계좌번호 입력" },
+      { holder: "방현진", relation: "신부", bank: "은행명", number: "계좌번호 입력", phone: "010-3198-2090", kakaopay: "" },
+      { holder: "방제연", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
+      { holder: "곽명임", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
     ],
+  },
+
+  /* ---------- 게스트 스냅 (하객 사진 업로드) ---------- */
+  // 구글 드라이브 연동 방법은 저장소의 게스트스냅-연동방법.md 참고.
+  // appsScriptUrl을 채우면 "게스트 스냅" 섹션이 나타납니다.
+  snap: {
+    appsScriptUrl: "",
   },
 
   /* ---------- 지도 ---------- */
@@ -152,7 +162,7 @@ const WEDDING_CONFIG = {
   // https://developers.kakao.com 에서 앱 생성 후 JavaScript 키를 넣어주세요.
   // 비워두면 카카오 공유 버튼 대신 "링크 복사"만 동작합니다.
   kakao: {
-    jsKey: "",
+    jsKey: "4d89d33c46e6f706c39a969d9eab68fe",
     shareTitle: "김형규 ♥ 방현진 결혼합니다",
     shareDescription: "2026년 11월 15일 일요일 오전 11시\n명동성당 파밀리아 채플",
     shareImage: "https://ddalggakai-ops.github.io/happy-wedding/assets/cover.jpg",

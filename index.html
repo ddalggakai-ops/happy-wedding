@@ -210,6 +210,20 @@
       <ul id="gb-list" class="guestbook__list"></ul>
     </section>
 
+    <!-- ═══════════ 9.5 게스트 스냅 (하객 사진 업로드) ═══════════
+         config.js 의 snap.appsScriptUrl 을 채우면 나타납니다.
+         연동 방법: 게스트스냅-연동방법.md -->
+    <section class="section snap" id="snap-section" hidden>
+      <p class="section__label reveal">GUEST SNAP</p>
+      <h2 class="section__title reveal">저희의 순간을 남겨주세요</h2>
+      <p class="snap__desc reveal">예식에서 직접 담아주신 사진을 올려주시면<br/>두 사람에게 가장 소중한 선물이 됩니다.</p>
+      <label class="btn btn--fill snap__btn reveal">
+        📷 사진 올리기
+        <input type="file" id="snap-input" accept="image/*" multiple hidden />
+      </label>
+      <p class="snap__status" id="snap-status"></p>
+    </section>
+
     <!-- ═══════════ 10. 공유하기 ═══════════ -->
     <section class="section share">
       <div class="share__btns reveal">
