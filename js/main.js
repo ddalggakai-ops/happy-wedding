@@ -83,17 +83,6 @@
     $("#splash-date").textContent =
       `${C.wedding.year}. ${pad(C.wedding.month)}. ${pad(C.wedding.day)}`;
 
-    // 베일 위 진주 장식 흩뿌리기
-    const box = $("#splash-pearls");
-    for (let i = 0; i < 20; i++) {
-      const p = document.createElement("span");
-      const s = 4 + Math.random() * 5;
-      p.style.width = p.style.height = `${s.toFixed(1)}px`;
-      p.style.left = `${(4 + Math.random() * 90).toFixed(1)}%`;
-      p.style.top = `${(2 + Math.random() * 94).toFixed(1)}%`;
-      box.appendChild(p);
-    }
-
     document.body.classList.add("no-scroll");
     let closed = false;
     const close = () => {

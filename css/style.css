@@ -1125,102 +1125,57 @@ textarea { resize: none; }
 .splash.is-closed { opacity: 0; pointer-events: none; }
 body.no-scroll { overflow: hidden; height: 100vh; }
 
-.splash__env {
+/* 봉투 사진 + 카드 위 문구 오버레이 */
+.splash__photo {
   position: relative;
-  width: min(76vw, 310px);
-  height: min(100vw, 420px);
+  width: min(82vw, 340px);
 }
-/* 뒤판(위로 열린 삼각 플랩) — 반투명 베일 */
-.splash__flap-back {
-  position: absolute;
-  top: 0; left: 4%; right: 4%;
-  height: 47%;
-  clip-path: polygon(0 100%, 50% 0, 100% 100%);
-  background: linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,.10));
-  border-radius: 6px;
+.splash__photo > img {
+  display: block;
+  width: 100%;
 }
-/* 봉투 몸통 */
-.splash__env::before {
-  content: "";
+.splash__overlay {
   position: absolute;
-  top: 44%; bottom: 0; left: 4%; right: 4%;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.22);
-  border-radius: 8px;
-}
-/* 초대 카드 */
-.splash__card {
-  position: absolute;
-  z-index: 2;
-  left: 9%; right: 9%;
-  top: 27%;
-  padding: 26px 14px 22px;
-  background: #f3eee4;
-  color: #2c2823;
+  left: 14%;
+  right: 14%;
+  top: 35.5%;     /* 사진 속 흰 카드 위쪽에 맞춘 위치 */
   text-align: center;
-  box-shadow: 0 10px 34px rgba(0,0,0,.55);
+  color: #3f3a33;
 }
 .splash__brand {
   font-family: var(--en);
-  font-size: 10.5px;
-  letter-spacing: .34em;
-  text-indent: .34em;
-  color: #6c655a;
-  margin-bottom: 10px;
+  font-size: 10px;
+  letter-spacing: .32em;
+  text-indent: .32em;
+  color: #837b6e;
+  margin-bottom: 8px;
 }
 .splash__title {
   font-family: var(--en);
   font-style: italic;
   font-weight: 500;
-  font-size: 34px;
+  font-size: 31px;
   line-height: 1.15;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .splash__guest {
   font-family: var(--kr);
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .splash__names {
   font-family: var(--kr);
-  font-size: 13px;
-  color: #5d564c;
+  font-size: 12.5px;
+  color: #6d665b;
 }
 .splash__date {
   font-family: var(--en);
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: .22em;
   text-indent: .22em;
-  color: #6c655a;
-  margin-top: 4px;
-}
-/* 앞판 베일 플랩 — 카드 아랫부분이 비쳐 보이도록 반투명 */
-.splash__flap {
-  position: absolute;
-  z-index: 3;
-  top: 44%; bottom: 0; left: 4%; right: 4%;
-  pointer-events: none;
-}
-.splash__flap--left {
-  clip-path: polygon(0 0, 78% 50%, 0 100%);
-  background: linear-gradient(100deg, rgba(255,255,255,.20), rgba(255,255,255,.08));
-}
-.splash__flap--right {
-  clip-path: polygon(100% 0, 22% 50%, 100% 100%);
-  background: linear-gradient(-100deg, rgba(255,255,255,.20), rgba(255,255,255,.08));
-}
-.splash__flap--bottom {
-  clip-path: polygon(0 100%, 50% 26%, 100% 100%);
-  background: linear-gradient(0deg, rgba(255,255,255,.22), rgba(255,255,255,.10));
-}
-/* 진주 장식 (JS가 생성) */
-.splash__pearls { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
-.splash__pearls span {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #ffffff, #d8d2ca 62%, #a49d94);
-  box-shadow: 0 1px 3px rgba(0,0,0,.5);
+  color: #837b6e;
+  margin-top: 2px;
 }
 .splash__open {
   font-family: var(--sans);
