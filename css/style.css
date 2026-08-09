@@ -304,7 +304,7 @@ body {
   --env-tilt: 0deg;       /* 봉투 이미지 기울기 (이미지가 이미 기울어져 있으면 0) */
   position: relative;
   width: min(100%, 340px);
-  margin: 40px auto 36px; 
+  margin: 30px auto 36px; 
 }
 /* 편지가 이 틀 안에서만 보이므로, 내려가 있을 땐 봉투 속에 숨어 있는 것처럼 보임 */
 .envelope__slot {
