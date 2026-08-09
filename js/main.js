@@ -190,11 +190,12 @@
     const sec = document.getElementById("parents-section");
     if (!sec) return;
     const P = C.parents || {};
-    const has = (s) => s && (s.family || s.letterImage || s.baby);
+    const has = (s) => s && (s.family || s.letterImage || (s.babies && s.babies.length));
     if (!has(P.groom) && !has(P.bride)) { sec.hidden = true; return; }
 
     const side = (s) => {
       if (!has(s)) return "";
+      const babies = s.babies || [];
       return `
       <div class="parents__side reveal">
         <p class="parents__label">${s.label || ""}</p>
@@ -202,12 +203,13 @@
         ${s.family ? `
         <div class="parents__photo">
           <img src="${s.family}" alt="${s.who} 가족 사진" loading="lazy" />
+          ${babies[0] ? `<img class="parents__sticker parents__sticker--1" src="${babies[0]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
+          ${babies[1] ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
         </div>` : ""}
         ${s.letterImage ? `
         <div class="parents__letter">
           <img src="${s.letterImage}" alt="${s.who} 부모님의 편지" loading="lazy" />
         </div>` : ""}
-        ${s.baby ? `<img class="parents__baby" src="${s.baby}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
       </div>`;
     };
     document.getElementById("parents-list").innerHTML = side(P.groom) + side(P.bride);

@@ -98,17 +98,17 @@ const WEDDING_CONFIG = {
   parents: {
     groom: {
       label: "김정수 & 정인선의 아들",
-      who: "신랑 형규",
+      who: "형규",
       family: "assets/parents/groom-family.jpg",
       letterImage: "assets/parents/groom-letter.jpg",
-      baby: "",
+      babies: ["assets/parents/groom-baby1.png", "assets/parents/groom-baby2.png"],
     },
     bride: {
       label: "방제연 & 곽명임의 딸",
-      who: "신부 현진",
+      who: "현진",
       family: "",
       letterImage: "",
-      baby: "",
+      babies: [],
     },
   },
 
