@@ -71,6 +71,41 @@
     $("#footer-names").textContent = `${C.groom.name} ♥ ${C.bride.name}`;
   }
 
+  /* ═══════════ 0. 인트로 스플래시 (베일 봉투) ═══════════ */
+  function initSplash() {
+    const el = document.getElementById("splash");
+    if (!el) return;
+    if (C.splash && C.splash.enabled === false) { el.remove(); return; }
+
+    const guest = getGuestName();
+    $("#splash-guest").textContent = guest ? `Dear. ${guest}` : "소중한 분을 초대합니다";
+    $("#splash-names").textContent = `${C.groom.name}  ·  ${C.bride.name}`;
+    $("#splash-date").textContent =
+      `${C.wedding.year}. ${pad(C.wedding.month)}. ${pad(C.wedding.day)}`;
+
+    // 베일 위 진주 장식 흩뿌리기
+    const box = $("#splash-pearls");
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement("span");
+      const s = 4 + Math.random() * 5;
+      p.style.width = p.style.height = `${s.toFixed(1)}px`;
+      p.style.left = `${(4 + Math.random() * 90).toFixed(1)}%`;
+      p.style.top = `${(2 + Math.random() * 94).toFixed(1)}%`;
+      box.appendChild(p);
+    }
+
+    document.body.classList.add("no-scroll");
+    let closed = false;
+    const close = () => {
+      if (closed) return;
+      closed = true;
+      el.classList.add("is-closed");
+      document.body.classList.remove("no-scroll");
+      setTimeout(() => el.remove(), 900);
+    };
+    el.addEventListener("click", close);   // 아무 곳이나 눌러도 열림
+  }
+
   /* ═══════════ 1.5 커버 꽃잎 흩날리기 ═══════════ */
   function initPetals() {
     const stage = document.querySelector(".intro__stage");
@@ -642,6 +677,7 @@
   /* ═══════════ 초기화 ═══════════ */
   document.addEventListener("DOMContentLoaded", () => {
     document.title = `${C.groom.name} ♥ ${C.bride.name} 결혼합니다`;
+    initSplash();
     renderIntro();
     renderGreeting();
     renderContacts();
