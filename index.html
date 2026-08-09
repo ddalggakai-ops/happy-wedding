@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Imperial+Script&family=Pinyon+Script&family=Barlow+Condensed:wght@300;400&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -127,8 +127,15 @@
       <div class="location__hero">
         <p class="section__label reveal">LOCATION</p>
         <h2 class="section__title reveal">오시는 길</h2>
-        <p class="location__venue reveal" id="venue-name"></p>
-        <p class="location__address reveal" id="venue-address"></p>
+
+        <!-- 미니 일러스트 액자 + 이름·주소 -->
+        <div class="location__head reveal">
+          <img class="location__mini" src="assets/venue-mini.jpg" alt="명동성당 일러스트" />
+          <div class="location__head-text">
+            <p class="location__venue" id="venue-name"></p>
+            <p class="location__address" id="venue-address"></p>
+          </div>
+        </div>
 
         <!-- 실제 지도 (네이버 지도 — config의 naverClientId 사용) -->
         <div class="location__map reveal">
@@ -148,8 +155,6 @@
           </a>
         </div>
         <button class="btn btn--outline reveal" id="copy-address">주소 복사하기</button>
-
-        <img class="location__illust reveal" src="assets/venue-bg.jpg" alt="명동성당 일러스트" />
       </div>
 
       <!-- 하단(블러시): 지하철·버스·주차 -->

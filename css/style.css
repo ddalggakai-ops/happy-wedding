@@ -31,7 +31,7 @@
   --myeongjo: var(--kr);
   --sans: var(--kr);
   --en: "Cormorant Garamond", serif;        /* 영문·라벨·날짜 */
-  --script: "Pinyon Script", cursive;       /* 커버 Our Wedding 스크립트체 */
+  --script: "Imperial Script", "Pinyon Script", cursive;  /* 커버 Our Wedding — 풍성한 클래식 필기체 */
   --hand: "Nanum Pen Script", cursive;      /* 손글씨 폰트 */
   --max-w: 480px;
 }
@@ -199,19 +199,19 @@ body {
 .intro__invited {
   font-family: var(--en);
   font-size: 12.5px;
-  letter-spacing: .28em;
-  text-indent: .28em;      /* 자간으로 밀린 중심 보정 */
+  letter-spacing: .24em;
+  text-indent: .24em;      /* 자간으로 밀린 중심 보정 */
   color: #efe5e8;
   margin-bottom: 4px;
 }
 .intro__script {
   font-family: var(--script);
   font-weight: 400;
-  font-size: 60px;
-  line-height: 1.25;
+  font-size: 66px;
+  line-height: 1.2;
   color: var(--accent);
   text-shadow: 0 4px 28px rgba(0,0,0,.5);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 /* 날짜·장소: 샘플처럼 고딕(Pretendard) + 아이콘 */
 .intro__date,
@@ -226,8 +226,11 @@ body {
   white-space: nowrap;
 }
 .intro__date {
-  font-size: 16.5px;
-  font-weight: 600;
+  /* 얇고 길쭉한 콘덴스드체 */
+  font-family: "Barlow Condensed", var(--kr);
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: .14em;
 }
 .intro__venue {
   font-size: 15px;
@@ -578,15 +581,29 @@ body {
 }
 /* 상단(크림): 제목 → 이름·주소 → 지도 → 버튼 → 일러스트 */
 .location__hero {
-  padding: 72px 28px 0;
+  padding: 72px 28px 30px;
   background: #fdf9f6;   /* 일러스트 여백과 같은 크림색 */
 }
 .location__hero .location__address { color: #5a4a51; }
-.location__illust {
-  display: block;
-  width: calc(100% + 56px);   /* 좌우 패딩 밖까지 꽉 차게 */
-  margin: 20px -28px 0;
+/* 미니 일러스트 액자 + 이름·주소 가로 배치 */
+.location__head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 10px 0 6px;
+  text-align: left;
 }
+.location__mini {
+  width: 106px;
+  flex: 0 0 auto;
+  background: #fff;
+  padding: 6px 6px 12px;    /* 폴라로이드 프레임 느낌 */
+  border: 1px solid rgba(0, 0, 0, .07);
+  box-shadow: 0 8px 18px rgba(60, 40, 30, .2);
+  transform: rotate(-3deg);
+}
+.location__head-text { min-width: 0; }
 /* 하단(블러시): 지하철·버스·주차 */
 .location__body {
   padding: 10px 28px 68px;
@@ -623,9 +640,9 @@ body {
   margin-bottom: 6px;
 }
 .location__address {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--ink-light);
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 /* 실제 지도 임베드 */
 .location__map {
