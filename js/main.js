@@ -325,8 +325,10 @@
     const lastDate = new Date(C.wedding.year, C.wedding.month, 0).getDate();
     const startDow = first.getDay();
 
+    // 요일 머리글 (레퍼런스처럼 영문 약자)
+    const DOW = ["SU", "M", "TU", "W", "TH", "F", "SA"];
     let html = "<thead><tr>" +
-      DAY_KO.map((d, i) => `<th class="${i === 0 ? "sun" : ""}">${d}</th>`).join("") +
+      DOW.map((d, i) => `<th class="${i === 0 ? "sun" : ""}">${d}</th>`).join("") +
       "</tr></thead><tbody><tr>";
 
     for (let i = 0; i < startDow; i++) html += "<td></td>";
@@ -339,6 +341,23 @@
     }
     html += "</tr></tbody>";
     $("#calendar-table").innerHTML = html;
+
+    // 카드 위 진주 장식 (리본 주변에 흩뿌림)
+    const pearlBox = $("#cal-pearls");
+    if (pearlBox && !pearlBox.childElementCount) {
+      const spots = [
+        [30, 12.5], [44.5, 10], [59, 12.5],      // 리본 아래
+        [12, 84], [31, 89.5], [58, 88], [79, 82] // 카드 하단 리본 주변
+      ];
+      spots.forEach(([left, top], i) => {
+        const p = document.createElement("span");
+        const s = i % 3 === 0 ? 9 : 7;
+        p.style.width = p.style.height = `${s}px`;
+        p.style.left = `${left}%`;
+        p.style.top = `${top}%`;
+        pearlBox.appendChild(p);
+      });
+    }
 
     // D-day
     const today = new Date();

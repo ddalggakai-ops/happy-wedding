@@ -521,63 +521,108 @@ body {
 }
 .gallery__grid a.is-hidden { display: none; }
 
-/* ═══════════ 5. 달력 ═══════════ */
-.calendar { background: var(--bg-soft); }
-.calendar__box {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 28px 20px;
-  max-width: 340px;
-  margin: 0 auto 24px;
+/* ═══════════ 5. 달력 (리본 · 진주 카드) ═══════════ */
+.calendar {
+  background: #f4efe6;          /* 크림 종이 */
+  color: #262220;
+}
+.calendar .section__label { color: #a08b7a; }
+.calendar .section__title { color: #241f1c; }
+.calendar .section__title::after { background: #241f1c; opacity: .45; }
+
+.cal-card {
+  position: relative;
+  width: min(100%, 340px);
+  margin: 30px auto 26px;
+  aspect-ratio: 340 / 470;
+}
+/* aspect-ratio 미지원 브라우저 대비 */
+@supports not (aspect-ratio: 1) {
+  .cal-card { height: 470px; }
+}
+.cal-card__deco {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  overflow: visible;
+}
+.cal-card__inner {
+  position: absolute;
+  inset: 5%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 15% 8% 8%;
+  background: #fdfbf6;         /* 카드 종이 */
+  box-shadow: 0 10px 30px rgba(90, 70, 50, .14);
+}
+/* 흩뿌린 진주 (JS 생성) */
+.cal-card__pearls { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.cal-card__pearls span {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #ffffff, #ece6dd 58%, #b9b0a4);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
 }
 .calendar__head {
   font-family: var(--en);
-  font-size: 20px;
-  letter-spacing: .14em;
-  font-weight: 600;
-  margin-bottom: 18px;
-  color: var(--accent);
+  font-size: 19px;
+  letter-spacing: .2em;
+  text-indent: .2em;
+  font-weight: 500;
+  color: #3a332e;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #2b2622;
 }
 .calendar__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-family: var(--en);
+  font-size: 15px;
+  color: #2b2622;
 }
 .calendar__table th {
-  font-weight: 400;
-  font-size: 12px;
-  color: var(--ink-light);
-  padding-bottom: 10px;
+  font-weight: 500;
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  color: #4a423c;
+  padding-bottom: 12px;
 }
-.calendar__table th.sun, .calendar__table td.sun { color: #ff7d93; }
 .calendar__table td {
-  padding: 8px 0;
+  padding: 7px 0;
   text-align: center;
   position: relative;
+  font-weight: 500;
 }
+.calendar__table th.sun, .calendar__table td.sun { color: #9c8577; }
+/* 예식일 — 검은 원 강조 */
 .calendar__table td.wedding-day {
-  color: #171214;
+  color: #fdfbf6;
   font-weight: 700;
+  z-index: 1;
 }
 .calendar__table td.wedding-day::before {
   content: "";
   position: absolute;
-  inset: 2px 50% 2px 50%;
-  transform: translateX(-50%);
-  width: 34px;
-  height: 34px;
+  left: 50%;
   top: 50%;
-  margin-top: -17px;
-  background: var(--accent);
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
+  background: #201c19;
   z-index: -1;
 }
 .calendar__dday {
-  font-family: var(--serif);
   font-size: 15px;
+  color: #4a423c;
 }
-.calendar__dday b { color: var(--accent-deep); }
+.calendar__dday b { color: #201c19; }
 
 /* ═══════════ 6. 오시는 길 ═══════════ */
 .location {
