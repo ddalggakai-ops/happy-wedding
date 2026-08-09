@@ -310,7 +310,15 @@
         const map = new naver.maps.Map("naver-map", {
           center: pos,
           zoom: 16,
-          scrollWheel: false,   // 페이지 스크롤 중 지도 확대 방지
+          // 지도를 완전히 고정 (이동·확대 불가 — 자세히 보려면 아래 지도앱 버튼 이용)
+          draggable: false,
+          pinchZoom: false,
+          scrollWheel: false,
+          keyboardShortcuts: false,
+          disableDoubleClickZoom: true,
+          disableDoubleTapZoom: true,
+          disableTwoFingerTapZoom: true,
+          zoomControl: false,
         });
         const marker = new naver.maps.Marker({
           position: pos, map, title: "명동성당 파밀리아 채플",
