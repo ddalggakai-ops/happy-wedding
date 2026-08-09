@@ -300,11 +300,11 @@ body {
 
 /* ---------- 봉투에서 나오는 편지 (스크롤 연동) ---------- */
 .envelope {
-  --letter-tilt: -4deg;   /* 편지 기울기 */
+  --letter-tilt: -0deg;   /* 편지 기울기 */
   --env-tilt: 0deg;       /* 봉투 이미지 기울기 (이미지가 이미 기울어져 있으면 0) */
   position: relative;
   width: min(100%, 340px);
-  margin: 14px auto 36px;
+  margin: 40px auto 36px; 
 }
 /* 편지가 이 틀 안에서만 보이므로, 내려가 있을 땐 봉투 속에 숨어 있는 것처럼 보임 */
 .envelope__slot {
@@ -383,7 +383,7 @@ body {
 }
 .greeting__family {
   font-size: 15.5px;
-  margin-bottom: 32px;
+  margin-bottom: 26px;
   line-height: 2.3;
 }
 .greeting__family .family-row { font-family: var(--serif); color: var(--ink-light); }
