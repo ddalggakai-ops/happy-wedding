@@ -719,15 +719,46 @@ body {
   color: var(--ink-light);
   margin-bottom: 28px;
 }
-/* 계좌 카드 (역할 + 이름 + 전화 + 카카오페이 / 계좌번호 + 복사) */
-.acc-side {
-  text-align: left;
-  font-size: 13px;
+/* 계좌 드롭다운 그룹 (신랑측/신부측 마음 전하실 곳) */
+.acc-group { margin-bottom: 12px; }
+.acc-group__head {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 15px 20px;
+  font-family: var(--sans);
+  font-size: 15px;
   font-weight: 700;
-  color: var(--accent);
-  letter-spacing: .06em;
-  margin: 22px 2px 10px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
 }
+.acc-group__head::after {
+  content: "▾";
+  color: var(--accent);
+  transition: transform .3s;
+}
+.acc-group.is-open .acc-group__head { border-radius: 14px 14px 0 0; }
+.acc-group.is-open .acc-group__head::after { transform: rotate(180deg); }
+.acc-group__body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .45s ease;
+  background: rgba(255, 255, 255, .03);
+  border: 0 solid var(--line);
+  border-radius: 0 0 14px 14px;
+}
+.acc-group.is-open .acc-group__body {
+  max-height: 900px;
+  border-width: 0 1px 1px;
+  padding: 12px 10px 10px;
+}
+
+/* 계좌 카드 (역할 + 이름 + 전화 + 카카오페이 / 계좌번호 + 복사) */
 .acc-card {
   background: var(--card);
   border: 1px solid var(--line);
