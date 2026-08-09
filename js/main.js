@@ -573,7 +573,8 @@
       });
     }
 
-    $("#share-kakao").addEventListener("click", () => {
+    const kakaoBtn = $("#share-kakao");
+    if (kakaoBtn) kakaoBtn.addEventListener("click", () => {
       if (!hasKakao) {
         copyText(location.href, "카카오 키가 없어 링크를 복사했습니다");
         return;

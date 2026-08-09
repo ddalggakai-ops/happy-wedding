@@ -103,12 +103,13 @@ const WEDDING_CONFIG = {
       letterImage: "assets/parents/groom-letter.jpg",
       babies: ["assets/parents/groom-baby1.png", "assets/parents/groom-baby2.png"],
     },
+    // ★ 신부측은 현재 임시(플레이스홀더) 이미지입니다. 실제 사진·편지로 교체해주세요.
     bride: {
       label: "방제연 & 곽명임의 딸",
       who: "현진",
-      family: "",
-      letterImage: "",
-      babies: [],
+      family: "assets/parents/bride-family.jpg",
+      letterImage: "assets/parents/bride-letter.jpg",
+      babies: ["assets/parents/bride-baby1.png"],
     },
   },
 
