@@ -253,6 +253,12 @@
     <!-- ═══════════ 10. 공유하기 ═══════════ -->
     <section class="section share">
       <div class="share__btns reveal">
+        <!-- 네이티브 공유 시트 (앱 이동 없이 하단에서 올라옴) — 지원 기기에서만 표시 -->
+        <button class="btn btn--fill" id="share-native" hidden>
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 15V3M8 7l4-4 4 4"/></svg>
+          공유하기
+        </button>
+        <!-- 카카오 리치 카드 공유 (네이티브 공유 미지원 기기·PC 대비) -->
         <button class="btn btn--kakao" id="share-kakao">
           <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#3C1E1E" d="M12 3C6.48 3 2 6.54 2 10.9c0 2.8 1.86 5.25 4.64 6.64-.2.75-.74 2.72-.85 3.14-.13.52.19.51.4.37.17-.11 2.62-1.78 3.68-2.5.68.1 1.39.15 2.13.15 5.52 0 10-3.54 10-7.9S17.52 3 12 3z"/></svg>
           카카오톡으로 소문내기

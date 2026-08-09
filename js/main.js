@@ -556,6 +556,23 @@
     const hasKakao = window.Kakao && C.kakao.jsKey;
     if (hasKakao && !Kakao.isInitialized()) Kakao.init(C.kakao.jsKey);
 
+    // 네이티브 공유 시트 — 앱으로 넘어가지 않고 화면 하단에서 올라옴
+    if (navigator.share) {
+      const btn = $("#share-native");
+      btn.hidden = false;
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.share({
+            title: C.kakao.shareTitle,
+            text: C.kakao.shareDescription,
+            url: location.href,
+          });
+        } catch (e) {
+          // 사용자가 공유를 취소한 경우는 조용히 무시
+        }
+      });
+    }
+
     $("#share-kakao").addEventListener("click", () => {
       if (!hasKakao) {
         copyText(location.href, "카카오 키가 없어 링크를 복사했습니다");
