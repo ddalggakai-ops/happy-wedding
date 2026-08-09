@@ -53,6 +53,8 @@ const WEDDING_CONFIG = {
   /* ---------- 인사말 ---------- */
   greeting: {
     title: "소중한 분들을 초대합니다",
+    // 손글씨 이미지를 넣으면 편지지에 글 대신 이미지가 표시됩니다. 비우면 아래 message 사용.
+    image: "assets/greeting-letter.png",
     message: `서로가 마주 보며 다져온 사랑을
 이제 함께 한 곳을 바라보며
 걸어갈 수 있는 큰 사랑으로 키우고자 합니다.
@@ -153,7 +155,7 @@ const WEDDING_CONFIG = {
     jsKey: "",
     shareTitle: "김형규 ♥ 방현진 결혼합니다",
     shareDescription: "2026년 11월 15일 일요일 오전 11시\n명동성당 파밀리아 채플",
-    shareImage: "",   // 공유 썸네일 이미지의 "전체 URL" (배포 후 주소 입력)
+    shareImage: "https://ddalggakai-ops.github.io/happy-wedding/assets/cover.jpg",
   },
 
   /* ---------- 방명록 · RSVP 저장 방식 ---------- */

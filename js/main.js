@@ -76,7 +76,7 @@
     const stage = document.querySelector(".intro__stage");
     if (!stage) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const COUNT = 14;
+    const COUNT = 10;   // 인앱 브라우저 부하를 고려해 개수 제한
     for (let i = 0; i < COUNT; i++) {
       const p = document.createElement("span");
       p.className = "petal";
@@ -110,7 +110,13 @@
   function renderGreeting() {
     const guest = getGuestName();
     $("#greeting-title").textContent = guest ? `Dear. ${guest}` : C.greeting.title;
-    $("#greeting-message").textContent = C.greeting.message;
+    if (C.greeting.image) {
+      // 손글씨 이미지 편지
+      $("#greeting-message").innerHTML =
+        `<img class="greeting__hand" src="${C.greeting.image}" alt="손글씨 인사말" />`;
+    } else {
+      $("#greeting-message").textContent = C.greeting.message;
+    }
 
     $("#greeting-family").innerHTML = `
       <p class="family-row">
@@ -553,7 +559,7 @@
 
     // 접근성: 모션 최소화 설정 시 애니메이션 없이 꺼내진 상태로 고정
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      letter.style.transform = `translateY(${REST}%) rotate(var(--letter-tilt))`;
+      letter.style.transform = `translate3d(0, ${REST}%, 0) rotate(var(--letter-tilt))`;
       return;
     }
 
@@ -561,8 +567,10 @@
     function update() {
       ticking = false;
       const sr = sec.getBoundingClientRect();
-      const ir = img.getBoundingClientRect();
       const vh = window.innerHeight;
+      // 섹션이 화면에서 멀면 아무 것도 안 함 (인앱 브라우저 스크롤 부하 절감)
+      if (sr.bottom < -100 || sr.top > vh + 200) return;
+      const ir = img.getBoundingClientRect();
       // 섹션 제목이 화면 하단(90%)에 들어오면 0 → 봉투가 화면 45% 지점에 오면 1
       const offset = ir.top - sr.top;               // 섹션 상단 ~ 봉투 사이 거리
       const startImgTop = vh * 0.9 + offset;        // 시작 시점의 봉투 위치
@@ -571,8 +579,9 @@
       p = Math.max(0, Math.min(1, p));
       // 살짝 부드러운 가속 (ease-out)
       const eased = 1 - Math.pow(1 - p, 2);
+      // translate3d: GPU 합성 강제 — 인앱 브라우저에서 스크롤 버벅임 완화
       letter.style.transform =
-        `translateY(${(REST + (1 - eased) * (HIDDEN - REST)).toFixed(2)}%) rotate(var(--letter-tilt))`;
+        `translate3d(0, ${(REST + (1 - eased) * (HIDDEN - REST)).toFixed(2)}%, 0) rotate(var(--letter-tilt))`;
     }
     function onScroll() {
       if (!ticking) { ticking = true; requestAnimationFrame(update); }

@@ -151,8 +151,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* 샘플처럼 살짝 톤 다운된 컬러. 흑백을 원하면 grayscale(1)로 교체 */
-  filter: saturate(.82) contrast(1.03) brightness(.96);
+  /* 톤 보정은 이미지 파일에 미리 적용됨 (CSS filter는 인앱 브라우저에서 스크롤 버벅임 유발) */
 }
 /* 위·아래 어두운 그라데이션 — 글씨가 사진 위에서 또렷하게 보이도록 */
 .intro__stage::after {
@@ -320,8 +319,9 @@ body {
   border: 44px solid transparent;
   border-image: url("../assets/letter.png") 70 fill stretch;
   padding: 4px 2px 170px;   /* 아래 여유 = 봉투 속에 남는 부분 (편지가 3/4만 나오므로 넉넉히) */
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, .45));
-  transform: translateY(76%) rotate(var(--letter-tilt));
+  /* 그림자 반경 축소 — 스크롤 애니메이션 중 GPU 부하 절감 */
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .4));
+  transform: translate3d(0, 76%, 0) rotate(var(--letter-tilt));
   will-change: transform;
 }
 .envelope__frame {
@@ -346,6 +346,12 @@ body {
   transform: translate(-50%, -50%) rotate(-3deg);
   filter: drop-shadow(0 4px 9px rgba(0, 0, 0, .4));
   pointer-events: none;
+}
+/* 손글씨 인사말 이미지 */
+.greeting__hand {
+  display: block;
+  width: 92%;
+  margin: 6px auto;
 }
 .greeting__message {
   font-family: var(--serif);
