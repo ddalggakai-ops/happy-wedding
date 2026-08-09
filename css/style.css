@@ -1144,17 +1144,17 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 }
 .splash__brand {
   font-family: var(--en);
-  font-size: 10px;
-  letter-spacing: .32em;
-  text-indent: .32em;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-indent: .14em;
   color: #837b6e;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
+/* 중세 유럽풍 블랙레터 */
 .splash__title {
-  font-family: var(--en);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 31px;
+  font-family: "UnifrakturMaguntia", "Grenze Gotisch", serif;
+  font-weight: 400;
+  font-size: 33px;
   line-height: 1.15;
   margin-bottom: 10px;
 }
@@ -1171,11 +1171,11 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 }
 .splash__date {
   font-family: var(--en);
-  font-size: 11px;
+  font-size: 11.5px;
   letter-spacing: .22em;
   text-indent: .22em;
   color: #837b6e;
-  margin-top: 2px;
+  margin-top: 14px;   /* 초대 문구와 한 줄 띄운 간격 */
 }
 .splash__open {
   font-family: var(--sans);

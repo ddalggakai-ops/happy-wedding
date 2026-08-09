@@ -161,7 +161,7 @@ const WEDDING_CONFIG = {
   // assets/audio/bgm.mp3 파일을 넣으면 재생 버튼이 활성화됩니다.
   bgm: {
     src: "assets/audio/bgm.mp3",
-    autoplay: false,   // 모바일 브라우저는 자동재생을 대부분 차단하므로 false 권장
+    autoplay: true,    // 접속(첫 터치) 시 바로 재생 — 스플래시의 "초대장 열기"를 누르는 순간 시작됩니다
   },
 
   /* ---------- 카카오톡 공유 ---------- */

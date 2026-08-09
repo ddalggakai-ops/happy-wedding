@@ -79,7 +79,8 @@
 
     const guest = getGuestName();
     $("#splash-guest").textContent = guest ? `Dear. ${guest}` : "소중한 분을 초대합니다";
-    $("#splash-names").textContent = `${C.groom.name}  ·  ${C.bride.name}`;
+    $("#splash-names").textContent =
+      `${C.groom.name} ${C.bride.name}의 결혼식에 초대합니다.`;
     $("#splash-date").textContent =
       `${C.wedding.year}. ${pad(C.wedding.month)}. ${pad(C.wedding.day)}`;
 
@@ -571,6 +572,18 @@
     if (C.bgm.autoplay) {
       // 자동재생 시도 (브라우저가 차단하면 무시됨)
       audio.play().then(() => btn.classList.add("is-playing")).catch(() => {});
+      // 모바일은 소리 있는 자동재생을 차단하므로,
+      // 첫 터치(스플래시의 "초대장 열기" 포함)에서 바로 재생 시작
+      const kick = () => {
+        if (!audio.paused) return cleanup();
+        audio.play().then(() => { btn.classList.add("is-playing"); cleanup(); }).catch(() => {});
+      };
+      const cleanup = () => {
+        ["pointerdown", "touchend", "click"].forEach((t) =>
+          document.removeEventListener(t, kick, true));
+      };
+      ["pointerdown", "touchend", "click"].forEach((t) =>
+        document.addEventListener(t, kick, true));
     }
   }
 
