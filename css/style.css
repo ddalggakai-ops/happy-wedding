@@ -1191,3 +1191,72 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* ═══════════ 3.5 부모님의 편지 (크림 플로럴 배경 스크랩북) ═══════════ */
+.parents {
+  background: #efe9e1 url("../assets/parents-bg.jpg") center top / cover repeat-y;
+  color: #3b332c;
+}
+.parents .section__label { color: #c9566f; }
+.parents .section__title { color: #2f2822; }
+.parents .section__title::after { background: #c9566f; }
+.parents__side { margin-top: 34px; }
+.parents__side + .parents__side { margin-top: 74px; }
+.parents__label {
+  font-size: 13.5px;
+  color: #6f665c;
+}
+.parents__who {
+  font-size: 17.5px;
+  font-weight: 700;
+  margin: 1px 0 20px;
+}
+/* 가족사진 — 흰 테두리 폴라로이드 + 마스킹테이프 */
+.parents__photo {
+  position: relative;
+  display: inline-block;
+  max-width: 82%;
+  background: #fff;
+  padding: 9px 9px 13px;
+  box-shadow: 0 10px 26px rgba(70, 50, 35, .22);
+  transform: rotate(-1.6deg);
+}
+.parents__photo img { display: block; width: 100%; }
+.parents__photo::after {
+  content: "";
+  position: absolute;
+  top: -11px; left: 50%;
+  width: 74px; height: 22px;
+  transform: translateX(-50%) rotate(-2deg);
+  background: rgba(150, 185, 235, .45);   /* 반투명 파란 테이프 */
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+/* 손편지 — 살짝 기울인 카드 + 테이프 */
+.parents__letter {
+  position: relative;
+  margin: 30px auto 0;
+  width: 92%;
+  transform: rotate(1.2deg);
+  box-shadow: 0 12px 28px rgba(70, 50, 35, .2);
+  border-radius: 4px;
+  overflow: visible;
+}
+.parents__letter img { display: block; width: 100%; border-radius: 4px; }
+.parents__letter::before {
+  content: "";
+  position: absolute;
+  bottom: -9px; left: 8%;
+  width: 66px; height: 20px;
+  transform: rotate(3deg);
+  background: rgba(150, 220, 180, .5);    /* 반투명 초록 테이프 */
+  z-index: 2;
+}
+/* 어린 시절 사진 — 스티커 컷아웃 느낌 */
+.parents__baby {
+  width: 132px;
+  margin-top: 20px;
+  border: 5px solid #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(70, 50, 35, .25);
+  transform: rotate(4deg);
+}

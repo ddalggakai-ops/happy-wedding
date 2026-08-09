@@ -54,7 +54,7 @@ const WEDDING_CONFIG = {
   greeting: {
     title: "소중한 분들을 초대합니다",
     // 손글씨 이미지를 넣으면 편지지에 글 대신 이미지가 표시됩니다. 비우면 아래 message 사용.
-    image: "assets/greeting-letter.png",
+    image: "",
     message: `서로가 마주 보며 다져온 사랑을
 이제 함께 한 곳을 바라보며
 걸어갈 수 있는 큰 사랑으로 키우고자 합니다.
@@ -91,6 +91,26 @@ const WEDDING_CONFIG = {
 손 꼭 잡고 걸어갈게. 사랑해.`,
     },
   ],
+
+  /* ---------- 부모님의 편지 ---------- */
+  // family: 가족사진 / letterImage: 손편지 사진 / baby: 어린 시절 사진 (스티커처럼 표시)
+  // 파일이 없는 항목은 비워두면 표시되지 않고, 양쪽 다 비면 섹션 전체가 숨겨집니다.
+  parents: {
+    groom: {
+      label: "김정수 & 정인선의 아들",
+      who: "신랑 형규",
+      family: "assets/parents/groom-family.jpg",
+      letterImage: "assets/parents/groom-letter.jpg",
+      baby: "",
+    },
+    bride: {
+      label: "방제연 & 곽명임의 딸",
+      who: "신부 현진",
+      family: "",
+      letterImage: "",
+      baby: "",
+    },
+  },
 
   /* ---------- 갤러리 이미지 ---------- */
   // assets/images 폴더에 사진을 넣고 파일명을 맞춰주세요.

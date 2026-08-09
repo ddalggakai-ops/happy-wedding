@@ -136,9 +136,15 @@
     const guest = getGuestName();
     $("#greeting-title").textContent = guest ? `Dear. ${guest}` : C.greeting.title;
     if (C.greeting.image) {
-      // 손글씨 이미지 편지
-      $("#greeting-message").innerHTML =
-        `<img class="greeting__hand" src="${C.greeting.image}" alt="손글씨 인사말" />`;
+      // 손글씨 이미지 편지 (파일이 없으면 자동으로 글 인사말로 대체)
+      const img = document.createElement("img");
+      img.className = "greeting__hand";
+      img.src = C.greeting.image;
+      img.alt = "손글씨 인사말";
+      img.onerror = () => { $("#greeting-message").textContent = C.greeting.message; };
+      const p = $("#greeting-message");
+      p.innerHTML = "";
+      p.appendChild(img);
     } else {
       $("#greeting-message").textContent = C.greeting.message;
     }
@@ -177,6 +183,34 @@
     $("#contact-modal").addEventListener("click", (e) => {
       if (e.target === e.currentTarget) e.currentTarget.hidden = true;
     });
+  }
+
+  /* ═══════════ 3.5 부모님의 편지 ═══════════ */
+  function renderParents() {
+    const sec = document.getElementById("parents-section");
+    if (!sec) return;
+    const P = C.parents || {};
+    const has = (s) => s && (s.family || s.letterImage || s.baby);
+    if (!has(P.groom) && !has(P.bride)) { sec.hidden = true; return; }
+
+    const side = (s) => {
+      if (!has(s)) return "";
+      return `
+      <div class="parents__side reveal">
+        <p class="parents__label">${s.label || ""}</p>
+        <p class="parents__who">${s.who || ""}</p>
+        ${s.family ? `
+        <div class="parents__photo">
+          <img src="${s.family}" alt="${s.who} 가족 사진" loading="lazy" />
+        </div>` : ""}
+        ${s.letterImage ? `
+        <div class="parents__letter">
+          <img src="${s.letterImage}" alt="${s.who} 부모님의 편지" loading="lazy" />
+        </div>` : ""}
+        ${s.baby ? `<img class="parents__baby" src="${s.baby}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
+      </div>`;
+    };
+    document.getElementById("parents-list").innerHTML = side(P.groom) + side(P.bride);
   }
 
   /* ═══════════ 3. 러브레터 (손글씨 편지) ═══════════ */
@@ -691,6 +725,7 @@
     renderGreeting();
     renderContacts();
     renderLetters();
+    renderParents();
     renderGallery();
     renderCalendar();
     renderLocation();
