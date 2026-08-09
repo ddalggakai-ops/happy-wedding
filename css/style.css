@@ -504,11 +504,16 @@ body {
 }
 .gallery__wrap.is-collapsed .gallery__more { display: flex; }
 .gallery__grid a {
+  /* 세로 3:4 비율 — aspect-ratio 미지원 브라우저(구형 삼성 인터넷 등)까지
+     동작하도록 padding 비율 방식 사용 */
+  position: relative;
   display: block;
-  aspect-ratio: 3 / 4;   /* 세로를 늘려 사진이 더 많이 보이도록 */
+  padding-top: 133.333%;
   overflow: hidden;
 }
 .gallery__grid img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
