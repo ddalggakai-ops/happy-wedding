@@ -322,25 +322,41 @@
   function renderCalendar() {
     $("#calendar-title").textContent = formatKoreanDate();
 
-    // D-day (캘린더는 이미지, 카운트만 동적으로)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const target = new Date(C.wedding.year, C.wedding.month - 1, C.wedding.day);
-    const diff = Math.round((target - today) / 86400000);
     const names = `${C.groom.name} ♥ ${C.bride.name}`;
-    let num, desc;
-    if (diff > 0) {
-      num = `D-${diff}`;
-      desc = `${names}의 결혼식이 ${diff}일 남았습니다`;
-    } else if (diff === 0) {
-      num = "D-DAY";
-      desc = `오늘, ${names} 결혼합니다!`;
-    } else {
-      num = `D+${Math.abs(diff)}`;
-      desc = `${names} 결혼식이 ${Math.abs(diff)}일 지났습니다`;
+    const target = weddingDate.getTime();
+
+    function tick() {
+      const now = Date.now();
+      let ms = target - now;
+
+      if (ms <= 0) {
+        // 예식 시각 이후
+        const past = Math.abs(ms);
+        const d = Math.floor(past / 86400000);
+        $("#cd-d").textContent = d;
+        $("#cd-h").textContent = Math.floor(past / 3600000) % 24;
+        $("#cd-m").textContent = Math.floor(past / 60000) % 60;
+        $("#cd-s").textContent = Math.floor(past / 1000) % 60;
+        $("#cd-text").innerHTML = d === 0
+          ? `오늘, ${names} 결혼합니다!`
+          : `${names}의 결혼식이 <b>${d}일</b> 지났습니다.`;
+        return;
+      }
+
+      $("#cd-d").textContent = Math.floor(ms / 86400000);
+      $("#cd-h").textContent = Math.floor(ms / 3600000) % 24;
+      $("#cd-m").textContent = Math.floor(ms / 60000) % 60;
+      $("#cd-s").textContent = Math.floor(ms / 1000) % 60;
+
+      // 남은 "일수"는 날짜 기준으로 계산 (0시 기준)
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const day0 = new Date(C.wedding.year, C.wedding.month - 1, C.wedding.day);
+      const dayLeft = Math.round((day0 - today) / 86400000);
+      $("#cd-text").innerHTML = `${names}의 결혼식이 <b>${dayLeft}일</b> 남았습니다.`;
     }
-    $("#dday-num").textContent = num;
-    $("#dday-desc").textContent = desc;
+
+    tick();
+    setInterval(tick, 1000);
   }
 
   /* ═══════════ 6. 오시는 길 ═══════════ */
