@@ -523,15 +523,15 @@ body {
 
 /* ═══════════ 5. 달력 (이미지) + 카운트다운 ═══════════ */
 .calendar {
-  /* 캘린더 이미지의 종이 여백과 똑같은 색 — 경계가 보이지 않도록 */
-  background: #dfd7c1;
-  color: #2c2620;
+  /* 캘린더 이미지의 검정 배경과 똑같은 색 — 경계가 보이지 않도록 */
+  background: #1a1818;
+  color: #ece5e6;
   padding-left: 0;
   padding-right: 0;
 }
-.calendar .section__label { color: #8d7455; }
-.calendar .section__title { color: #241f19; }
-.calendar .section__title::after { background: #241f19; opacity: .4; }
+.calendar .section__label { color: var(--accent-deep); }
+.calendar .section__title { color: #f6f1f2; }
+.calendar .section__title::after { background: var(--accent); opacity: .6; }
 
 /* 이미지를 좌우 끝까지 채워 배경과 자연스럽게 이어지게 */
 .cal-photo {
@@ -558,36 +558,37 @@ body {
   gap: 2px;
   padding: 12px 4px 14px;
   border-radius: 14px;
-  background: rgba(255, 253, 247, .72);
+  background: rgba(255, 255, 255, .07);
+  border: 1px solid rgba(255, 255, 255, .09);
 }
 .cd-box__label {
   font-family: var(--en);
   font-size: 11px;
   letter-spacing: .14em;
   text-indent: .14em;
-  color: #7d6d55;
+  color: #b9a3a9;
 }
 .cd-box__num {
   font-family: var(--kr);
   font-size: 26px;
   font-weight: 600;
   line-height: 1.15;
-  color: #241f19;
+  color: #f7f2f3;
 }
 .cd-sep {
   align-self: center;
   font-size: 17px;
-  color: #9a8a70;
+  color: #6f6165;
   padding-bottom: 4px;
 }
 .countdown__text {
   margin-top: 16px;
   font-size: 14.5px;
-  color: #4a4034;
+  color: #c2b6ba;
   text-align: center;
 }
 .countdown__text b {
-  color: #b5455f;
+  color: var(--accent);
   font-weight: 700;
 }
 
@@ -595,25 +596,28 @@ body {
 .location {
   padding: 0;   /* 상단/하단 블록이 각자 여백을 가짐 */
   color: #33272c;
+  /* 손으로 뜬 종이 질감 (이음새 없는 타일) */
+  background: #f4f1ea url("../assets/paper-bg.jpg") top left / 300px auto repeat;
 }
-/* 상단(크림): 제목 → 이름·주소 → 지도 → 버튼 → 일러스트 */
+/* 상단: 제목 → 이름·주소 → 지도 → 버튼 → 일러스트 */
 .location__hero {
-  padding: 72px 28px 30px;
-  background: #fdf9f6;   /* 일러스트 여백과 같은 크림색 */
+  padding: 72px 28px 24px;
+  background: transparent;
 }
 .location__hero .location__address { color: #5a4a51; }
-/* 콜라주: 일러스트 + 겹쳐 올라오는 지도 카드 */
+/* 성당 일러스트 — multiply로 흰 여백을 없애 종이 위에 직접 그린 느낌 */
 .location__illust {
   display: block;
-  width: 84%;
-  margin: 8px auto -64px;   /* 아래 -값 = 지도 카드가 일러스트를 덮는 깊이 */
+  width: 96%;
+  margin: 4px auto 10px;   /* 아래가 지도에 가리지 않도록 여유를 둠 */
+  mix-blend-mode: multiply;
 }
-/* 하단(블러시): 지하철·버스·주차 */
+/* 하단: 지하철·버스·주차 */
 .location__body {
-  padding: 10px 28px 68px;
-  background: #f6e3e8;
+  padding: 0 28px 68px;
+  background: transparent;
 }
-.location__body .location__transit { margin-top: 12px; border-top: none; }
+.location__body .location__transit { margin-top: 26px; border-top: none; }
 .location .section__label { color: #c9566f; }
 .location .section__title { color: #2c2126; }
 .location .section__title::after { background: #c9566f; }
@@ -651,7 +655,7 @@ body {
   width: 88%;
   margin: 0 auto 24px;
   transform: rotate(1.8deg);
-  border: 8px solid #fff;
+  border: 8px solid #fffdf8;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 16px 32px rgba(60, 40, 30, .28);
