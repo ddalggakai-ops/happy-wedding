@@ -246,17 +246,42 @@
       <ul id="gb-list" class="guestbook__list"></ul>
     </section>
 
-    <!-- ═══════════ 9.5 게스트 스냅 (하객 사진 업로드) ═══════════
+    <!-- ═══════════ 9.5 게스트 스냅 · 포토 빙고 ═══════════
          config.js 의 snap.appsScriptUrl 을 채우면 나타납니다.
          연동 방법: 게스트스냅-연동방법.md -->
     <section class="section snap" id="snap-section" hidden>
-      <p class="section__label reveal">GUEST SNAP</p>
-      <h2 class="section__title reveal">저희의 순간을 남겨주세요</h2>
-      <p class="snap__desc reveal">예식에서 직접 담아주신 사진을 올려주시면<br/>두 사람에게 가장 소중한 선물이 됩니다.</p>
-      <label class="btn btn--fill snap__btn reveal">
-        📷 사진 올리기
+      <p class="section__label reveal">PHOTO BINGO</p>
+      <h2 class="section__title reveal" id="bingo-title"></h2>
+      <p class="snap__desc reveal" id="bingo-desc"></p>
+
+      <!-- 3×3 미션 판 (칸은 config.bingo.cells 로 생성) -->
+      <div class="bingo__grid reveal" id="bingo-grid"></div>
+      <p class="bingo__status" id="bingo-status"></p>
+
+      <!-- 응모 정보 -->
+      <form class="bingo__form reveal" id="bingo-form">
+        <div class="form-row form-row--pair">
+          <label class="chip"><input type="radio" name="bingo-side" value="신랑측" checked /><span>신랑측</span></label>
+          <label class="chip"><input type="radio" name="bingo-side" value="신부측" /><span>신부측</span></label>
+        </div>
+        <div class="form-row">
+          <input type="text" id="bingo-name" placeholder="성함" maxlength="20" required />
+          <input type="tel" id="bingo-phone" placeholder="연락처" maxlength="20" required />
+        </div>
+        <button type="submit" class="btn btn--fill" id="bingo-submit" disabled>한 줄을 먼저 완성해주세요</button>
+        <p class="bingo__note" id="bingo-note"></p>
+      </form>
+
+      <p class="bingo__done" id="bingo-done" hidden></p>
+
+      <!-- 빙고와 상관없이 사진만 올리고 싶을 때 -->
+      <label class="bingo__free reveal" id="bingo-free">
+        빙고와 상관없이 사진만 올리기
         <input type="file" id="snap-input" accept="image/*" multiple hidden />
       </label>
+
+      <!-- 빙고 칸 촬영용 (칸을 누르면 열립니다) -->
+      <input type="file" id="bingo-input" accept="image/*" hidden />
       <p class="snap__status" id="snap-status"></p>
     </section>
 

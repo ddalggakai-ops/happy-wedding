@@ -705,42 +705,265 @@
     update();
   }
 
-  /* ═══════════ 9.5 게스트 스냅 (하객 사진 → 구글 드라이브) ═══════════ */
-  function initSnap() {
+  /* ═══════════ 9.5 게스트 스냅 · 포토 빙고 (→ 구글 드라이브/시트) ═══════════ */
+
+  // 3×3 빙고 라인 (가로 3 · 세로 3 · 대각선 2)
+  const BINGO_LINES = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6],
+  ];
+
+  /* 사진을 브라우저에서 미리 줄여 업로드 (원본 그대로 보내면 너무 느립니다) */
+  function loadBitmap(file) {
+    if (window.createImageBitmap) {
+      try {
+        return createImageBitmap(file, { imageOrientation: "from-image" }).catch(() => loadImgEl(file));
+      } catch (e) { /* 옵션 미지원 → 아래로 */ }
+    }
+    return loadImgEl(file);
+  }
+  function loadImgEl(file) {
+    return new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = URL.createObjectURL(file);
+    });
+  }
+  async function shrink(file, max, quality) {
+    const src = await loadBitmap(file);
+    let w = src.width, h = src.height;
+    const scale = Math.min(1, max / Math.max(w, h));
+    w = Math.max(1, Math.round(w * scale));
+    h = Math.max(1, Math.round(h * scale));
+    const cv = document.createElement("canvas");
+    cv.width = w; cv.height = h;
+    cv.getContext("2d").drawImage(src, 0, 0, w, h);
+    if (src.close) src.close();
+    const blob = await new Promise((res) => cv.toBlob(res, "image/jpeg", quality));
+    return blob || file;
+  }
+  function toBase64(blob) {
+    return new Promise((res, rej) => {
+      const fr = new FileReader();
+      fr.onload = () => res(String(fr.result).split(",")[1]);
+      fr.onerror = rej;
+      fr.readAsDataURL(blob);
+    });
+  }
+  /* Apps Script 전송 — CORS가 되면 응답을 읽고, 막히면 no-cors로 재시도 */
+  async function postScript(url, params) {
+    try {
+      const r = await fetch(url, { method: "POST", body: new URLSearchParams(params) });
+      if (r.ok) {
+        try { return await r.json(); } catch (e) { return { ok: true }; }
+      }
+    } catch (e) { /* 아래에서 no-cors 재시도 */ }
+    await fetch(url, { method: "POST", mode: "no-cors", body: new URLSearchParams(params) });
+    return { ok: true, opaque: true };
+  }
+
+  function initBingo() {
     const url = (C.snap && C.snap.appsScriptUrl || "").trim();
     if (!url) return;                       // URL이 없으면 섹션 숨김 유지
     $("#snap-section").hidden = false;
 
-    const input = $("#snap-input");
-    const status = $("#snap-status");
-    const MAX_FILES = 10;
-    const MAX_SIZE = 20 * 1024 * 1024;      // 파일당 20MB
+    const B = C.bingo || {};
+    const CELLS = (B.cells || []).slice(0, 9);
+    if (CELLS.length < 9) return;
 
-    input.addEventListener("change", async () => {
-      const files = Array.from(input.files).slice(0, MAX_FILES);
+    $("#bingo-title").textContent = B.title || "포토 빙고";
+    $("#bingo-desc").innerHTML = String(B.desc || "").replace(/\n/g, "<br/>");
+    $("#bingo-note").innerHTML =
+      "사진은 신랑·신부의 구글 드라이브에만 저장되며, 연락처는 경품 안내 외에는 사용하지 않습니다."
+      + (B.prize ? "<br/>" + B.prize : "");
+
+    const grid = $("#bingo-grid");
+    const status = $("#bingo-status");
+    const form = $("#bingo-form");
+    const btn = $("#bingo-submit");
+    const done = $("#bingo-done");
+    const cellInput = $("#bingo-input");
+    const shots = new Array(9).fill(null);   // { blob, url }
+    let pending = -1;
+    let busy = false;
+
+    /* --- 판 그리기 --- */
+    grid.innerHTML = CELLS.map((c, i) => `
+      <button type="button" class="bingo-cell" data-i="${i}" aria-label="${escapeHtml(c.text)}">
+        <img class="bingo-cell__img" alt="" />
+        <span class="bingo-cell__check">✓</span>
+        <span class="bingo-cell__inner">
+          <span class="bingo-cell__icon">${escapeHtml(c.icon || "📷")}</span>
+          <span class="bingo-cell__text">${escapeHtml(c.text)}</span>
+        </span>
+      </button>`).join("");
+    const cells = Array.prototype.slice.call(grid.children);
+
+    function filledCount() { return shots.filter(Boolean).length; }
+    function doneLines() { return BINGO_LINES.filter((l) => l.every((i) => shots[i])); }
+
+    function refresh() {
+      const lines = doneLines();
+      const lit = {};
+      lines.forEach((l) => l.forEach((i) => { lit[i] = true; }));
+      cells.forEach((el, i) => {
+        el.classList.toggle("is-filled", !!shots[i]);
+        el.classList.toggle("is-line", !!lit[i]);
+      });
+
+      const n = filledCount();
+      if (!n) {
+        status.textContent = "칸을 눌러 미션 사진을 담아주세요.";
+      } else if (!lines.length) {
+        status.innerHTML = `${n}칸 채웠어요. 한 줄(가로·세로·대각선)을 완성하면 응모할 수 있어요!`;
+      } else if (n < 9) {
+        status.innerHTML = `<b>${lines.length}빙고</b> 완성! 칸을 더 채울수록 당첨 확률이 올라갑니다.`;
+      } else {
+        status.innerHTML = `<b>퍼펙트 빙고</b> — 아홉 칸을 모두 채우셨어요!`;
+      }
+
+      btn.disabled = busy || !lines.length;
+      if (!busy) btn.textContent = lines.length ? "빙고 응모하기" : "한 줄을 먼저 완성해주세요";
+    }
+
+    /* --- 칸 선택 → 사진 담기 --- */
+    grid.addEventListener("click", (e) => {
+      const el = e.target.closest(".bingo-cell");
+      if (!el || busy) return;
+      pending = Number(el.dataset.i);
+      cellInput.value = "";
+      cellInput.click();
+    });
+
+    cellInput.addEventListener("change", async () => {
+      const file = cellInput.files && cellInput.files[0];
+      if (!file || pending < 0) return;
+      const i = pending;
+      pending = -1;
+      try {
+        const blob = await shrink(file, 1600, 0.82);
+        if (shots[i]) URL.revokeObjectURL(shots[i].url);
+        const objUrl = URL.createObjectURL(blob);
+        shots[i] = { blob: blob, url: objUrl };
+        cells[i].querySelector(".bingo-cell__img").src = objUrl;
+        refresh();
+      } catch (err) {
+        toast("사진을 불러오지 못했습니다. 다시 시도해주세요");
+      }
+      cellInput.value = "";
+    });
+
+    /* --- 응모 --- */
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (busy) return;
+      const lines = doneLines();
+      if (!lines.length) return;
+
+      const guest = $("#bingo-name").value.trim();
+      const phone = $("#bingo-phone").value.trim();
+      const side = (document.querySelector('input[name="bingo-side"]:checked') || {}).value || "";
+      if (!guest) { toast("성함을 입력해주세요"); return; }
+      if (phone.replace(/\D/g, "").length < 9) { toast("연락처를 정확히 입력해주세요"); return; }
+
+      busy = true;
+      btn.disabled = true;
+      const idx = [];
+      shots.forEach((s, i) => { if (s) idx.push(i); });
+
+      let ok = 0;
+      for (let k = 0; k < idx.length; k++) {
+        const i = idx[k];
+        btn.textContent = `사진 올리는 중... (${k + 1}/${idx.length})`;
+        try {
+          const data = await toBase64(shots[i].blob);
+          await postScript(url, {
+            kind: "bingo-photo",
+            data: data,
+            type: "image/jpeg",
+            name: `${guest}_${String(i + 1).padStart(2, "0")}.jpg`,
+            guest: guest, phone: phone, side: side,
+            cell: String(i + 1),
+            mission: CELLS[i].text,
+          });
+          ok++;
+        } catch (err) { /* 다음 사진 계속 */ }
+      }
+
+      try {
+        await postScript(url, {
+          kind: "bingo-entry",
+          guest: guest, phone: phone, side: side,
+          lines: String(lines.length),
+          photos: String(ok),
+          missions: idx.map((i) => CELLS[i].text).join(" / "),
+        });
+      } catch (err) { /* 기록 실패해도 사진은 올라갔습니다 */ }
+
+      busy = false;
+      if (!ok) {
+        refresh();
+        toast("업로드에 실패했습니다. 잠시 후 다시 시도해주세요");
+        return;
+      }
+      try {
+        localStorage.setItem("wedding-bingo-entry", JSON.stringify({ guest: guest, lines: lines.length }));
+      } catch (err) { /* 사파리 프라이빗 모드 등 */ }
+      showDone(guest, lines.length);
+      toast(`응모 완료! 사진 ${ok}장 감사합니다 ♥`);
+    });
+
+    function showDone(guest, lines) {
+      form.hidden = true;
+      done.hidden = false;
+      done.innerHTML =
+        `${escapeHtml(guest)}님, <b>${lines}빙고</b>로 응모가 완료되었습니다 ♥<br/>`
+        + `당첨되시면 남겨주신 연락처로 안내드릴게요.<br/>`
+        + `<button type="button" class="bingo__free" id="bingo-again">다시 응모하기</button>`;
+      const again = $("#bingo-again");
+      if (again) {
+        again.addEventListener("click", () => {
+          done.hidden = true;
+          form.hidden = false;
+          refresh();
+        });
+      }
+    }
+
+    /* 이미 응모한 기록이 있으면 완료 화면부터 */
+    try {
+      const saved = JSON.parse(localStorage.getItem("wedding-bingo-entry") || "null");
+      if (saved && saved.guest) showDone(saved.guest, saved.lines || 1);
+    } catch (err) { /* 무시 */ }
+
+    /* --- 빙고와 무관한 자유 업로드 --- */
+    const freeInput = $("#snap-input");
+    const freeStatus = $("#snap-status");
+    freeInput.addEventListener("change", async () => {
+      const files = Array.prototype.slice.call(freeInput.files).slice(0, 10);
       if (!files.length) return;
       let ok = 0;
       for (let i = 0; i < files.length; i++) {
-        const f = files[i];
-        status.textContent = `업로드 중... (${i + 1}/${files.length})`;
-        if (f.size > MAX_SIZE) continue;
+        freeStatus.textContent = `업로드 중... (${i + 1}/${files.length})`;
         try {
-          const base64 = await new Promise((res, rej) => {
-            const fr = new FileReader();
-            fr.onload = () => res(String(fr.result).split(",")[1]);
-            fr.onerror = rej;
-            fr.readAsDataURL(f);
+          const blob = await shrink(files[i], 1600, 0.82);
+          const data = await toBase64(blob);
+          await postScript(url, {
+            kind: "free-photo", data: data, type: "image/jpeg",
+            name: files[i].name.replace(/\.[^.]+$/, "") + ".jpg",
+            guest: ($("#bingo-name").value || "").trim(),
           });
-          const body = new URLSearchParams({ data: base64, name: f.name, type: f.type });
-          // Apps Script 웹앱은 CORS 응답이 없어 no-cors로 전송 (성공 여부는 낙관적으로 처리)
-          await fetch(url, { method: "POST", mode: "no-cors", body });
           ok++;
-        } catch (e) { /* 다음 파일 계속 */ }
+        } catch (err) { /* 다음 파일 계속 */ }
       }
-      status.textContent = "";
-      input.value = "";
-      toast(ok > 0 ? `사진 ${ok}장이 전달되었습니다. 감사합니다 ♥` : "업로드에 실패했습니다. 다시 시도해주세요");
+      freeStatus.textContent = "";
+      freeInput.value = "";
+      toast(ok ? `사진 ${ok}장이 전달되었습니다. 감사합니다 ♥` : "업로드에 실패했습니다. 다시 시도해주세요");
     });
+
+    refresh();
   }
 
   /* ═══════════ 초기화 ═══════════ */
@@ -760,7 +983,7 @@
     initGuestbook();
     initShare();
     initBgm();
-    initSnap();
+    initBingo();
     initReveal();   // 동적 요소 생성 후 마지막에 실행
     initEnvelopeScroll();
     initPetals();
