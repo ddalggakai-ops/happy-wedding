@@ -417,9 +417,7 @@
       try { collage = await buildCollage(shots, CELLS, guest, lines); } catch (err) { /* 없어도 진행 */ }
 
       let sent = 0;
-      const total = idx.length + (collage ? 1 : 0);
-      const bump = () => { btn.textContent = `사진 올리는 중... (${++sent}/${total})`; };
-      bump(); sent = 0;
+      btn.textContent = `사진 올리는 중... (0/${idx.length})`;
 
       const results = await runPool(idx, UP.parallel, async (i) => {
         const data = await toBase64(shots[i].blob);
@@ -432,21 +430,23 @@
           cell: String(i + 1),
           mission: CELLS[i].text,
         });
-        bump();
+        btn.textContent = `사진 올리는 중... (${++sent}/${idx.length})`;
         return r;
       });
 
       const ok = results.filter((r) => r && r.ok).length;
+      // 응답을 실제로 읽어 성공을 확인한 건수 (no-cors로 보낸 건 확인 불가)
+      const verified = results.filter((r) => r && r.ok && r.value && !r.value.unverified).length;
       const firstError = (results.find((r) => r && !r.ok) || {}).error;
 
       if (collage) {
+        btn.textContent = "빙고판 저장 중...";
         try {
           await postScript(url, {
             kind: "bingo-collage", data: await toBase64(collage),
             type: "image/jpeg", name: `${guest}_빙고판.jpg`,
             guest: guest, phone: phone, side: side, mission: "빙고 콜라주",
           });
-          bump();
         } catch (err) { /* 콜라주는 실패해도 무시 */ }
       }
 
@@ -470,7 +470,8 @@
         localStorage.setItem("wedding-bingo-entry", JSON.stringify({ guest: guest, lines: lines.length }));
       } catch (err) { /* 사파리 프라이빗 모드 등 */ }
       showDone(guest, lines.length, collage);
-      toast(`응모 완료! 사진 ${ok}장 감사합니다 ♥`);
+      if (verified) toast(`응모 완료! 사진 ${ok}장 감사합니다 ♥`);
+      else toast(`사진 ${ok}장을 보냈지만 저장 확인이 안 됐어요. 신랑·신부에게 알려주세요`);
     });
 
     function showDone(guest, lines, collage) {
@@ -569,9 +570,61 @@
   }
 
 
+
+  /* ── 연결 진단 (주소 끝에 ?debug=1 을 붙이면 나타납니다) ── */
+  function initDebug(url) {
+    if (!/[?&]debug=1/.test(location.search)) return;
+    const host = document.getElementById("snap-section");
+    if (!host) return;
+    const box = document.createElement("div");
+    box.className = "bingo__debug";
+    box.innerHTML =
+      '<button type="button" class="btn btn--outline" id="dbg-run">연결 테스트</button>'
+      + '<pre id="dbg-out"></pre>';
+    host.appendChild(box);
+
+    const params = async () => {
+      const cv = document.createElement("canvas");
+      cv.width = cv.height = 16;
+      const c = cv.getContext("2d");
+      c.fillStyle = "#fa89a3"; c.fillRect(0, 0, 16, 16);
+      const blob = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.8));
+      return {
+        kind: "test", data: await toBase64(blob), type: "image/jpeg",
+        name: "연결테스트.jpg", guest: "연결테스트", mission: "연결 테스트",
+      };
+    };
+
+    document.getElementById("dbg-run").addEventListener("click", async () => {
+      const out = document.getElementById("dbg-out");
+      const log = [];
+      const print = (t) => { log.push(t); out.textContent = log.join("\n"); };
+      out.textContent = "테스트 중...";
+      log.length = 0;
+      const base = await params();
+      print("URL …" + url.slice(-24));
+      print("보낸 크기 " + Math.round(base.data.length / 1024) + "KB");
+      try {
+        const r = await fetch(url, { method: "POST", body: new URLSearchParams(base) });
+        print("status " + r.status + " / type " + r.type + " / redirected " + r.redirected);
+        const t = await r.text();
+        print("응답: " + t.slice(0, 400));
+      } catch (e) {
+        print("cors 읽기 실패: " + e.name + " — " + e.message);
+        try {
+          await fetch(url, { method: "POST", mode: "no-cors", body: new URLSearchParams(base) });
+          print("no-cors 전송은 완료 (응답 확인 불가)");
+        } catch (e2) {
+          print("no-cors 전송도 실패: " + e2.name + " — " + e2.message);
+        }
+      }
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     renderHead();
     initBingo();
+    initDebug((C.snap && C.snap.appsScriptUrl || "").trim());
     initReveal();
   });
 })();

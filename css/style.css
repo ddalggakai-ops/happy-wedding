@@ -1286,6 +1286,21 @@ textarea { resize: none; }
   border-bottom: 1px solid var(--line);
   padding-bottom: 2px;
 }
+/* 연결 진단 패널 (?debug=1) */
+.bingo__debug { margin-top: 30px; text-align: left; }
+.bingo__debug .btn { width: 100%; margin-bottom: 10px; }
+.bingo__debug pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 40px;
+}
 .bingo__notice {
   margin: 4px 0 22px;
   font-size: 13.5px;
