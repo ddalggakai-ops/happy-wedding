@@ -79,7 +79,7 @@
 
     // 안내 문구·이름·날짜는 이미지에 인쇄되어 있고, 손님 이름만 빈칸 위에 얹습니다.
     // 글자마다 기울기·높이·크기를 조금씩 흔들어 '직접 써넣은' 느낌을 냅니다.
-    const guest = getGuestName();
+    const guest = getGuestName() || "Guest";   // ?to= 가 없으면 Dear. Guest
     $("#splash-guest").innerHTML = Array.from(guest).map((ch, i) => {
       const r = Math.sin((i + 1) * 12.9898) * 43758.5453;
       const f = r - Math.floor(r);                 // 0~1 (항상 같은 값 — 새로고침해도 안 흔들림)
@@ -192,6 +192,45 @@
   }
 
   /* ═══════════ 3.5 부모님의 편지 ═══════════ */
+
+  /* ── 아기 사진 옆 손그림 아이콘 (꽃 · 자전거 · 풍선 · 별) ── */
+  const BABY_DOODLES = {
+    flower: '<svg viewBox="0 0 60 70"><path d="M30 40c-1 8-3 16-7 24"/><path d="M23 52c-6-1-11-4-14-9 6-2 11-1 15 4"/><path d="M27 58c5-3 10-4 15-2-3 5-8 8-14 7"/>'
+      + '<path d="M30 12c5-4 12-1 12 5 0 3-2 6-5 7 4 1 7 5 6 9-1 5-7 8-11 5-1 4-5 7-9 6-5-1-8-6-6-11-4 0-8-4-7-9 1-4 5-7 9-6-1-5 3-9 7-9 2 0 3 1 4 3z"/>'
+      + '<circle cx="30" cy="26" r="4.5"/></svg>',
+    bike: '<svg viewBox="0 0 84 56"><circle cx="17" cy="38" r="13"/><circle cx="66" cy="38" r="13"/>'
+      + '<path d="M17 38l13-20h16l7 20"/><path d="M30 18l20 1"/><path d="M53 38l-7-20 6-6"/>'
+      + '<path d="M45 10h10"/><path d="M30 18l-4-8h-8"/></svg>',
+    balloon: '<svg viewBox="0 0 46 74"><path d="M23 4c9 0 16 8 16 18 0 12-10 22-16 24-6-2-16-12-16-24C7 12 14 4 23 4z"/>'
+      + '<path d="M20 46l3 5 3-5"/><path d="M23 51c4 6-4 9 0 15 3 5-2 6-2 6"/></svg>',
+    star: '<svg viewBox="0 0 54 54"><path d="M27 6c2 9 5 13 14 15-9 2-12 6-14 15-2-9-5-13-14-15 9-2 12-6 14-15z"/>'
+      + '<path d="M44 38c1 4 2 5 6 6-4 1-5 2-6 6-1-4-2-5-6-6 4-1 5-2 6-6z"/>'
+      + '<path d="M10 33c.8 3 1.6 4 4.5 4.6-2.9.7-3.7 1.6-4.5 4.6-.8-3-1.6-4-4.5-4.6 2.9-.7 3.7-1.6 4.5-4.6z"/></svg>',
+    rattle: '<svg viewBox="0 0 56 70"><circle cx="27" cy="22" r="18"/><circle cx="27" cy="22" r="7"/>'
+      + '<path d="M27 40v18"/><rect x="20" y="58" width="14" height="9" rx="4"/></svg>',
+    cloud: '<svg viewBox="0 0 78 46"><path d="M20 38c-8 0-14-5-14-12S12 14 20 14c2-7 9-11 16-9 5 1 8 5 9 9 8-1 15 4 16 12 0 7-6 12-14 12z"/>'
+      + '<path d="M26 44h6M40 44h9M56 44h5"/></svg>',
+  };
+
+  // 각 사진 주변에 놓을 위치 (사진 바깥 여백에 걸치도록)
+  const DOODLE_SPOTS = [
+    { k: "flower", cls: "d1" },
+    { k: "bike",   cls: "d2" },
+    { k: "star",   cls: "d3" },
+    { k: "balloon", cls: "d4" },
+  ];
+  const DOODLE_SPOTS_ALT = [
+    { k: "flower", cls: "d1" },
+    { k: "rattle", cls: "d2" },
+    { k: "star",   cls: "d3" },
+    { k: "cloud",  cls: "d4" },
+  ];
+  function doodleHtml(alt) {
+    return (alt ? DOODLE_SPOTS_ALT : DOODLE_SPOTS)
+      .map((d) => `<span class="parents__doodle parents__doodle--${d.cls}">${BABY_DOODLES[d.k]}</span>`)
+      .join("");
+  }
+
   function renderParents() {
     const sec = document.getElementById("parents-section");
     if (!sec) return;
@@ -199,9 +238,11 @@
     const has = (s) => s && (s.family || s.letterImage || (s.babies && s.babies.length));
     if (!has(P.groom) && !has(P.bride)) { sec.hidden = true; return; }
 
+    let idx = 0;
     const side = (s) => {
       if (!has(s)) return "";
       const babies = s.babies || [];
+      const alt = (idx++) % 2 === 1;
       return `
       <div class="parents__side reveal">
         <p class="parents__label">${s.label || ""}</p>
@@ -211,6 +252,7 @@
           <img src="${s.family}" alt="${s.who} 가족 사진" loading="lazy" />
           ${babies[0] ? `<img class="parents__sticker parents__sticker--1" src="${babies[0]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
           ${babies[1] ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
+          ${doodleHtml(alt)}
         </div>` : ""}
         ${s.letterImage ? `
         <div class="parents__letter">

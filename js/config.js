@@ -101,14 +101,15 @@ const WEDDING_CONFIG = {
       who: "현진",
       family: "assets/parents/bride-family.jpg",
       letterImage: "assets/parents/bride-letter.jpg",   // ★ 임시 — 실제 편지로 교체 예정
-      babies: ["assets/parents/bride-baby1.jpg", "assets/parents/bride-baby2.jpg"],
+      babies: ["assets/parents/bride-baby1.png", "assets/parents/bride-baby2.png"],
     },
     groom: {
       label: "김정수 & 정인선의 아들",
       who: "형규",
       family: "assets/parents/groom-family.jpg",
       letterImage: "assets/parents/groom-letter.jpg",
-      babies: ["assets/parents/groom-baby1.png", "assets/parents/groom-baby2.png"],
+      // ★ groom-baby2.png 는 baby1과 같은 사진이라 잠시 빼두었습니다. 다른 사진이 생기면 다시 추가하세요.
+      babies: ["assets/parents/groom-baby1.png"],
     },
   },
 
