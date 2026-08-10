@@ -541,7 +541,9 @@
       freeBusy = true;
       if (all.length > files.length) toast(`한 번에 ${UP.maxFiles}장까지 올라갑니다`);
 
+      // 응모 때 적은 이름·연락처가 있으면 같은 폴더(이름-연락처)로 모이도록 함께 보냅니다
       const who = ($("#bingo-name").value || "").trim() || getGuestName() || "이름없음";
+      const whoPhone = ($("#bingo-phone").value || "").trim();
       let sent = 0;
       freeStatus.textContent = `업로드 중... (0/${files.length})`;
 
@@ -551,7 +553,7 @@
           kind: "free-photo", data: await toBase64(blob), type: "image/jpeg",
           name: f.name.replace(/\.[^.]+$/, "") + ".jpg",
           // 이름을 적어둔 게 있으면 그 이름으로, 없으면 초대장 URL의 손님 이름으로 정리
-          guest: who,
+          guest: who, phone: whoPhone,
         });
         freeStatus.textContent = `업로드 중... (${++sent}/${files.length})`;
         return r;
