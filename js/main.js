@@ -77,9 +77,18 @@
     if (!el) return;
     if (C.splash && C.splash.enabled === false) { el.remove(); return; }
 
-    // 안내 문구·이름·날짜는 이미지에 인쇄되어 있고, 손님 이름만 빈칸 위에 얹습니다
+    // 안내 문구·이름·날짜는 이미지에 인쇄되어 있고, 손님 이름만 빈칸 위에 얹습니다.
+    // 글자마다 기울기·높이·크기를 조금씩 흔들어 '직접 써넣은' 느낌을 냅니다.
     const guest = getGuestName();
-    $("#splash-guest").textContent = guest;
+    $("#splash-guest").innerHTML = Array.from(guest).map((ch, i) => {
+      const r = Math.sin((i + 1) * 12.9898) * 43758.5453;
+      const f = r - Math.floor(r);                 // 0~1 (항상 같은 값 — 새로고침해도 안 흔들림)
+      const rot = (f * 5 - 2.5).toFixed(2);
+      const dy = ((f * 2 - 1) * 3.4).toFixed(2);
+      const sc = (0.955 + f * 0.095).toFixed(3);
+      return `<span style="transform:translateY(${dy}%) rotate(${rot}deg) scale(${sc})">`
+        + escapeHtml(ch) + "</span>";
+    }).join("");
 
     document.body.classList.add("no-scroll");
     let closed = false;
