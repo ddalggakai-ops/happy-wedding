@@ -108,8 +108,7 @@ const WEDDING_CONFIG = {
       who: "형규",
       family: "assets/parents/groom-family.jpg",
       letterImage: "assets/parents/groom-letter.jpg",
-      // ★ groom-baby2.png 는 baby1과 같은 사진이라 잠시 빼두었습니다. 다른 사진이 생기면 다시 추가하세요.
-      babies: ["assets/parents/groom-baby1.png"],
+      babies: ["assets/parents/groom-baby1.png", "assets/parents/groom-baby2.png"],
     },
   },
 

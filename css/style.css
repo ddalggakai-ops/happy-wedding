@@ -1464,28 +1464,20 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   transform: rotate(-9deg);
 }
 
-/* 아기 사진 주변 손그림 아이콘 */
+/* 아기 사진 주변 손그림 아이콘 (연필 스케치 스캔 이미지) */
 .parents__doodle {
   position: absolute;
   z-index: 3;
-  pointer-events: none;
-  color: #c2778c;
-  opacity: .85;
-}
-.parents__doodle svg {
   display: block;
-  width: 100%;
   height: auto;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  pointer-events: none;
+  opacity: .78;
+  mix-blend-mode: multiply;   /* 연필이 종이에 스며든 느낌 */
 }
-.parents__doodle--d1 { width: 40px; right: -34px; top: -22px; transform: rotate(9deg); }
-.parents__doodle--d2 { width: 62px; left: -44px; bottom: -30px; transform: rotate(-6deg); }
-.parents__doodle--d3 { width: 34px; left: -30px; top: 42%; transform: rotate(-14deg); opacity: .7; }
-.parents__doodle--d4 { width: 30px; left: 36%; bottom: -46px; transform: rotate(8deg); opacity: .75; }
+.parents__doodle--d1 { right: -36px; top: -26px; transform: rotate(9deg); }
+.parents__doodle--d2 { left: -46px; bottom: -32px; transform: rotate(-6deg); }
+.parents__doodle--d3 { left: -32px; top: 42%; transform: rotate(-14deg); opacity: .66; }
+.parents__doodle--d4 { left: 36%; bottom: -50px; transform: rotate(8deg); opacity: .7; }
 
 /* 손편지 — 살짝 기울인 카드 + 테이프 */
 .parents__letter {
