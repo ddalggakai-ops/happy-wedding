@@ -77,18 +77,12 @@
     if (!el) return;
     if (C.splash && C.splash.enabled === false) { el.remove(); return; }
 
-    // 안내 문구·이름·날짜는 이미지에 인쇄되어 있고, 손님 이름만 빈칸 위에 얹습니다.
-    // 글자마다 기울기·높이·크기를 조금씩 흔들어 '직접 써넣은' 느낌을 냅니다.
-    const guest = getGuestName() || "Guest";   // ?to= 가 없으면 Dear. Guest
-    $("#splash-guest").innerHTML = Array.from(guest).map((ch, i) => {
-      const r = Math.sin((i + 1) * 12.9898) * 43758.5453;
-      const f = r - Math.floor(r);                 // 0~1 (항상 같은 값 — 새로고침해도 안 흔들림)
-      const rot = (f * 5 - 2.5).toFixed(2);
-      const dy = ((f * 2 - 1) * 3.4).toFixed(2);
-      const sc = (0.955 + f * 0.095).toFixed(3);
-      return `<span style="transform:translateY(${dy}%) rotate(${rot}deg) scale(${sc})">`
-        + escapeHtml(ch) + "</span>";
-    }).join("");
+    // 카드의 'Dear. ____ 님' 줄은 이미지에서 지웠고, 그 자리를 글자로 채웁니다.
+    const guest = getGuestName();
+    $("#splash-guest").innerHTML = guest
+      ? `<span class="sg-en">Dear.</span><span class="sg-name">${escapeHtml(guest)}</span>`
+        + `<span class="sg-suffix">님</span>`
+      : `<span class="sg-line">소중한 분들을 초대합니다</span>`;
 
     document.body.classList.add("no-scroll");
     let closed = false;
@@ -199,12 +193,18 @@
     { k: "bike",    cls: "d2", w: 66 },
     { k: "star",    cls: "d3", w: 38 },
     { k: "balloon", cls: "d4", w: 32 },
+    { k: "star",    cls: "d5", w: 22 },
+    { k: "star",    cls: "d6", w: 16 },
+    { k: "star",    cls: "d7", w: 26 },
   ];
   const DOODLE_SPOTS_ALT = [
     { k: "flower", cls: "d1", w: 40 },
     { k: "rattle", cls: "d2", w: 40 },
     { k: "star",   cls: "d3", w: 34 },
     { k: "cloud",  cls: "d4", w: 46 },
+    { k: "star",   cls: "d5", w: 26 },
+    { k: "star",   cls: "d6", w: 18 },
+    { k: "star",   cls: "d7", w: 21 },
   ];
   function doodleHtml(alt) {
     return (alt ? DOODLE_SPOTS_ALT : DOODLE_SPOTS).map((d) =>
@@ -564,29 +564,6 @@
       }));
   }
 
-  function initGuestbook() {
-    $("#gb-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const entry = {
-        id: `gb_${Date.now()}_${Math.floor(Math.random() * 1e6)}`,
-        name: $("#gb-name").value.trim(),
-        password: $("#gb-pass").value,
-        message: $("#gb-message").value.trim(),
-        date: new Date().toISOString(),
-      };
-      if (!entry.name || !entry.message) return toast("이름과 메시지를 입력해주세요");
-      try {
-        await Storage.addGuestbook(entry);
-        $("#gb-form").reset();
-        toast("소중한 메시지가 등록되었습니다");
-        renderGuestbook();
-      } catch (err) {
-        toast("등록에 실패했습니다. 잠시 후 다시 시도해주세요");
-      }
-    });
-    renderGuestbook();
-  }
-
   /* ═══════════ 10. 공유하기 ═══════════ */
   function initShare() {
     const hasKakao = window.Kakao && C.kakao.jsKey;
@@ -774,7 +751,6 @@
     renderLocation();
     renderAccounts();
     initRsvp();
-    initGuestbook();
     initShare();
     initBgm();
     renderBingoTeaser();

@@ -761,14 +761,14 @@ body {
   overflow: hidden;
   transition: max-height .45s ease;
   background: rgba(255, 255, 255, .03);
-  border: 0 solid var(--line);
   border-radius: 0 0 14px 14px;
+  /* 좌우 여백은 항상 고정 — 열릴 때 안쪽 카드가 옆으로 밀리지 않도록 */
+  padding: 0 10px;
 }
-.acc-group.is-open .acc-group__body {
-  max-height: 900px;
-  border-width: 0 1px 1px;
-  padding: 12px 10px 10px;
-}
+.acc-group.is-open .acc-group__body { max-height: 900px; }
+/* 위아래 여백은 카드 마진으로 (패딩이 갑자기 생기면 덜컥거림) */
+.acc-group__body .acc-card:first-child { margin-top: 12px; }
+.acc-group__body .acc-card:last-child { margin-bottom: 10px; }
 
 /* 계좌 카드 (역할 + 이름 + 전화 + 카카오페이 / 계좌번호 + 복사) */
 .acc-card {
@@ -1374,24 +1374,41 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   display: block;
   width: 100%;
 }
-/* 'DEAR. ______ 님' 빈칸 위 (이미지에서 실측한 위치) */
+/* 카드에서 지운 'Dear. ____ 님' 자리 (이미지에서 실측한 위치) */
 .splash__guest {
   position: absolute;
-  left: 54.6%;
-  bottom: 54.7%;
-  transform: translateX(-50%) rotate(-1.1deg);   /* 살짝 기울여 쓴 느낌 */
-  transform-origin: center bottom;
-  font-family: "Hi Melody", var(--hand), cursive;
-  font-size: calc(var(--fw) * 0.072);
-  line-height: 1;
+  left: 52.2%;
+  top: 43.8%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: .34em;
   white-space: nowrap;
-  /* 종이 결이 글씨에 비쳐 보이도록 잉크처럼 겹쳐 찍습니다 */
-  color: #33313a;
-  mix-blend-mode: multiply;
-  filter: blur(.18px);
+  color: #55483f;
+  mix-blend-mode: multiply;   /* 종이 결이 글자에 비치도록 */
 }
-/* 글자마다 미세하게 다른 기울기·높이 — 폰트 티가 덜 나도록 (JS가 span 생성) */
-.splash__guest span { display: inline-block; }
+.splash__guest .sg-en {
+  font-family: var(--en);
+  font-style: italic;
+  font-size: calc(var(--fw) * 0.046);
+  letter-spacing: .01em;
+}
+.splash__guest .sg-name {
+  font-family: "Nanum Myeongjo", serif;
+  font-size: calc(var(--fw) * 0.050);
+  letter-spacing: .04em;
+}
+.splash__guest .sg-suffix {
+  font-family: "Nanum Myeongjo", serif;
+  font-size: calc(var(--fw) * 0.036);
+}
+.splash__guest .sg-line {
+  font-family: "Nanum Myeongjo", serif;
+  font-size: calc(var(--fw) * 0.042);
+  letter-spacing: .03em;
+}
+
 .splash__open {
   font-family: var(--sans);
   font-size: 14px;
@@ -1478,6 +1495,10 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 .parents__doodle--d2 { left: -46px; bottom: -32px; transform: rotate(-6deg); }
 .parents__doodle--d3 { left: -32px; top: 42%; transform: rotate(-14deg); opacity: .66; }
 .parents__doodle--d4 { left: 36%; bottom: -50px; transform: rotate(8deg); opacity: .7; }
+/* 별은 여기저기 흩뿌리듯 */
+.parents__doodle--d5 { right: -26px; top: 34%; transform: rotate(16deg); opacity: .58; }
+.parents__doodle--d6 { left: 22%; top: -30px; transform: rotate(-20deg); opacity: .5; }
+.parents__doodle--d7 { right: 16%; bottom: -40px; transform: rotate(24deg); opacity: .52; }
 
 /* 손편지 — 살짝 기울인 카드 + 테이프 */
 .parents__letter {
