@@ -163,7 +163,7 @@ const WEDDING_CONFIG = {
   // 연동 방법은 저장소의 게스트스냅-연동방법.md 참고.
   // appsScriptUrl을 채우면 "포토 빙고" 섹션이 나타납니다.
   snap: {
-    appsScriptUrl: "https://script.google.com/macros/s/AKfycbwK4zzOH2IQ5VecF_oa77FeEmuMN8MCUFjaTaY4Lpij8CH1YRKSo7ebeaHMnWCFKRZXWQ/exec",
+    appsScriptUrl: "https://script.google.com/macros/s/AKfycbxf0Alfd9tSV5dcbEfQ6qh4k4l0gl9aG9GtXjw7HaUtL_bjo4e63AFSwajj5-3rnN2zng/exec",
   },
   bingo: {
     title: "포토 빙고",
