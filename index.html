@@ -254,45 +254,11 @@
       <h2 class="section__title reveal" id="bingo-title"></h2>
       <p class="snap__desc reveal" id="bingo-desc"></p>
 
-      <!-- 3×3 미션 판 (칸은 config.bingo.cells 로 생성) -->
-      <div class="bingo__grid reveal" id="bingo-grid"></div>
-      <p class="bingo__status" id="bingo-status"></p>
+      <!-- 미리보기 판 (실제 참여는 bingo.html 에서) -->
+      <div class="bingo__grid bingo__grid--preview reveal" id="bingo-preview"></div>
 
-      <!-- 응모 정보 -->
-      <form class="bingo__form reveal" id="bingo-form">
-        <div class="form-row form-row--pair">
-          <label class="chip"><input type="radio" name="bingo-side" value="신랑측" checked /><span>신랑측</span></label>
-          <label class="chip"><input type="radio" name="bingo-side" value="신부측" /><span>신부측</span></label>
-        </div>
-        <div class="form-row">
-          <input type="text" id="bingo-name" placeholder="성함" maxlength="20" required />
-          <input type="tel" id="bingo-phone" placeholder="연락처" maxlength="20" required />
-        </div>
-        <button type="submit" class="btn btn--fill" id="bingo-submit" disabled>한 줄을 먼저 완성해주세요</button>
-        <p class="bingo__note" id="bingo-note"></p>
-      </form>
-
-      <p class="bingo__done" id="bingo-done" hidden></p>
-
-      <!-- 완성한 빙고판 콜라주 -->
-      <div class="bingo__collage" id="bingo-collage" hidden>
-        <img id="collage-img" alt="완성한 포토 빙고판" />
-        <button type="button" class="btn btn--fill" id="collage-save">빙고판 이미지 저장하기</button>
-        <p class="bingo__collage-note">저장이 안 되면 이미지를 길게 눌러 저장해주세요.</p>
-      </div>
-
-      <!-- 빙고와 상관없이 사진만 올리고 싶을 때 -->
-      <div class="bingo__extra reveal">
-        <p class="bingo__extra-desc">빙고와 상관없이, 오늘 담아주신 사진을<br/>자유롭게 올려주셔도 좋습니다.</p>
-        <label class="btn btn--outline bingo__free" id="bingo-free">
-          📷 사진 올리기 (최대 10장)
-          <input type="file" id="snap-input" accept="image/*" multiple hidden />
-        </label>
-      </div>
-
-      <!-- 빙고 칸 촬영용 (칸을 누르면 열립니다) -->
-      <input type="file" id="bingo-input" accept="image/*" hidden />
-      <p class="snap__status" id="snap-status"></p>
+      <a class="btn btn--fill bingo__go reveal" id="bingo-go" href="bingo.html">포토 빙고 만들러 가기</a>
+      <p class="bingo__go-note reveal">예식장에 비치된 QR로도 바로 열 수 있어요.</p>
     </section>
 
     <!-- ═══════════ 10. 공유하기 ═══════════ -->
