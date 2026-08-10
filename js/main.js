@@ -752,16 +752,175 @@
       fr.readAsDataURL(blob);
     });
   }
-  /* Apps Script 전송 — CORS가 되면 응답을 읽고, 막히면 no-cors로 재시도 */
+  /* 업로드 설정 — 여기 숫자만 바꾸면 화질/속도 조절이 됩니다 */
+  const UP = {
+    maxPx: 1280,        // 긴 변 최대 픽셀
+    quality: 0.72,      // JPEG 품질
+    parallel: 4,        // 동시에 올리는 장수
+    maxFiles: 100,      // 자유 업로드 최대 장수
+  };
+
+  /* Apps Script 전송 — 응답을 실제로 확인해서 실패를 실패로 알립니다.
+     (CORS가 막히는 환경에서만 no-cors로 재시도하고, 그 건은 '확인 불가'로 셉니다) */
   async function postScript(url, params) {
     try {
       const r = await fetch(url, { method: "POST", body: new URLSearchParams(params) });
-      if (r.ok) {
-        try { return await r.json(); } catch (e) { return { ok: true }; }
+      const text = await r.text();
+      if (!r.ok) throw new Error(`서버 응답 ${r.status}`);
+      try {
+        const data = JSON.parse(text);
+        if (data && data.ok === false) throw new Error(data.error || "스크립트 오류");
+        return data;
+      } catch (e) {
+        if (e instanceof SyntaxError) throw new Error("스크립트가 오류 페이지를 반환했습니다");
+        throw e;
       }
-    } catch (e) { /* 아래에서 no-cors 재시도 */ }
-    await fetch(url, { method: "POST", mode: "no-cors", body: new URLSearchParams(params) });
-    return { ok: true, opaque: true };
+    } catch (e) {
+      // fetch 자체가 막힌 경우(CORS 등)에만 no-cors로 한 번 더
+      if (e instanceof TypeError) {
+        await fetch(url, { method: "POST", mode: "no-cors", body: new URLSearchParams(params) });
+        return { ok: true, unverified: true };
+      }
+      throw e;
+    }
+  }
+
+  /* 여러 건을 동시에(최대 limit개) 처리 — 하나씩 올리면 너무 느립니다 */
+  async function runPool(items, limit, fn) {
+    const out = new Array(items.length);
+    let next = 0;
+    const worker = async () => {
+      for (;;) {
+        const i = next++;
+        if (i >= items.length) return;
+        try { out[i] = { ok: true, value: await fn(items[i], i) }; }
+        catch (e) { out[i] = { ok: false, error: e }; }
+      }
+    };
+    const n = Math.min(limit, items.length);
+    await Promise.all(Array.from({ length: n }, worker));
+    return out;
+  }
+
+  /* ── 완성한 빙고판을 한 장의 콜라주 이미지로 그립니다 ── */
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+  function fitLines(ctx, text, maxW, maxLines) {
+    const words = String(text).split(" ");
+    const lines = [];
+    let cur = "";
+    for (let i = 0; i < words.length; i++) {
+      const t = cur ? cur + " " + words[i] : words[i];
+      if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = words[i]; }
+      else cur = t;
+      if (lines.length === maxLines - 1 && ctx.measureText(cur).width > maxW) break;
+    }
+    if (cur) lines.push(cur);
+    return lines.slice(0, maxLines);
+  }
+
+  async function buildCollage(shots, CELLS, guest, lines) {
+    try { if (document.fonts && document.fonts.ready) await document.fonts.ready; } catch (e) { /* 무시 */ }
+
+    const S = 380, GAP = 14, PAD = 44, HEAD = 248, FOOT = 108;
+    const W = PAD * 2 + S * 3 + GAP * 2;
+    const H = HEAD + S * 3 + GAP * 2 + FOOT;
+    const cv = document.createElement("canvas");
+    cv.width = W; cv.height = H;
+    const x = cv.getContext("2d");
+
+    const KR = '"Pretendard Variable", Pretendard, "Noto Sans KR", sans-serif';
+    const EN = '"Cormorant Garamond", serif';
+    const PINK = "#fa89a3";
+
+    x.fillStyle = "#141011";
+    x.fillRect(0, 0, W, H);
+
+    // 상단 타이틀
+    x.textAlign = "center";
+    x.fillStyle = PINK;
+    x.font = `400 30px ${EN}`;
+    x.fillText("P H O T O   B I N G O", W / 2, 96);
+    x.fillStyle = "#f6f1f2";
+    x.font = `600 62px ${KR}`;
+    x.fillText(`${C.groom.name}  ♥  ${C.bride.name}`, W / 2, 168);
+    x.fillStyle = "#9d8f93";
+    x.font = `400 27px ${KR}`;
+    x.fillText(
+      `${C.wedding.year}. ${pad(C.wedding.month)}. ${pad(C.wedding.day)}   ·   ${C.venue.name} ${C.venue.hall}`,
+      W / 2, 212
+    );
+
+    const lit = {};
+    lines.forEach((l) => l.forEach((i) => { lit[i] = true; }));
+
+    for (let i = 0; i < 9; i++) {
+      const cx = PAD + (i % 3) * (S + GAP);
+      const cy = HEAD + Math.floor(i / 3) * (S + GAP);
+      x.save();
+      roundRect(x, cx, cy, S, S, 22);
+      x.clip();
+
+      if (shots[i]) {
+        const img = await new Promise((res, rej) => {
+          const im = new Image();
+          im.onload = () => res(im); im.onerror = rej;
+          im.src = shots[i].url;
+        });
+        const sc = Math.max(S / img.width, S / img.height);
+        const dw = img.width * sc, dh = img.height * sc;
+        x.drawImage(img, cx + (S - dw) / 2, cy + (S - dh) / 2, dw, dh);
+        const g = x.createLinearGradient(0, cy + S * 0.5, 0, cy + S);
+        g.addColorStop(0, "rgba(0,0,0,0)");
+        g.addColorStop(1, "rgba(0,0,0,.78)");
+        x.fillStyle = g;
+        x.fillRect(cx, cy + S * 0.5, S, S * 0.5);
+        x.fillStyle = "#ffffff";
+      } else {
+        x.fillStyle = "#1f1a1c";
+        x.fillRect(cx, cy, S, S);
+        x.fillStyle = "#6b5f63";
+      }
+
+      x.font = `500 26px ${KR}`;
+      x.textAlign = "center";
+      const tx = cx + S / 2;
+      if (shots[i]) {
+        const ls = fitLines(x, CELLS[i].text, S - 40, 2);
+        ls.forEach((t, k) => x.fillText(t, tx, cy + S - 32 - (ls.length - 1 - k) * 32));
+      } else {
+        const ls = fitLines(x, CELLS[i].text, S - 60, 3);
+        ls.forEach((t, k) => x.fillText(t, tx, cy + S / 2 + 10 + (k - (ls.length - 1) / 2) * 34));
+      }
+      x.restore();
+
+      // 완성된 줄에 포함된 칸은 핑크 테두리
+      if (lit[i]) {
+        x.strokeStyle = PINK;
+        x.lineWidth = 5;
+        roundRect(x, cx + 2.5, cy + 2.5, S - 5, S - 5, 22);
+        x.stroke();
+      }
+    }
+
+    // 하단
+    const by = H - FOOT + 60;
+    x.textAlign = "center";
+    x.fillStyle = "#f6f1f2";
+    x.font = `500 32px ${KR}`;
+    x.fillText(`${guest}님의 ${lines.length}빙고`, W / 2, by);
+    x.fillStyle = PINK;
+    x.font = `400 26px ${KR}`;
+    x.fillText("함께해 주셔서 고맙습니다 ♥", W / 2, by + 40);
+
+    return await new Promise((res) => cv.toBlob(res, "image/jpeg", 0.9));
   }
 
   function initBingo() {
@@ -843,7 +1002,7 @@
       const i = pending;
       pending = -1;
       try {
-        const blob = await shrink(file, 1600, 0.82);
+        const blob = await shrink(file, UP.maxPx, UP.quality);
         if (shots[i]) URL.revokeObjectURL(shots[i].url);
         const objUrl = URL.createObjectURL(blob);
         shots[i] = { blob: blob, url: objUrl };
@@ -873,23 +1032,43 @@
       const idx = [];
       shots.forEach((s, i) => { if (s) idx.push(i); });
 
-      let ok = 0;
-      for (let k = 0; k < idx.length; k++) {
-        const i = idx[k];
-        btn.textContent = `사진 올리는 중... (${k + 1}/${idx.length})`;
+      // 콜라주를 먼저 만들어 함께 올립니다
+      btn.textContent = "콜라주 만드는 중...";
+      let collage = null;
+      try { collage = await buildCollage(shots, CELLS, guest, lines); } catch (err) { /* 없어도 진행 */ }
+
+      let sent = 0;
+      const total = idx.length + (collage ? 1 : 0);
+      const bump = () => { btn.textContent = `사진 올리는 중... (${++sent}/${total})`; };
+      bump(); sent = 0;
+
+      const results = await runPool(idx, UP.parallel, async (i) => {
+        const data = await toBase64(shots[i].blob);
+        const r = await postScript(url, {
+          kind: "bingo-photo",
+          data: data,
+          type: "image/jpeg",
+          name: `${guest}_${String(i + 1).padStart(2, "0")}.jpg`,
+          guest: guest, phone: phone, side: side,
+          cell: String(i + 1),
+          mission: CELLS[i].text,
+        });
+        bump();
+        return r;
+      });
+
+      const ok = results.filter((r) => r && r.ok).length;
+      const firstError = (results.find((r) => r && !r.ok) || {}).error;
+
+      if (collage) {
         try {
-          const data = await toBase64(shots[i].blob);
           await postScript(url, {
-            kind: "bingo-photo",
-            data: data,
-            type: "image/jpeg",
-            name: `${guest}_${String(i + 1).padStart(2, "0")}.jpg`,
-            guest: guest, phone: phone, side: side,
-            cell: String(i + 1),
-            mission: CELLS[i].text,
+            kind: "bingo-collage", data: await toBase64(collage),
+            type: "image/jpeg", name: `${guest}_빙고판.jpg`,
+            guest: guest, phone: phone, side: side, mission: "빙고 콜라주",
           });
-          ok++;
-        } catch (err) { /* 다음 사진 계속 */ }
+          bump();
+        } catch (err) { /* 콜라주는 실패해도 무시 */ }
       }
 
       try {
@@ -905,17 +1084,17 @@
       busy = false;
       if (!ok) {
         refresh();
-        toast("업로드에 실패했습니다. 잠시 후 다시 시도해주세요");
+        toast(firstError ? `업로드 실패: ${firstError.message}` : "업로드에 실패했습니다. 잠시 후 다시 시도해주세요");
         return;
       }
       try {
         localStorage.setItem("wedding-bingo-entry", JSON.stringify({ guest: guest, lines: lines.length }));
       } catch (err) { /* 사파리 프라이빗 모드 등 */ }
-      showDone(guest, lines.length);
+      showDone(guest, lines.length, collage);
       toast(`응모 완료! 사진 ${ok}장 감사합니다 ♥`);
     });
 
-    function showDone(guest, lines) {
+    function showDone(guest, lines, collage) {
       form.hidden = true;
       done.hidden = false;
       done.innerHTML =
@@ -930,6 +1109,38 @@
           refresh();
         });
       }
+      if (collage) showCollage(collage, guest);
+    }
+
+    /* 완성한 빙고판 이미지 — 화면에 보여주고 저장할 수 있게 */
+    function showCollage(blob, guest) {
+      const wrap = $("#bingo-collage");
+      const img = $("#collage-img");
+      const save = $("#collage-save");
+      const objUrl = URL.createObjectURL(blob);
+      img.src = objUrl;
+      wrap.hidden = false;
+      const fileName = `포토빙고_${guest}.jpg`;
+
+      save.onclick = async () => {
+        // 모바일에서는 공유 시트로 바로 저장하는 편이 확실합니다
+        try {
+          const file = new File([blob], fileName, { type: "image/jpeg" });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: "포토 빙고" });
+            return;
+          }
+        } catch (err) {
+          if (err && err.name === "AbortError") return;   // 사용자가 취소
+        }
+        const a = document.createElement("a");
+        a.href = objUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        toast("저장되지 않으면 이미지를 길게 눌러 저장해주세요");
+      };
     }
 
     /* 이미 응모한 기록이 있으면 완료 화면부터 */
@@ -941,27 +1152,38 @@
     /* --- 빙고와 무관한 자유 업로드 --- */
     const freeInput = $("#snap-input");
     const freeStatus = $("#snap-status");
+    let freeBusy = false;
     freeInput.addEventListener("change", async () => {
-      const files = Array.prototype.slice.call(freeInput.files).slice(0, 10);
+      if (freeBusy) return;
+      const all = Array.prototype.slice.call(freeInput.files);
+      const files = all.slice(0, UP.maxFiles);
       if (!files.length) return;
-      let ok = 0;
-      for (let i = 0; i < files.length; i++) {
-        freeStatus.textContent = `업로드 중... (${i + 1}/${files.length})`;
-        try {
-          const blob = await shrink(files[i], 1600, 0.82);
-          const data = await toBase64(blob);
-          await postScript(url, {
-            kind: "free-photo", data: data, type: "image/jpeg",
-            name: files[i].name.replace(/\.[^.]+$/, "") + ".jpg",
-            // 이름을 적어둔 게 있으면 그 이름으로, 없으면 초대장 URL의 손님 이름으로 정리
-            guest: ($("#bingo-name").value || "").trim() || getGuestName() || "이름없음",
-          });
-          ok++;
-        } catch (err) { /* 다음 파일 계속 */ }
-      }
+      freeBusy = true;
+      if (all.length > files.length) toast(`한 번에 ${UP.maxFiles}장까지 올라갑니다`);
+
+      const who = ($("#bingo-name").value || "").trim() || getGuestName() || "이름없음";
+      let sent = 0;
+      freeStatus.textContent = `업로드 중... (0/${files.length})`;
+
+      const results = await runPool(files, UP.parallel, async (f) => {
+        const blob = await shrink(f, UP.maxPx, UP.quality);
+        const r = await postScript(url, {
+          kind: "free-photo", data: await toBase64(blob), type: "image/jpeg",
+          name: f.name.replace(/\.[^.]+$/, "") + ".jpg",
+          // 이름을 적어둔 게 있으면 그 이름으로, 없으면 초대장 URL의 손님 이름으로 정리
+          guest: who,
+        });
+        freeStatus.textContent = `업로드 중... (${++sent}/${files.length})`;
+        return r;
+      });
+
+      const ok = results.filter((r) => r && r.ok).length;
+      const firstError = (results.find((r) => r && !r.ok) || {}).error;
       freeStatus.textContent = "";
       freeInput.value = "";
-      toast(ok ? `사진 ${ok}장이 전달되었습니다. 감사합니다 ♥` : "업로드에 실패했습니다. 다시 시도해주세요");
+      freeBusy = false;
+      if (ok) toast(`사진 ${ok}장이 전달되었습니다. 감사합니다 ♥`);
+      else toast(firstError ? `업로드 실패: ${firstError.message}` : "업로드에 실패했습니다");
     });
 
     refresh();

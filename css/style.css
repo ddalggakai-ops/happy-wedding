@@ -652,22 +652,13 @@ body {
   color: var(--ink-light);
   margin-bottom: 0;
 }
-/* 실제 지도 임베드 — 프레임 없이 화면 가로를 꽉 채우고, 그림자로 종이와 분리 */
+/* 실제 지도 임베드 — 화면 가로를 꽉 채우고 레이스 테두리를 두름 */
 .location__map {
   position: relative;
   width: calc(100% + 56px);   /* .location__hero 좌우 패딩(28px)만큼 상쇄 */
   margin: 0 -28px 30px;
-  overflow: hidden;
-  /* 위·아래 바깥쪽 그림자 — 종이 위에 지도가 얹힌 느낌 */
-  box-shadow: 0 10px 22px rgba(70, 48, 40, .26), 0 -6px 16px rgba(70, 48, 40, .16);
-}
-/* 안쪽 가장자리 음영 — iframe 위에 덮어 경계를 또렷하게 */
-.location__map::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  box-shadow: inset 0 0 22px rgba(50, 34, 28, .22);
+  border: 22px solid #fffdf8;                            /* 미지원 브라우저 폴백 */
+  border-image: url("../assets/lace.png") 48 round;      /* 레이스 테두리 */
 }
 .location__map iframe {
   display: block;
@@ -1245,6 +1236,23 @@ textarea { resize: none; }
   line-height: 1.9;
   color: var(--accent-deep);
 }
+/* 완성한 빙고판 콜라주 */
+.bingo__collage { margin-top: 22px; }
+.bingo__collage img {
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  margin-bottom: 14px;
+}
+.bingo__collage .btn { max-width: 280px; margin: 0 auto; }
+.bingo__collage-note {
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: var(--ink-light);
+  opacity: .8;
+}
+
 /* 빙고와 무관한 자유 업로드 */
 .bingo__extra {
   margin-top: 30px;
