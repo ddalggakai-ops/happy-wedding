@@ -521,26 +521,30 @@ body {
 }
 .gallery__grid a.is-hidden { display: none; }
 
-/* ═══════════ 5. 달력 (리본 · 진주 카드) ═══════════ */
+/* ═══════════ 5. 달력 (이미지) + D-day 카드 ═══════════ */
 .calendar {
-  background: #f4efe6;          /* 크림 종이 */
-  color: #262220;
+  background: #eee7d9;          /* 캘린더 이미지 여백과 맞춘 크림 */
+  color: #2c2620;
 }
-.calendar .section__label { color: #a08b7a; }
-.calendar .section__title { color: #241f1c; }
-.calendar .section__title::after { background: #241f1c; opacity: .45; }
+.calendar .section__label { color: #9a8062; }
+.calendar .section__title { color: #241f19; }
+.calendar .section__title::after { background: #241f19; opacity: .4; }
 
-.cal-card {
+.cal-photo {
+  display: block;
+  width: min(100%, 340px);
+  margin: 26px auto 34px;
+}
+
+/* D-day 카드 — 캘린더와 같은 리본 무드 */
+.dday-card {
   position: relative;
   width: min(100%, 340px);
-  margin: 30px auto 26px;
-  aspect-ratio: 340 / 470;
+  margin: 0 auto;
+  padding-top: 55.9%;          /* 340 : 190 비율 (구형 브라우저 호환) */
+  max-height: 190px;
 }
-/* aspect-ratio 미지원 브라우저 대비 */
-@supports not (aspect-ratio: 1) {
-  .cal-card { height: 470px; }
-}
-.cal-card__deco {
+.dday-card__deco {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -549,80 +553,38 @@ body {
   pointer-events: none;
   overflow: visible;
 }
-.cal-card__inner {
+.dday-card__inner {
   position: absolute;
-  inset: 5%;
+  inset: 7% 8%;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  padding: 15% 8% 8%;
-  background: #fdfbf6;         /* 카드 종이 */
-  box-shadow: 0 10px 30px rgba(90, 70, 50, .14);
+  align-items: center;
+  justify-content: center;
+  background: #fdfbf6;
+  box-shadow: 0 8px 22px rgba(90, 70, 50, .13);
 }
-/* 흩뿌린 진주 (JS 생성) */
-.cal-card__pearls { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
-.cal-card__pearls span {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, #ffffff, #ece6dd 58%, #b9b0a4);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
-}
-.calendar__head {
+.dday-card__label {
   font-family: var(--en);
-  font-size: 19px;
-  letter-spacing: .2em;
-  text-indent: .2em;
-  font-weight: 500;
-  color: #3a332e;
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #2b2622;
+  font-size: 11.5px;
+  letter-spacing: .3em;
+  text-indent: .3em;
+  color: #8a7a63;
 }
-.calendar__table {
-  width: 100%;
-  border-collapse: collapse;
+.dday-card__num {
   font-family: var(--en);
-  font-size: 15px;
-  color: #2b2622;
+  font-size: 40px;
+  line-height: 1.15;
+  font-weight: 600;
+  color: #201c17;
+  letter-spacing: .02em;
 }
-.calendar__table th {
-  font-weight: 500;
-  font-size: 12.5px;
-  letter-spacing: .04em;
-  color: #4a423c;
-  padding-bottom: 12px;
+.dday-card__desc {
+  font-family: var(--kr);
+  font-size: 13.5px;
+  color: #5a5044;
+  margin-top: 2px;
 }
-.calendar__table td {
-  padding: 7px 0;
-  text-align: center;
-  position: relative;
-  font-weight: 500;
-}
-.calendar__table th.sun, .calendar__table td.sun { color: #9c8577; }
-/* 예식일 — 검은 원 강조 */
-.calendar__table td.wedding-day {
-  color: #fdfbf6;
-  font-weight: 700;
-  z-index: 1;
-}
-.calendar__table td.wedding-day::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 30px;
-  height: 30px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: #201c19;
-  z-index: -1;
-}
-.calendar__dday {
-  font-size: 15px;
-  color: #4a423c;
-}
-.calendar__dday b { color: #201c19; }
 
 /* ═══════════ 6. 오시는 길 ═══════════ */
 .location {

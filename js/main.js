@@ -321,57 +321,26 @@
   /* ═══════════ 5. 달력 · D-day ═══════════ */
   function renderCalendar() {
     $("#calendar-title").textContent = formatKoreanDate();
-    $("#calendar-month").textContent = `${C.wedding.year}. ${pad(C.wedding.month)}`;
 
-    const first = new Date(C.wedding.year, C.wedding.month - 1, 1);
-    const lastDate = new Date(C.wedding.year, C.wedding.month, 0).getDate();
-    const startDow = first.getDay();
-
-    // 요일 머리글 (레퍼런스처럼 영문 약자)
-    const DOW = ["SU", "M", "TU", "W", "TH", "F", "SA"];
-    let html = "<thead><tr>" +
-      DOW.map((d, i) => `<th class="${i === 0 ? "sun" : ""}">${d}</th>`).join("") +
-      "</tr></thead><tbody><tr>";
-
-    for (let i = 0; i < startDow; i++) html += "<td></td>";
-    for (let d = 1; d <= lastDate; d++) {
-      const dow = (startDow + d - 1) % 7;
-      if (dow === 0 && d !== 1) html += "</tr><tr>";
-      const cls = [dow === 0 ? "sun" : "", d === C.wedding.day ? "wedding-day" : ""]
-        .filter(Boolean).join(" ");
-      html += `<td class="${cls}">${d}</td>`;
-    }
-    html += "</tr></tbody>";
-    $("#calendar-table").innerHTML = html;
-
-    // 카드 위 진주 장식 (리본 주변에 흩뿌림)
-    const pearlBox = $("#cal-pearls");
-    if (pearlBox && !pearlBox.childElementCount) {
-      const spots = [
-        [30, 12.5], [44.5, 10], [59, 12.5],      // 리본 아래
-        [12, 84], [31, 89.5], [58, 88], [79, 82] // 카드 하단 리본 주변
-      ];
-      spots.forEach(([left, top], i) => {
-        const p = document.createElement("span");
-        const s = i % 3 === 0 ? 9 : 7;
-        p.style.width = p.style.height = `${s}px`;
-        p.style.left = `${left}%`;
-        p.style.top = `${top}%`;
-        pearlBox.appendChild(p);
-      });
-    }
-
-    // D-day
+    // D-day (캘린더는 이미지, 카운트만 동적으로)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const target = new Date(C.wedding.year, C.wedding.month - 1, C.wedding.day);
     const diff = Math.round((target - today) / 86400000);
     const names = `${C.groom.name} ♥ ${C.bride.name}`;
-    let text;
-    if (diff > 0) text = `${names}의 결혼식이 <b>${diff}일</b> 남았습니다.`;
-    else if (diff === 0) text = `오늘, ${names} 결혼합니다!`;
-    else text = `${names} 결혼식이 ${Math.abs(diff)}일 지났습니다.`;
-    $("#dday").innerHTML = text;
+    let num, desc;
+    if (diff > 0) {
+      num = `D-${diff}`;
+      desc = `${names}의 결혼식이 ${diff}일 남았습니다`;
+    } else if (diff === 0) {
+      num = "D-DAY";
+      desc = `오늘, ${names} 결혼합니다!`;
+    } else {
+      num = `D+${Math.abs(diff)}`;
+      desc = `${names} 결혼식이 ${Math.abs(diff)}일 지났습니다`;
+    }
+    $("#dday-num").textContent = num;
+    $("#dday-desc").textContent = desc;
   }
 
   /* ═══════════ 6. 오시는 길 ═══════════ */
