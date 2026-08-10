@@ -921,7 +921,7 @@
       done.innerHTML =
         `${escapeHtml(guest)}님, <b>${lines}빙고</b>로 응모가 완료되었습니다 ♥<br/>`
         + `당첨되시면 남겨주신 연락처로 안내드릴게요.<br/>`
-        + `<button type="button" class="bingo__free" id="bingo-again">다시 응모하기</button>`;
+        + `<button type="button" class="bingo__again" id="bingo-again">다시 응모하기</button>`;
       const again = $("#bingo-again");
       if (again) {
         again.addEventListener("click", () => {
@@ -953,7 +953,8 @@
           await postScript(url, {
             kind: "free-photo", data: data, type: "image/jpeg",
             name: files[i].name.replace(/\.[^.]+$/, "") + ".jpg",
-            guest: ($("#bingo-name").value || "").trim(),
+            // 이름을 적어둔 게 있으면 그 이름으로, 없으면 초대장 URL의 손님 이름으로 정리
+            guest: ($("#bingo-name").value || "").trim() || getGuestName() || "이름없음",
           });
           ok++;
         } catch (err) { /* 다음 파일 계속 */ }

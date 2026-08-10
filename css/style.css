@@ -38,6 +38,9 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* display 를 지정한 요소도 hidden 속성이 확실히 먹도록 */
+[hidden] { display: none !important; }
+
 html { -webkit-text-size-adjust: 100%; touch-action: manipulation; /* 더블탭 줌 방지 */ }
 
 body {
@@ -649,12 +652,22 @@ body {
   color: var(--ink-light);
   margin-bottom: 0;
 }
-/* 실제 지도 임베드 — 프레임 없이 화면 가로를 꽉 채움 */
+/* 실제 지도 임베드 — 프레임 없이 화면 가로를 꽉 채우고, 그림자로 종이와 분리 */
 .location__map {
   position: relative;
   width: calc(100% + 56px);   /* .location__hero 좌우 패딩(28px)만큼 상쇄 */
-  margin: 0 -28px 24px;
+  margin: 0 -28px 30px;
   overflow: hidden;
+  /* 위·아래 바깥쪽 그림자 — 종이 위에 지도가 얹힌 느낌 */
+  box-shadow: 0 10px 22px rgba(70, 48, 40, .26), 0 -6px 16px rgba(70, 48, 40, .16);
+}
+/* 안쪽 가장자리 음영 — iframe 위에 덮어 경계를 또렷하게 */
+.location__map::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 22px rgba(50, 34, 28, .22);
 }
 .location__map iframe {
   display: block;
@@ -1232,13 +1245,35 @@ textarea { resize: none; }
   line-height: 1.9;
   color: var(--accent-deep);
 }
+/* 빙고와 무관한 자유 업로드 */
+.bingo__extra {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+.bingo__extra-desc {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--ink-light);
+  margin-bottom: 14px;
+}
 .bingo__free {
+  display: block;
+  max-width: 260px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+/* 완료 화면의 "다시 응모하기" 텍스트 버튼 */
+.bingo__again {
   display: inline-block;
-  margin-top: 20px;
+  margin-top: 6px;
+  font-family: var(--kr);
   font-size: 12.5px;
   color: var(--ink-light);
+  background: none;
+  border: 0;
   border-bottom: 1px solid var(--line);
-  padding-bottom: 2px;
+  padding: 0 0 2px;
   cursor: pointer;
 }
 
