@@ -395,65 +395,47 @@ body {
 }
 
 /* ═══════════ 3. 러브레터 (손글씨 편지지) ═══════════ */
-.letter { background: var(--bg-soft); }
+/* 사진 위쪽이 흰색으로 사라지고, 그 자리에 손글씨가 올라갑니다 */
+.letter {
+  background: #fff;
+  color: #1c1a1a;
+  padding-left: 0;
+  padding-right: 0;
+}
+.letter .section__label { color: #c0607a; }
+.letter .section__title { color: #1c1a1a; }
+.letter .section__title::after { background: #c0607a; opacity: .7; }
 
-/* 편지지 카드: 줄노트 질감 + 마스킹테이프 + 살짝 기울임 */
-.letter-card {
-  position: relative;
-  background:
-    repeating-linear-gradient(
-      transparent,
-      transparent 35px,
-      var(--paper-line) 35px,
-      var(--paper-line) 36px
-    ),
-    var(--paper);
-  border: none;
-  border-radius: 4px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.5);
-  padding: 34px 26px 28px;
-  margin: 30px 6px;
+.lt { margin-top: 46px; background: #fff; }
+.lt:first-child { margin-top: 30px; }
+/* 손글씨 — 사진 위 흰 여백에 */
+.lt__hand {
+  margin: 0 9% 22px;
   text-align: left;
+  font-family: var(--hand);
+  font-size: clamp(21px, 6.4vw, 31px);
+  line-height: 1.66;
+  letter-spacing: .01em;
+  color: #17161a;
   transform: rotate(-1.2deg);
+  transform-origin: left center;
+  word-break: keep-all;
 }
-.letter-card:nth-child(even) { transform: rotate(1.2deg); }
-
-/* 상단 마스킹테이프 */
-.letter-card::before {
-  content: "";
+.lt__frame { position: relative; margin-top: -6px; }
+.lt__img { display: block; width: 100%; }
+/* 사진 윗부분만 흰 종이로 서서히 사라지게 */
+.lt__fade {
   position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-2deg);
-  width: 92px;
-  height: 26px;
-  background: rgba(250,137,163,.6);   /* 핑크 마스킹테이프 */
-  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  left: 0; right: 0; top: 0;
+  height: 40%;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    #fff 0%, rgba(255,255,255,.97) 12%, rgba(255,255,255,.78) 34%,
+    rgba(255,255,255,.45) 58%, rgba(255,255,255,.16) 80%, rgba(255,255,255,0) 100%);
 }
-.letter-card__to {
-  font-family: var(--hand);
-  font-size: 24px;
-  color: #d4587a;          /* 흰 편지지 위에서 읽히는 진한 핑크 */
-  margin-bottom: 6px;
-}
-.letter-card__text {
-  font-family: var(--hand);
-  font-size: 23px;
-  line-height: 36px;      /* 편지지 줄 간격(36px)에 글씨를 맞춤 */
-  color: var(--paper-ink);   /* 흰 편지지 위에는 어두운 글씨 */
-  white-space: pre-line;
-}
-.letter-card__from {
-  font-family: var(--hand);
-  font-size: 22px;
-  color: #7d7075;
-  text-align: right;
-  margin-top: 10px;
-}
-
-/* 스캔한 손편지 이미지를 쓸 경우 */
-.letter-card--image { padding: 12px; background: var(--paper); }
-.letter-card--image img { width: 100%; display: block; border-radius: 2px; }
+/* 스캔한 손편지를 그대로 올릴 때 */
+.lt--scan { padding: 0 22px; }
+.lt--scan img { display: block; width: 100%; }
 
 /* ═══════════ 4. 갤러리 (풀블리드 바둑판) ═══════════ */
 .gallery {

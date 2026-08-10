@@ -72,7 +72,8 @@ const WEDDING_CONFIG = {
   letters: [
     {
       from: "groom",           // groom | bride
-      image: "",               // 예: "assets/images/loveletter1.jpg"
+      photo: "assets/letter-groom.jpg",   // 손글씨가 올라갈 배경 사진
+      image: "",               // 실제 손편지를 스캔했다면 여기에 (넣으면 photo/text 대신 이미지만 표시)
       text: `현진아, 처음 만난 날의 떨림을
 아직도 기억해.
 앞으로도 그 마음 그대로
@@ -82,7 +83,8 @@ const WEDDING_CONFIG = {
     },
     {
       from: "bride",
-      image: "",               // 예: "assets/images/loveletter2.jpg"
+      photo: "assets/letter-bride.jpg",
+      image: "",
       text: `함께한 모든 계절이
 참 따뜻했어.
 이제 매일의 아침을 같이 맞이하자.

@@ -252,25 +252,26 @@
     $("#letter-list").innerHTML = C.letters.map((l) => {
       const isGroom = l.from === "groom";
       const who = isGroom ? `신랑 ${C.groom.name}` : `신부 ${C.bride.name}`;
-      const dear = isGroom ? `To. 나의 신부에게` : `To. 나의 신랑에게`;
 
-      // 스캔한 손편지 이미지가 있으면 이미지로 표시 (원본 샘플 방식)
+      // 스캔한 손편지 이미지가 있으면 그대로 표시
       if (l.image) {
         return `
-          <div class="letter-card letter-card--image reveal">
+          <div class="lt lt--scan reveal">
             <img src="${l.image}" alt="${who}의 손편지" loading="lazy" />
           </div>`;
       }
-      // 없으면 손글씨 폰트로 편지지에 표시
+      // 기본: 사진 위쪽을 흰색으로 페이드하고 그 위에 손글씨
       return `
-        <div class="letter-card reveal">
-          <div class="letter-card__to">${dear}</div>
-          <div class="letter-card__text">${escapeHtml(l.text)}</div>
-          <div class="letter-card__from">- ${who} 올림 -</div>
+        <div class="lt reveal">
+          <p class="lt__hand">${escapeHtml(l.text).replace(/\n/g, "<br/>")}</p>
+          ${l.photo ? `
+          <div class="lt__frame">
+            <img class="lt__img" src="${l.photo}" alt="" loading="lazy" />
+            <span class="lt__fade"></span>
+          </div>` : ""}
         </div>`;
     }).join("");
   }
-
   /* ═══════════ 4. 갤러리 + 라이트박스 ═══════════ */
   let lightboxIndex = 0;
 
