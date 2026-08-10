@@ -527,8 +527,8 @@ body {
 
 /* ═══════════ 5. 달력 (이미지) + 카운트다운 ═══════════ */
 .calendar {
-  /* 캘린더 이미지의 검정 배경과 똑같은 색 — 경계가 보이지 않도록 */
-  background: #1a1818;
+  /* 캘린더 사진 속 검정 종이에서 뽑아낸 색·질감 — SAVE THE DATE부터 카운트다운까지 이어집니다 */
+  background: #1e1e1e url("../assets/calendar-bg.jpg") top center / 240px auto repeat;
   color: #ece5e6;
   padding-left: 0;
   padding-right: 0;
@@ -562,15 +562,15 @@ body {
   gap: 2px;
   padding: 12px 4px 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, .07);
-  border: 1px solid rgba(255, 255, 255, .09);
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(250, 137, 163, .22);
 }
 .cd-box__label {
   font-family: var(--en);
   font-size: 11px;
   letter-spacing: .14em;
   text-indent: .14em;
-  color: #b9a3a9;
+  color: #e0a7b6;
 }
 .cd-box__num {
   font-family: var(--kr);
