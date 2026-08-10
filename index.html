@@ -29,15 +29,10 @@
        접속 시 처음 보이는 화면. 아무 곳이나 누르면 청첩장이 열립니다.
        config.js 의 splash.enabled 로 켜고 끌 수 있습니다. -->
   <div class="splash" id="splash">
+    <!-- 문구는 이미지 안에 인쇄되어 있고, 손님 이름만 'DEAR. ____ 님' 빈칸 위에 얹습니다 -->
     <div class="splash__photo">
       <img src="assets/splash.jpg" alt="진주 베일 봉투 초대장" />
-      <div class="splash__overlay">
-        <p class="splash__brand">Wedding Invitation</p>
-        <p class="splash__title">You're Invited</p>
-        <p class="splash__guest" id="splash-guest"></p>
-        <p class="splash__names" id="splash-names"></p>
-        <p class="splash__date" id="splash-date"></p>
-      </div>
+      <span class="splash__guest" id="splash-guest"></span>
     </div>
     <button class="splash__open" id="splash-open">초대장 열기</button>
   </div>

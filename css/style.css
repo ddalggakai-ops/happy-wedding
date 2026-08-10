@@ -541,7 +541,7 @@ body {
 .cal-photo {
   display: block;
   width: 100%;
-  margin: 20px auto 8px;
+  margin: 24px auto 48px;   /* 아래 여백 = 카운트다운과의 간격 */
 }
 
 /* 카운트다운 타일 */
@@ -1372,59 +1372,29 @@ textarea { resize: none; }
 .splash.is-closed { opacity: 0; pointer-events: none; }
 body.no-scroll { overflow: hidden; height: 100vh; }
 
-/* 봉투 사진 + 카드 위 문구 오버레이 */
+/* 봉투 사진 — 문구는 이미지에 인쇄돼 있고, 손님 이름만 빈칸 위에 얹습니다 */
 .splash__photo {
   position: relative;
-  width: min(82vw, 340px);
+  /* 이미지 비율 0.75 — 화면 높이에 맞춰 줄어들되 너무 커지지 않게 */
+  --fw: min(90vw, 400px);
+  --fw: min(90vw, 400px, calc(76svh * 0.75));
+  width: var(--fw);
 }
 .splash__photo > img {
   display: block;
   width: 100%;
 }
-.splash__overlay {
-  position: absolute;
-  left: 14%;
-  right: 14%;
-  top: 35.5%;     /* 사진 속 흰 카드 위쪽에 맞춘 위치 */
-  text-align: center;
-  color: #3f3a33;
-}
-.splash__brand {
-  font-family: var(--en);
-  font-size: 11px;
-  letter-spacing: .14em;
-  text-indent: .14em;
-  color: #837b6e;
-  margin-bottom: 7px;
-}
-/* 커버의 Our Wedding과 같은 필기체 */
-.splash__title {
-  font-family: var(--script);
-  font-weight: 400;
-  font-size: 44px;
-  line-height: 1.1;
-  margin-bottom: 8px;
-}
+/* 'DEAR. ______ 님' 빈칸 위 (이미지에서 실측한 위치) */
 .splash__guest {
-  font-family: var(--kr);
-  font-size: 14.5px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-.splash__names {
-  font-family: var(--kr);
-  font-size: 12.5px;
-  color: #6d665b;
-}
-.splash__date {
-  /* 커버 날짜와 같은 얇은 콘덴스드체 */
-  font-family: "Barlow Condensed", var(--kr);
-  font-weight: 300;
-  font-size: 14.5px;
-  letter-spacing: .22em;
-  text-indent: .22em;
-  color: #6d665b;
-  margin-top: 14px;   /* 초대 문구와 한 줄 띄운 간격 */
+  position: absolute;
+  left: 52.2%;
+  bottom: 55.3%;
+  transform: translateX(-50%);
+  font-family: var(--hand);
+  font-size: calc(var(--fw) * 0.068);
+  line-height: 1;
+  color: #2b2723;
+  white-space: nowrap;
 }
 .splash__open {
   font-family: var(--sans);

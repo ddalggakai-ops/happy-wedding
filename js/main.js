@@ -77,12 +77,9 @@
     if (!el) return;
     if (C.splash && C.splash.enabled === false) { el.remove(); return; }
 
+    // 안내 문구·이름·날짜는 이미지에 인쇄되어 있고, 손님 이름만 빈칸 위에 얹습니다
     const guest = getGuestName();
-    $("#splash-guest").textContent = guest ? `Dear. ${guest}` : "소중한 분을 초대합니다";
-    $("#splash-names").textContent =
-      `${C.groom.name} ${C.bride.name}의 결혼식에 초대합니다.`;
-    $("#splash-date").textContent =
-      `${C.wedding.year}. ${pad(C.wedding.month)}. ${pad(C.wedding.day)}`;
+    $("#splash-guest").textContent = guest;
 
     document.body.classList.add("no-scroll");
     let closed = false;
