@@ -212,7 +212,9 @@
         </div>` : ""}
       </div>`;
     };
-    document.getElementById("parents-list").innerHTML = side(P.groom) + side(P.bride);
+    // 표시 순서는 config.js의 parents 항목 순서를 그대로 따릅니다
+    document.getElementById("parents-list").innerHTML =
+      Object.values(P).map(side).join("");
   }
 
   /* ═══════════ 3. 러브레터 (손글씨 편지) ═══════════ */

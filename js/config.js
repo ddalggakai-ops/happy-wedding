@@ -96,20 +96,19 @@ const WEDDING_CONFIG = {
   // family: 가족사진 / letterImage: 손편지 사진 / baby: 어린 시절 사진 (스티커처럼 표시)
   // 파일이 없는 항목은 비워두면 표시되지 않고, 양쪽 다 비면 섹션 전체가 숨겨집니다.
   parents: {
+    bride: {
+      label: "방제연 & 곽명임의 딸",
+      who: "현진",
+      family: "assets/parents/bride-family.jpg",
+      letterImage: "assets/parents/bride-letter.jpg",   // ★ 임시 — 실제 편지로 교체 예정
+      babies: ["assets/parents/bride-baby1.jpg", "assets/parents/bride-baby2.jpg"],
+    },
     groom: {
       label: "김정수 & 정인선의 아들",
       who: "형규",
       family: "assets/parents/groom-family.jpg",
       letterImage: "assets/parents/groom-letter.jpg",
       babies: ["assets/parents/groom-baby1.png", "assets/parents/groom-baby2.png"],
-    },
-    // ★ 신부측은 현재 임시(플레이스홀더) 이미지입니다. 실제 사진·편지로 교체해주세요.
-    bride: {
-      label: "방제연 & 곽명임의 딸",
-      who: "현진",
-      family: "assets/parents/bride-family.jpg",
-      letterImage: "assets/parents/bride-letter.jpg",
-      babies: ["assets/parents/bride-baby1.png"],
     },
   },
 

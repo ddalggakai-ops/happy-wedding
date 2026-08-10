@@ -1244,7 +1244,7 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 
 /* ═══════════ 3.5 부모님의 편지 (핑크 플로럴 · 미니멀) ═══════════ */
 .parents {
-  background: #f6dfe5 url("../assets/parents-bg.jpg") center top / cover repeat-y;
+  background: #f6dfe5 url("../assets/parents-bg.jpg") center top / 100% auto repeat-y;
   color: #3b2f34;
   padding-top: 40px;
   padding-bottom: 84px;
