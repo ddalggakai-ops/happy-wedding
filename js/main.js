@@ -200,35 +200,46 @@
     if (!has(P.groom) && !has(P.bride)) { sec.hidden = true; return; }
 
     let idx = 0;
-    const side = (s) => {
+    const side = (s, key) => {
       if (!has(s)) return "";
       const babies = s.babies || [];
       const alt = (idx++) % 2 === 1;
+      // 이름은 "신부 방현진" 처럼 호칭까지 붙여서 표기합니다
+      const fullName =
+        key === "groom" ? `신랑 ${C.groom.name}`
+        : key === "bride" ? `신부 ${C.bride.name}`
+        : (s.who || "");
+      const hasLines = !!(s.letterLines && s.letterLines.length);
+      const baby2 = babies[1]
+        ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />`
+        : "";
+      // 편지를 한 줄씩 오려 붙인 쪽은 아기2를 가족사진 우하단에 걸쳐 놓고,
+      // 편지 첫 줄이 그 위로 살짝 올라오게 합니다 (DOM 순서상 편지가 위에 그려짐)
       return `
       <div class="parents__side reveal">
         <p class="parents__label">${s.label || ""}</p>
-        <p class="parents__who">${s.who || ""}</p>
+        <p class="parents__who">${fullName}</p>
         ${s.family ? `
         <div class="parents__photo">
           <img src="${s.family}" alt="${s.who} 가족 사진" loading="lazy" />
           ${babies[0] ? `<img class="parents__sticker parents__sticker--1" src="${babies[0]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
+          ${hasLines ? baby2 : ""}
           ${doodleHtml(alt)}
         </div>` : ""}
-        ${(s.letterLines && s.letterLines.length) ? `
+        ${hasLines ? `
         <div class="parents__lines">
           ${s.letterLines.map((src, k) => `<img class="parents__line parents__line--${(k % 4) + 1}" src="${src}" alt="" loading="lazy" />`).join("")}
-          ${babies[1] ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
         </div>`
         : s.letterImage ? `
         <div class="parents__letter">
           <img src="${s.letterImage}" alt="${s.who} 부모님의 편지" loading="lazy" />
-          ${babies[1] ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
+          ${baby2}
         </div>` : ""}
       </div>`;
     };
     // 표시 순서는 config.js의 parents 항목 순서를 그대로 따릅니다
     document.getElementById("parents-list").innerHTML =
-      Object.values(P).map(side).join("");
+      Object.entries(P).map(([key, s]) => side(s, key)).join("");
   }
 
   /* ═══════════ 3. 러브레터 (손글씨 편지) ═══════════ */
@@ -394,7 +405,7 @@
     const naverKey = (C.map && C.map.naverClientId || "").trim();
     if (naverKey) {
       const box = document.querySelector(".location__map");
-      box.innerHTML = '<div id="naver-map" style="width:100%;height:240px"></div>';
+      box.innerHTML = '<div id="naver-map" class="location__canvas"></div>';
       const s = document.createElement("script");
       s.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(naverKey)}`;
       s.onload = () => {
@@ -423,10 +434,37 @@
           disableAnchor: false,
         });
         iw.open(map, marker);
+
+        /* PC·태블릿처럼 지도 크기가 만들어진 뒤에 달라지는 경우(창 크기 변경, 카드 확대 등)
+           네이버 지도는 좌상단을 기준으로 남겨두어 성당이 한쪽으로 밀립니다.
+           크기가 바뀔 때마다 다시 중앙으로 맞춰줍니다. */
+        const el = document.getElementById("naver-map");
+        let lastW = 0, lastH = 0, timer = 0;
+        const recenter = () => {
+          try {
+            map.refresh(true);
+            map.setCenter(pos);
+          } catch (_) { /* 지도가 아직 준비 전이면 다음 기회에 */ }
+        };
+        const onResize = () => {
+          if (!el) return;
+          const r = el.getBoundingClientRect();
+          // 같은 크기로 다시 불려도(무한 반복 방지) 아무 것도 하지 않습니다
+          if (Math.abs(r.width - lastW) < 1 && Math.abs(r.height - lastH) < 1) return;
+          lastW = r.width; lastH = r.height;
+          clearTimeout(timer);
+          timer = setTimeout(recenter, 60);
+        };
+        onResize();
+        setTimeout(recenter, 300);
+        setTimeout(recenter, 1200);   // 폰트·이미지 로딩으로 레이아웃이 늦게 잡히는 경우
+        window.addEventListener("resize", onResize);
+        window.addEventListener("orientationchange", () => setTimeout(recenter, 300));
+        if (window.ResizeObserver && el) new ResizeObserver(onResize).observe(el);
       };
       s.onerror = () => {
         // 키 오류 등으로 네이버 지도를 못 불러오면 구글 지도로 대체
-        box.innerHTML = '<iframe id="map-embed" title="예식장 지도" loading="lazy" style="display:block;width:100%;height:240px;border:0"></iframe>';
+        box.innerHTML = '<iframe id="map-embed" title="예식장 지도" loading="lazy"></iframe>';
         $("#map-embed").src = `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
       };
       document.head.appendChild(s);
