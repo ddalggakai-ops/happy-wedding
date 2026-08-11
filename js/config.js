@@ -73,6 +73,7 @@ const WEDDING_CONFIG = {
     {
       from: "groom",           // groom | bride
       photo: "assets/letter-groom.jpg",   // 손글씨가 올라갈 배경 사진
+      tag: "현진이에게, 형규가",           // 사진 위 작은 머리말
       image: "",               // 실제 손편지를 스캔했다면 여기에 (넣으면 photo/text 대신 이미지만 표시)
       text: `현진아, 처음 만난 날의 떨림을
 아직도 기억해.
@@ -84,6 +85,7 @@ const WEDDING_CONFIG = {
     {
       from: "bride",
       photo: "assets/letter-bride.jpg",
+      tag: "형규에게, 현진이가",
       image: "",
       text: `함께한 모든 계절이
 참 따뜻했어.

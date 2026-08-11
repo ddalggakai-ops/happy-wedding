@@ -405,10 +405,26 @@ body {
 .letter .section__title { color: #1c1a1a; }
 .letter .section__title::after { background: #c0607a; opacity: .7; }
 
-.lt { margin-top: 46px; background: #fff; }
-.lt:first-child { margin-top: 0; }
-.lt:last-child .lt__frame { margin-bottom: 0; }
-/* 손글씨 — 사진 위 흰 여백에 */
+/* margin 대신 padding — 위쪽 여백이 섹션 밖으로 새어 검은 띠가 생기지 않도록 */
+.lt { position: relative; padding-top: 46px; background: #fff; }
+.lt:first-child { padding-top: 0; }
+.lt--groom { padding-bottom: 58px; }
+
+/* 작은 머리말 (현진이에게, 형규가) */
+.lt__tag {
+  position: absolute;
+  z-index: 3;
+  top: 20px;
+  font-family: "Nanum Myeongjo", serif;
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: #6b625e;
+}
+.lt__tag--right { right: 9%; }
+.lt__tag--left { left: 9%; }
+.lt__tag--light { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.85), 0 2px 16px rgba(0,0,0,.6); }
+
+/* 손글씨 */
 .lt__hand {
   margin: 0 9% 22px;
   text-align: left;
@@ -421,30 +437,29 @@ body {
   transform-origin: left center;
   word-break: keep-all;
 }
+/* 신랑 편지는 사진이 사라진 자리로 글이 올라와 앉습니다 */
+.lt--groom .lt__hand { margin: -13% 9% 0; }
+
 .lt__frame { position: relative; margin-top: -6px; }
+.lt--groom .lt__frame { margin-top: 0; }
 .lt__img { display: block; width: 100%; }
-/* 사진 윗부분만 흰 종이로 서서히 사라지게 */
-.lt__fade {
-  position: absolute;
-  left: 0; right: 0; top: 0;
-  height: 40%;
-  pointer-events: none;
+
+/* 사진이 흰 종이로 서서히 사라지는 그라데이션
+   신부: 사진 위쪽 / 신랑: 사진 아래쪽 */
+.lt__fade { position: absolute; left: 0; right: 0; height: 40%; pointer-events: none; }
+.lt--bride .lt__fade {
+  top: 0;
   background: linear-gradient(180deg,
     #fff 0%, rgba(255,255,255,.97) 12%, rgba(255,255,255,.78) 34%,
     rgba(255,255,255,.45) 58%, rgba(255,255,255,.16) 80%, rgba(255,255,255,0) 100%);
 }
-/* 첫 번째(신랑 → 신부) 편지는 사진 아래쪽도 흰색으로 사라지게 */
-.lt__fade--bottom {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 34%;
-  pointer-events: none;
+.lt--groom .lt__fade {
+  bottom: 0;
+  height: 48%;
   background: linear-gradient(0deg,
-    #fff 0%, rgba(255,255,255,.95) 16%, rgba(255,255,255,.7) 42%,
-    rgba(255,255,255,.32) 70%, rgba(255,255,255,0) 100%);
+    #fff 0%, rgba(255,255,255,.98) 18%, rgba(255,255,255,.82) 40%,
+    rgba(255,255,255,.5) 62%, rgba(255,255,255,.18) 84%, rgba(255,255,255,0) 100%);
 }
-/* 첫 편지 위쪽 여백 (제목을 없앤 자리) */
-.lt:first-child .lt__hand { margin-top: 64px; }
 
 /* 스캔한 손편지를 그대로 올릴 때 */
 .lt--scan { padding: 0 22px; }
@@ -1465,17 +1480,17 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 }
 /* 아기1 — 가족사진 좌상단 */
 .parents__sticker--1 {
-  width: 104px;
-  left: -24px;
-  top: -32px;
+  width: 142px;
+  left: -30px;
+  top: -46px;
   transform: rotate(-8deg);
 }
 /* 아기2 — 부모님 편지 우하단 */
 .parents__sticker--2 {
-  width: 98px;
-  right: -20px;
-  bottom: -34px;
-  transform: rotate(7deg);
+  width: 180px;
+  right: -26px;
+  bottom: -70px;
+  transform: rotate(6deg);
 }
 
 /* 아기 사진 주변 손그림 아이콘 (연필 스케치 스캔 이미지) */

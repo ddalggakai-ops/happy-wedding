@@ -228,23 +228,30 @@
       const isGroom = l.from === "groom";
       const who = isGroom ? `신랑 ${C.groom.name}` : `신부 ${C.bride.name}`;
 
-      // 스캔한 손편지 이미지가 있으면 그대로 표시
       if (l.image) {
         return `
           <div class="lt lt--scan reveal">
             <img src="${l.image}" alt="${who}의 손편지" loading="lazy" />
           </div>`;
       }
-      // 기본: 사진 위쪽을 흰색으로 페이드하고 그 위에 손글씨
-      return `
-        <div class="lt reveal">
-          <p class="lt__hand">${escapeHtml(l.text).replace(/\n/g, "<br/>")}</p>
-          ${l.photo ? `
+
+      const tag = l.tag
+        ? `<span class="lt__tag lt__tag--${isGroom ? "right lt__tag--light" : "left"}">`
+          + escapeHtml(l.tag) + "</span>"
+        : "";
+      const hand = `<p class="lt__hand">${escapeHtml(l.text).replace(/\n/g, "<br/>")}</p>`;
+      const frame = l.photo ? `
           <div class="lt__frame">
             <img class="lt__img" src="${l.photo}" alt="" loading="lazy" />
             <span class="lt__fade"></span>
-            ${isGroom ? `<span class="lt__fade--bottom"></span>` : ""}
-          </div>` : ""}
+          </div>` : "";
+
+      // 신랑 → 사진이 위, 아래로 흐려지며 그 아래에 손글씨
+      // 신부 → 손글씨가 위, 사진 윗부분이 흐려지며 이어짐
+      return `
+        <div class="lt lt--${isGroom ? "groom" : "bride"} reveal">
+          ${tag}
+          ${isGroom ? frame + hand : hand + frame}
         </div>`;
     }).join("");
   }
