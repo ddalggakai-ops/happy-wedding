@@ -113,10 +113,10 @@
     const COUNT = 10;   // 인앱 브라우저 부하를 고려해 개수 제한
     for (let i = 0; i < COUNT; i++) {
       const p = document.createElement("span");
-      p.className = "petal";
-      const size = 11 + Math.random() * 13;             // 11~24px
+      p.className = `petal petal--${1 + Math.floor(Math.random() * 3)}`;
+      const size = 13 + Math.random() * 13;             // 13~26px
       p.style.width = `${size.toFixed(1)}px`;
-      p.style.height = `${(size * 1.25).toFixed(1)}px`;   // 꽃잎은 세로로 조금 길게
+      p.style.height = `${(size * 1.35).toFixed(1)}px`;   // 꽃잎은 세로로 조금 길게
       p.style.left = `${(Math.random() * 100).toFixed(1)}%`;
       p.style.opacity = (0.45 + Math.random() * 0.45).toFixed(2);
       p.style.setProperty("--fall", `${(8 + Math.random() * 8).toFixed(1)}s`);
@@ -661,10 +661,10 @@
       try { sent = localStorage.getItem("wedding-rsvp-sent") === "1"; } catch (e) {}
       // 예식이 끝난 뒤에는 더 이상 묻지 않습니다
       const over = Date.now() > weddingDate.getTime() + 12 * 60 * 60 * 1000;
-      const loc = document.querySelector(".location");
+      const loc = document.querySelector(".info") || document.querySelector(".location");
       if (!sent && !over) {
         /* 두 가지 경우에 한 번만 띄웁니다.
-           ① '오시는 길'을 완전히 지나쳐 스크롤했을 때
+           ① '안내사항'을 완전히 지나쳐 스크롤했을 때
            ② 거기까지 내려가지 않는 분들을 위해, 초대장을 연 뒤 30초가 지났을 때
            (보내지 않고 닫으면 다음에 다시 열었을 때 또 나타납니다) */
         const WAIT_MS = 30000;
