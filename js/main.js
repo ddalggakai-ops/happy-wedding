@@ -78,7 +78,11 @@
     if (C.splash && C.splash.enabled === false) { el.remove(); return; }
 
     // 카드의 'Dear. ____ 님' 줄은 이미지에서 지웠고, 그 자리를 글자로 채웁니다.
-    const guest = getGuestName();
+    // 이름이 길면 카드 밖으로 나가지 않도록 글자를 줄이고 길이도 제한합니다
+    const guest = getGuestName().slice(0, 14);
+    const n = guest.length;
+    $("#splash-guest").style.setProperty(
+      "--tag-scale", n > 10 ? ".6" : n > 7 ? ".74" : n > 5 ? ".87" : "1");
     $("#splash-guest").innerHTML = guest
       ? `<span class="sg-en">Dear.</span><span class="sg-name">${escapeHtml(guest)}</span>`
         + `<span class="sg-suffix">님</span>`
@@ -530,8 +534,10 @@
       // 이미 보냈으면 다시 띄우지 않습니다
       let sent = false;
       try { sent = localStorage.getItem("wedding-rsvp-sent") === "1"; } catch (e) {}
+      // 예식이 끝난 뒤에는 더 이상 묻지 않습니다
+      const over = Date.now() > weddingDate.getTime() + 12 * 60 * 60 * 1000;
       const loc = document.querySelector(".location");
-      if (!sent && loc) {
+      if (!sent && !over && loc) {
         // '오시는 길'을 완전히 지나쳐 스크롤하면 한 번만 띄웁니다
         const onScroll = () => {
           if (loc.getBoundingClientRect().bottom > 0) return;

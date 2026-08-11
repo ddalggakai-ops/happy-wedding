@@ -26,6 +26,8 @@
         media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css" /></noscript>
   <link rel="stylesheet" href="css/style.css" />
+  <!-- 자바스크립트가 꺼져 있으면 봉투 화면에 갇히므로 아예 숨깁니다 -->
+  <noscript><style>.splash{display:none!important}body{overflow:auto!important}</style></noscript>
 </head>
 <body>
 
@@ -94,7 +96,7 @@
           </div>
         </div>
         <div class="envelope__frame">
-          <img class="envelope__img" src="assets/envelope.jpg" alt="편지 봉투" />
+          <img class="envelope__img" src="assets/envelope.jpg" alt="편지 봉투" loading="lazy" />
         </div>
       </div>
 
@@ -106,7 +108,7 @@
          파일이 없는 동안에는 영역 전체가 숨겨집니다. -->
     <section class="scrapbook">
       <img src="assets/scrapbook.jpg" alt="신랑 신부 스크랩북"
-           onerror="this.closest('section').style.display='none'" />
+           onerror="this.closest('section').style.display='none'" loading="lazy" />
     </section>
 
     <!-- ═══════════ 3.5 부모님의 편지 ═══════════
@@ -133,7 +135,7 @@
     <section class="section calendar">
       <p class="section__label reveal">SAVE THE DATE</p>
       <h2 class="section__title reveal" id="calendar-title"></h2>
-      <img class="cal-photo reveal" src="assets/calendar.jpg" alt="2026년 11월 캘린더" />
+      <img class="cal-photo reveal" src="assets/calendar.jpg" alt="2026년 11월 캘린더" loading="lazy" />
 
       <!-- 카운트다운 (일 : 시 : 분 : 초) -->
       <div class="countdown reveal">
@@ -162,7 +164,7 @@
         <p class="location__address reveal" id="venue-address"></p>
 
         <!-- 콜라주: 일러스트 아래를 지도 카드가 살짝 덮으며 올라옴 -->
-        <img class="location__illust reveal" src="assets/venue-bg.png" alt="명동성당 일러스트" />
+        <img class="location__illust reveal" src="assets/venue-bg.png" alt="명동성당 일러스트" loading="lazy" />
 
         <!-- 실제 지도 (네이버 지도 — config의 naverClientId 사용) -->
         <div class="location__map reveal">

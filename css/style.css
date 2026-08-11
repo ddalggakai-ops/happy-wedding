@@ -71,6 +71,14 @@ body {
   transform: translateY(0);
 }
 
+/* '동작 줄이기'를 켠 분에게는 애니메이션 없이 바로 보여줍니다 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .petal { display: none; }
+  .envelope__letter { transition: none !important; }
+  * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+}
+
 /* ---------- 공통 섹션 ---------- */
 .section {
   padding: 72px 28px;
@@ -672,6 +680,7 @@ body {
 
 .location__map-btns {
   display: flex;
+  flex-wrap: wrap;          /* 아주 좁은 화면에서 줄바꿈 */
   gap: 8px;
   justify-content: center;
   margin-bottom: 0;
@@ -800,7 +809,8 @@ body {
 .acc-card__name { font-size: 15.5px; font-weight: 700; }
 .acc-card__tel {
   display: inline-flex;
-  width: 26px; height: 26px;
+  width: 40px; height: 40px;   /* 손가락으로 누르기 쉬운 크기 */
+  margin: -7px 0;
   align-items: center; justify-content: center;
   color: var(--accent);
 }
@@ -972,8 +982,8 @@ textarea { resize: none; }
   top: 16px;
   right: 16px;
   z-index: 50;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--line);
   background: rgba(31,26,29,.85);
@@ -1466,27 +1476,28 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   justify-content: center;
   gap: .34em;
   white-space: nowrap;
+  max-width: 82%;
   color: #55483f;
   mix-blend-mode: multiply;   /* 종이 결이 글자에 비치도록 */
 }
 .splash__guest .sg-en {
   font-family: var(--en);
   font-style: italic;
-  font-size: calc(var(--fw) * 0.046);
+  font-size: calc(var(--fw) * 0.046 * var(--tag-scale, 1));
   letter-spacing: .01em;
 }
 .splash__guest .sg-name {
   font-family: "Nanum Myeongjo", serif;
-  font-size: calc(var(--fw) * 0.050);
+  font-size: calc(var(--fw) * 0.050 * var(--tag-scale, 1));
   letter-spacing: .04em;
 }
 .splash__guest .sg-suffix {
   font-family: "Nanum Myeongjo", serif;
-  font-size: calc(var(--fw) * 0.036);
+  font-size: calc(var(--fw) * 0.036 * var(--tag-scale, 1));
 }
 .splash__guest .sg-line {
   font-family: "Nanum Myeongjo", serif;
-  font-size: calc(var(--fw) * 0.042);
+  font-size: calc(var(--fw) * 0.042 * var(--tag-scale, 1));
   letter-spacing: .03em;
 }
 
@@ -1551,9 +1562,9 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 }
 /* 아기1 — 가족사진 좌상단 */
 .parents__sticker--1 {
-  width: 38%;
-  left: -9%;
-  top: -14%;
+  width: 36%;
+  left: -6%;
+  top: -12%;
   transform: rotate(-8deg);
 }
 /* 아기2 — 부모님 편지 우하단 */
@@ -1574,14 +1585,14 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   opacity: .9;
   mix-blend-mode: multiply;   /* 연필이 종이에 스며든 느낌 */
 }
-.parents__doodle--d1 { right: -36px; top: -26px; transform: rotate(9deg); }
-.parents__doodle--d2 { left: -46px; bottom: -32px; transform: rotate(-6deg); }
-.parents__doodle--d3 { left: -32px; top: 42%; transform: rotate(-14deg); opacity: .9; }
+.parents__doodle--d1 { right: -8%; top: -7%; transform: rotate(9deg); }
+.parents__doodle--d2 { left: -9%; bottom: -8%; transform: rotate(-6deg); }
+.parents__doodle--d3 { left: -7%; top: 42%; transform: rotate(-14deg); opacity: .9; }
 .parents__doodle--d4 { left: 36%; bottom: -50px; transform: rotate(8deg); opacity: .7; }
 /* 별은 여기저기 흩뿌리듯 */
-.parents__doodle--d5 { right: -26px; top: 34%; transform: rotate(16deg); opacity: .82; }
-.parents__doodle--d6 { left: 22%; top: -30px; transform: rotate(-20deg); opacity: .74; }
-.parents__doodle--d7 { right: 16%; bottom: -40px; transform: rotate(24deg); opacity: .78; }
+.parents__doodle--d5 { right: -6%; top: 34%; transform: rotate(16deg); opacity: .82; }
+.parents__doodle--d6 { left: 22%; top: -7%; transform: rotate(-20deg); opacity: .74; }
+.parents__doodle--d7 { right: 16%; bottom: -9%; transform: rotate(24deg); opacity: .78; }
 
 /* 손편지를 한 줄씩 오려 붙인 구성 */
 .parents__lines {
