@@ -662,14 +662,49 @@
       // 예식이 끝난 뒤에는 더 이상 묻지 않습니다
       const over = Date.now() > weddingDate.getTime() + 12 * 60 * 60 * 1000;
       const loc = document.querySelector(".location");
-      if (!sent && !over && loc) {
-        // '오시는 길'을 완전히 지나쳐 스크롤하면 한 번만 띄웁니다
-        const onScroll = () => {
-          if (loc.getBoundingClientRect().bottom > 0) return;
+      if (!sent && !over) {
+        /* 두 가지 경우에 한 번만 띄웁니다.
+           ① '오시는 길'을 완전히 지나쳐 스크롤했을 때
+           ② 거기까지 내려가지 않는 분들을 위해, 초대장을 연 뒤 30초가 지났을 때
+           (보내지 않고 닫으면 다음에 다시 열었을 때 또 나타납니다) */
+        const WAIT_MS = 30000;
+        let done = false;
+        let timer = 0;
+
+        const fire = () => {
+          if (done) return;
+          done = true;
           window.removeEventListener("scroll", onScroll);
+          clearTimeout(timer);
+          // 다른 탭에 있는 동안에는 띄우지 않고, 돌아왔을 때 보여줍니다
+          if (document.hidden) {
+            document.addEventListener("visibilitychange", function again() {
+              if (document.hidden) return;
+              document.removeEventListener("visibilitychange", again);
+              setTimeout(open, 600);
+            });
+            return;
+          }
           setTimeout(open, 350);
         };
-        window.addEventListener("scroll", onScroll, { passive: true });
+
+        const onScroll = () => {
+          if (!loc || loc.getBoundingClientRect().bottom > 0) return;
+          fire();
+        };
+        if (loc) window.addEventListener("scroll", onScroll, { passive: true });
+
+        // 봉투(스플래시)를 닫은 시점부터 시간을 셉니다
+        const startTimer = () => { timer = setTimeout(fire, WAIT_MS); };
+        if (document.getElementById("splash")) {
+          const watch = setInterval(() => {
+            if (document.getElementById("splash")) return;
+            clearInterval(watch);
+            startTimer();
+          }, 500);
+        } else {
+          startTimer();
+        }
       }
     }
 

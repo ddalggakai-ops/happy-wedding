@@ -158,6 +158,16 @@ body {
   overflow: hidden;
   height: min(96svh, 780px);
 }
+/* 커버는 세로로 긴 1:1.9 비율 (화면 높이를 넘지 않는 선에서) */
+@supports (aspect-ratio: 1 / 1) {
+  .intro__stage {
+    height: auto;
+    aspect-ratio: 1 / 1.9;
+    max-height: min(96svh, 940px);
+    min-width: 86%;        /* 창이 짧아도 사진이 너무 좁아지지는 않게 */
+    margin-inline: auto;   /* 높이에 맞춰 좁아질 때 가운데 정렬 */
+  }
+}
 .intro__bg {
   position: absolute;
   inset: 0;
@@ -1819,15 +1829,10 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 /* ═══════════ PC 웹브라우저 대응 ═══════════
    모바일 기준(480px 카드)으로 만든 화면이라 큰 모니터에서는 글씨가 작아 보입니다.
    zoom 으로 카드 전체를 통째로 키워 비율은 그대로 두고 크기만 올립니다.
-   (화면이 넓을수록 더 크게 — 태블릿 1.18배 → 데스크톱 1.34배 → 대형 1.5배) */
+   (svh 값은 zoom 으로 나눠서 넣어야 실제 화면 비율과 맞습니다) */
 @media (min-width: 700px) {
-  .invitation { zoom: 1.06; }
-  /* zoom 만큼 나눠서 화면 높이를 넘지 않게 보정 */
-  .intro__stage { height: min(91svh, 760px); }
-  /* 지도만은 확대에서 제외합니다 — 네이버 지도가 확대된 크기를 한 번 더 반영해
-     성당 위치가 오른쪽 아래로 밀리기 때문입니다. 보이는 크기는 그대로 유지됩니다. */
-  .location__map .location__canvas,
-  .location__map iframe { zoom: .9434; height: 276px; }
+  .invitation { zoom: 1.0; }
+  .intro__stage { max-height: min(94svh, 940px); }
   .splash__photo { --fw: min(78vw, 440px, calc(78svh * 0.7227)); }
   .bgm-btn { width: 50px; height: 50px; top: 22px; right: 22px; }
   .bgm-btn svg { width: 19px; height: 19px; }
@@ -1841,22 +1846,24 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   .splash__open { font-size: 15.5px; padding: 14px 40px; }
 }
 @media (min-width: 1000px) {
-  .invitation { zoom: 1.14; }
-  .intro__stage { height: min(84svh, 740px); }
+  .invitation { zoom: 1.06; }
+  .intro__stage { max-height: min(89svh, 900px); }
   .splash__photo { --fw: min(60vw, 470px, calc(80svh * 0.7227)); }
+  /* 지도만은 확대에서 제외합니다 — 네이버 지도가 확대된 크기를 한 번 더 반영해
+     성당 위치가 오른쪽 아래로 밀리기 때문입니다. 보이는 크기는 그대로 유지됩니다. */
   .location__map .location__canvas,
-  .location__map iframe { zoom: .8772; height: 296px; }
+  .location__map iframe { zoom: .9434; height: 276px; }
 }
 @media (min-width: 1500px) {
-  .invitation { zoom: 1.22; }
-  .intro__stage { height: min(79svh, 730px); }
+  .invitation { zoom: 1.12; }
+  .intro__stage { max-height: min(84svh, 880px); }
   .location__map .location__canvas,
-  .location__map iframe { zoom: .8197; height: 317px; }
+  .location__map iframe { zoom: .8929; height: 291px; }
 }
 /* zoom 을 지원하지 않는 브라우저에서는 글자만이라도 키웁니다 */
 @supports not (zoom: 1.2) {
   @media (min-width: 1000px) {
-    .invitation { --max-w: 620px; }
-    .section { font-size: 17px; }
+    .invitation { --max-w: 560px; }
+    .section { font-size: 16.5px; }
   }
 }

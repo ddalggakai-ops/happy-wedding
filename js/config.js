@@ -275,7 +275,7 @@ const WEDDING_CONFIG = {
     jsKey: "4d89d33c46e6f706c39a969d9eab68fe",
     shareTitle: "김형규 ♥ 방현진 결혼합니다",
     shareDescription: "2026년 11월 15일 일요일 오전 11시\n명동성당 파밀리아 채플",
-    shareImage: "https://ddalggakai-ops.github.io/happy-wedding/assets/cover.jpg",
+    shareImage: "https://hyeongkyu-and-hyunjin.life/assets/cover.jpg",
   },
 
   /* ---------- 방명록 · RSVP 저장 방식 ---------- */
