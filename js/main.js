@@ -405,10 +405,18 @@
     const naverKey = (C.map && C.map.naverClientId || "").trim();
     if (naverKey) {
       const box = document.querySelector(".location__map");
-      box.innerHTML = '<div id="naver-map" class="location__canvas"></div>';
-      const s = document.createElement("script");
-      s.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(naverKey)}`;
-      s.onload = () => {
+
+      // 네이버 지도를 못 쓰면(키 만료·도메인 미등록 등) 조용히 구글 지도로 대체합니다
+      const googleMap = () => {
+        box.innerHTML = '<iframe id="map-embed" title="예식장 지도" loading="lazy"></iframe>';
+        $("#map-embed").src = `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
+      };
+
+      // 키 종류에 따라 파라미터 이름이 다릅니다 (신규 발급 키=ncpKeyId / 예전 키=ncpClientId)
+      const KEY_PARAMS = ["ncpKeyId", "ncpClientId"];
+      let attempt = 0;
+
+      const drawMap = () => {
         const pos = new naver.maps.LatLng(v.lat, v.lng);
         const map = new naver.maps.Map("naver-map", {
           center: pos,
@@ -462,12 +470,23 @@
         window.addEventListener("orientationchange", () => setTimeout(recenter, 300));
         if (window.ResizeObserver && el) new ResizeObserver(onResize).observe(el);
       };
-      s.onerror = () => {
-        // 키 오류 등으로 네이버 지도를 못 불러오면 구글 지도로 대체
-        box.innerHTML = '<iframe id="map-embed" title="예식장 지도" loading="lazy"></iframe>';
-        $("#map-embed").src = `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
+
+      const loadNaver = () => {
+        if (attempt >= KEY_PARAMS.length) { googleMap(); return; }
+        const param = KEY_PARAMS[attempt++];
+        box.innerHTML = '<div id="naver-map" class="location__canvas"></div>';
+        const s = document.createElement("script");
+        s.src = `https://oapi.map.naver.com/openapi/v3/maps.js?${param}=${encodeURIComponent(naverKey)}`;
+        s.onload = () => {
+          try { drawMap(); }
+          catch (e) { loadNaver(); }   // 인증 실패 후 API가 반쪽만 로드된 경우
+        };
+        s.onerror = () => loadNaver();
+        document.head.appendChild(s);
       };
-      document.head.appendChild(s);
+      // 네이버가 인증 실패 시 호출하는 전역 함수 — 다음 방식으로 재시도, 끝내 안 되면 구글 지도
+      window.navermap_authFailure = () => loadNaver();
+      loadNaver();
     } else {
       $("#map-embed").src =
         `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
