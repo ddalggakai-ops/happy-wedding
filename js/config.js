@@ -153,13 +153,12 @@ const WEDDING_CONFIG = {
   },
 
   /* ---------- 마음 전하실 곳 (계좌번호) ---------- */
-  // ★ 계좌번호는 아직 전달받지 못해 예시입니다. 은행명과 번호를 채워주세요.
   // phone    : 넣으면 이름 옆에 전화 아이콘이 생깁니다 (비우면 숨김)
   // kakaopay : 카카오페이 송금 링크(https://qr.kakaopay.com/...)를 넣으면 pay 버튼이 생깁니다
   //            (카카오페이 앱 → 송금·이체 → 내 송금코드/QR → 링크 복사)
   accounts: {
     groomSide: [
-      { holder: "김형규", relation: "신랑", bank: "은행명", number: "계좌번호 입력", phone: "010-6383-1547", kakaopay: "" },
+      { holder: "김형규", relation: "신랑", bank: "새마을금고", number: "9003-2601-7176-1", phone: "010-6383-1547", kakaopay: "" },
       { holder: "김정수", relation: "혼주", bank: "농협", number: "421034-52-064544", phone: "010-5459-1547", kakaopay: "" },
       { holder: "정인선", relation: "혼주", bank: "농협", number: "211-02-185444", phone: "010-4078-9153", kakaopay: "" },
     ],
