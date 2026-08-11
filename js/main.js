@@ -7,6 +7,11 @@
   const C = WEDDING_CONFIG;
   const $ = (sel) => document.querySelector(sel);
 
+  /* 새로고침해도 마지막 위치가 아니라 항상 처음(커버)부터 보이도록 */
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
+  window.addEventListener("load", () => window.scrollTo(0, 0));
+
   /* ---------- 유틸 ---------- */
   const DAY_KO = ["일", "월", "화", "수", "목", "금", "토"];
   const weddingDate = new Date(
@@ -109,9 +114,9 @@
     for (let i = 0; i < COUNT; i++) {
       const p = document.createElement("span");
       p.className = "petal";
-      const size = 8 + Math.random() * 11;              // 8~19px
+      const size = 11 + Math.random() * 13;             // 11~24px
       p.style.width = `${size.toFixed(1)}px`;
-      p.style.height = `${(size * 0.85).toFixed(1)}px`;
+      p.style.height = `${(size * 1.25).toFixed(1)}px`;   // 꽃잎은 세로로 조금 길게
       p.style.left = `${(Math.random() * 100).toFixed(1)}%`;
       p.style.opacity = (0.45 + Math.random() * 0.45).toFixed(2);
       p.style.setProperty("--fall", `${(8 + Math.random() * 8).toFixed(1)}s`);
