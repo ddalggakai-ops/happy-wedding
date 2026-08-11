@@ -282,6 +282,68 @@
     return await new Promise((res) => cv.toBlob(res, "image/jpeg", 0.9));
   }
 
+
+  /* ── 담은 사진 임시 저장 (새로고침·앱 전환에도 살아남도록) ──
+     사진은 용량이 커서 localStorage에 못 넣으므로 IndexedDB를 씁니다.
+     지원하지 않는 환경(구형 시크릿 모드 등)에서는 조용히 건너뜁니다. */
+  const DB_NAME = "wedding-bingo";
+  const STORE = "shots";
+  function openDb() {
+    return new Promise((res, rej) => {
+      if (!window.indexedDB) return rej(new Error("no indexedDB"));
+      const r = indexedDB.open(DB_NAME, 1);
+      r.onupgradeneeded = () => { if (!r.result.objectStoreNames.contains(STORE)) r.result.createObjectStore(STORE); };
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    });
+  }
+  async function draftPut(key, value) {
+    try {
+      const db = await openDb();
+      await new Promise((res, rej) => {
+        const t = db.transaction(STORE, "readwrite");
+        t.objectStore(STORE).put(value, key);
+        t.oncomplete = res; t.onerror = () => rej(t.error);
+      });
+    } catch (e) { /* 저장 못 해도 진행 */ }
+  }
+  async function draftDel(key) {
+    try {
+      const db = await openDb();
+      await new Promise((res) => {
+        const t = db.transaction(STORE, "readwrite");
+        t.objectStore(STORE).delete(key);
+        t.oncomplete = res; t.onerror = res;
+      });
+    } catch (e) { /* 무시 */ }
+  }
+  async function draftAll() {
+    try {
+      const db = await openDb();
+      return await new Promise((res, rej) => {
+        const t = db.transaction(STORE, "readonly");
+        const st = t.objectStore(STORE);
+        const keys = st.getAllKeys(), vals = st.getAll();
+        t.oncomplete = () => {
+          const out = {};
+          keys.result.forEach((k, i) => { out[k] = vals.result[i]; });
+          res(out);
+        };
+        t.onerror = () => rej(t.error);
+      });
+    } catch (e) { return {}; }
+  }
+  async function draftClear() {
+    try {
+      const db = await openDb();
+      await new Promise((res) => {
+        const t = db.transaction(STORE, "readwrite");
+        t.objectStore(STORE).clear();
+        t.oncomplete = res; t.onerror = res;
+      });
+    } catch (e) { /* 무시 */ }
+  }
+
   function initBingo() {
     const url = (C.snap && C.snap.appsScriptUrl || "").trim();
     const B = C.bingo || {};
@@ -314,7 +376,8 @@
     $("#bingo-title").textContent = B.title || "포토 빙고";
     $("#bingo-desc").innerHTML = String(B.desc || "").replace(/\n/g, "<br/>");
     $("#bingo-note").innerHTML =
-      "사진은 신랑·신부의 구글 드라이브에만 저장되며, 연락처는 경품 안내 외에는 사용하지 않습니다."
+      "담은 사진은 자동 저장되어 새로고침해도 남아 있습니다.<br/>"
+      + "사진은 신랑·신부의 구글 드라이브에만 저장되며, 연락처는 경품 안내 외에는 사용하지 않습니다."
       + (B.prize ? "<br/>" + B.prize : "");
 
     const grid = $("#bingo-grid");
@@ -387,11 +450,47 @@
         shots[i] = { blob: blob, url: objUrl };
         cells[i].querySelector(".bingo-cell__img").src = objUrl;
         refresh();
+        draftPut("cell-" + i, blob);          // 새로고침에 대비해 저장
       } catch (err) {
         toast("사진을 불러오지 못했습니다. 다시 시도해주세요");
       }
       cellInput.value = "";
     });
+
+    /* 입력한 이름·연락처도 함께 기억 */
+    ["#bingo-name", "#bingo-phone"].forEach((sel) => {
+      const el = $(sel);
+      if (el) el.addEventListener("change", () => draftPut("meta", {
+        name: $("#bingo-name").value, phone: $("#bingo-phone").value,
+        side: (document.querySelector('input[name="bingo-side"]:checked') || {}).value || "",
+      }));
+    });
+
+    /* 저장해둔 사진 되살리기 */
+    (async () => {
+      const saved = await draftAll();
+      let restored = 0;
+      Object.keys(saved).forEach((k) => {
+        if (k === "meta") {
+          const m = saved[k] || {};
+          if (m.name) $("#bingo-name").value = m.name;
+          if (m.phone) $("#bingo-phone").value = m.phone;
+          if (m.side) {
+            const r = document.querySelector(`input[name="bingo-side"][value="${m.side}"]`);
+            if (r) r.checked = true;
+          }
+          return;
+        }
+        const i = Number(String(k).replace("cell-", ""));
+        const blob = saved[k];
+        if (!(i >= 0 && i < 9) || !blob) return;
+        const objUrl = URL.createObjectURL(blob);
+        shots[i] = { blob: blob, url: objUrl };
+        cells[i].querySelector(".bingo-cell__img").src = objUrl;
+        restored++;
+      });
+      if (restored) { refresh(); toast(`이어서 채우실 수 있어요 (${restored}칸 불러옴)`); }
+    })();
 
     /* --- 응모 --- */
     form.addEventListener("submit", async (e) => {
@@ -469,6 +568,7 @@
       try {
         localStorage.setItem("wedding-bingo-entry", JSON.stringify({ guest: guest, lines: lines.length }));
       } catch (err) { /* 사파리 프라이빗 모드 등 */ }
+      draftClear();                          // 다 보냈으니 임시 저장 비우기
       showDone(guest, lines.length, collage);
       if (verified) toast(`응모 완료! 사진 ${ok}장 감사합니다 ♥`);
       else toast(`사진 ${ok}장을 보냈지만 저장 확인이 안 됐어요. 신랑·신부에게 알려주세요`);

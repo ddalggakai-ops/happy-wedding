@@ -497,6 +497,29 @@
   }
 
   /* ═══════════ 8. RSVP ═══════════ */
+  /* Apps Script 전송 (참석 여부 → 구글 시트) */
+  async function postScript(url, params) {
+    try {
+      const r = await fetch(url, { method: "POST", body: new URLSearchParams(params) });
+      const text = await r.text();
+      if (!r.ok) throw new Error(`서버 응답 ${r.status}`);
+      try {
+        const data = JSON.parse(text);
+        if (data && data.ok === false) throw new Error(data.error || "스크립트 오류");
+        return data;
+      } catch (e) {
+        if (e instanceof SyntaxError) throw new Error("스크립트가 오류 페이지를 반환했습니다");
+        throw e;
+      }
+    } catch (e) {
+      if (e instanceof TypeError) {
+        await fetch(url, { method: "POST", mode: "no-cors", body: new URLSearchParams(params) });
+        return { ok: true, unverified: true };
+      }
+      throw e;
+    }
+  }
+
   function initRsvp() {
     const modal = $("#rsvp-modal");
     const open = () => { if (modal) modal.hidden = false; };
@@ -555,13 +578,31 @@
         count: Number($("#rsvp-count").value) || 1,
         date: new Date().toISOString(),
       };
+      const btn = $("#rsvp-form").querySelector('button[type="submit"]');
+      btn.disabled = true;
+      const prev = btn.textContent;
+      btn.textContent = "보내는 중...";
       try {
-        await Storage.addRsvp(entry);
+        // 포토 빙고와 같은 Apps Script로 보내 구글 시트 '참석여부' 탭에 기록합니다
+        const url = (C.snap && C.snap.appsScriptUrl || "").trim();
+        if (url) {
+          await postScript(url, {
+            kind: "rsvp",
+            guest: entry.name,
+            side: entry.side,
+            attend: entry.attend,
+            meal: entry.attend === "참석" ? entry.meal : "",
+            count: entry.attend === "참석" ? String(entry.count) : "0",
+          });
+        }
+        await Storage.addRsvp(entry);          // 로컬 사본
         $("#rsvp-form").hidden = true;
         $("#rsvp-done").hidden = false;
         try { localStorage.setItem("wedding-rsvp-sent", "1"); } catch (err2) {}
         setTimeout(() => { if (modal) modal.hidden = true; }, 1800);
       } catch (err) {
+        btn.disabled = false;
+        btn.textContent = prev;
         toast("전송에 실패했습니다. 잠시 후 다시 시도해주세요");
       }
     });
