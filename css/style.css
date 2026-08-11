@@ -429,7 +429,7 @@ body {
   color: #37322c;
   text-shadow: 0 1px 8px rgba(255,255,255,.95), 0 0 18px rgba(255,255,255,.85);
 }
-.lt__tag--br { right: 5%; bottom: 24%; }     /* 신랑 — 사진 우하단 */
+.lt__tag--br { right: 5%; bottom: 17%; }     /* 신랑 — 사진 우하단 */
 .lt__tag--tl { left: 5%; top: 5%; }          /* 신부 — 사진 좌상단 */
 
 /* 손글씨 */
@@ -470,6 +470,40 @@ body {
 /* 스캔한 손편지를 그대로 올릴 때 */
 .lt--scan { padding: 0 22px; }
 .lt--scan img { display: block; width: 100%; }
+
+/* ═══════════ 3.7 스크랩북 꾸미기 ═══════════ */
+.scrap2 {
+  position: relative;
+  overflow: hidden;
+  min-height: 430px;
+  padding: 0;
+  /* 부모님 섹션과 같은 분홍 엠보싱 종이 */
+  background: #f5b7c4 url("../assets/parents-bg.jpg") center top / 100% auto repeat-y;
+}
+.scrap2__deco {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 10px rgba(120, 60, 80, .26));
+}
+/* 마스킹테이프 */
+.scrap2__deco--tape1 { width: 42%; left: -6%; top: 8%; transform: rotate(-8deg); opacity: .95; }
+.scrap2__deco--tape2 { width: 34%; right: -5%; bottom: 16%; transform: rotate(11deg); opacity: .95; }
+/* 날짜 도장 */
+.scrap2__deco--stamp { width: 38%; right: 8%; top: 12%; transform: rotate(-9deg); opacity: .92; }
+/* 색종이 하트 */
+.scrap2__deco--heart1 { width: 21%; left: 10%; top: 34%; transform: rotate(-14deg); }
+.scrap2__deco--heart2 { width: 15%; left: 34%; bottom: 12%; transform: rotate(18deg); }
+.scrap2__deco--heart3 { width: 11%; right: 24%; bottom: 40%; transform: rotate(6deg); }
+/* 연필 낙서 (부모님 섹션과 같은 손그림) */
+.scrap2__deco--star1 { width: 12%; left: 30%; top: 14%; transform: rotate(-10deg);
+  mix-blend-mode: multiply; filter: none; opacity: .85; }
+.scrap2__deco--star2 { width: 8%; right: 12%; bottom: 10%; transform: rotate(20deg);
+  mix-blend-mode: multiply; filter: none; opacity: .7; }
+.scrap2__deco--flower { width: 13%; left: 6%; bottom: 8%; transform: rotate(8deg);
+  mix-blend-mode: multiply; filter: none; opacity: .8; }
+.scrap2__deco--balloon { width: 10%; right: 6%; top: 46%; transform: rotate(-6deg);
+  mix-blend-mode: multiply; filter: none; opacity: .75; }
 
 /* ═══════════ 4. 갤러리 (풀블리드 바둑판) ═══════════ */
 .gallery {
@@ -1603,13 +1637,13 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 .parents__line {
   display: block;
   width: 100%;
-  margin-bottom: 4px;
+  margin-bottom: 10px;   /* 조각끼리 겹치지 않도록 */
   filter: drop-shadow(0 3px 7px rgba(120, 60, 80, .26));
 }
-.parents__line--1 { transform: rotate(-1.1deg); }
+.parents__line--1 { transform: rotate(-0.8deg); }
 .parents__line--2 { transform: rotate(.9deg) translateX(2%); }
 .parents__line--3 { transform: rotate(-.6deg) translateX(-1.5%); }
-.parents__line--4 { transform: rotate(1.3deg) translateX(1%); }
+.parents__line--4 { transform: rotate(1deg) translateX(1%); }
 
 /* 오려 붙인 편지에서는 아기 사진을 줄 아래 오른쪽에 (글자를 가리지 않게) */
 .parents__lines .parents__sticker--2 {
