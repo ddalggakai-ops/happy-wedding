@@ -242,13 +242,15 @@
 
       // 신랑 머리말은 사진과 글 사이 오른쪽에, 신부 머리말은 사진 좌상단에
       const tag = l.tag
-        ? `<span class="lt__tag lt__tag--${isGroom ? "join" : "topleft"}">` + escapeHtml(l.tag) + "</span>"
+        ? `<span class="lt__tag lt__tag--${isGroom ? "br" : "tl"}">` + escapeHtml(l.tag) + "</span>"
         : "";
       const hand = `<p class="lt__hand">${escapeHtml(l.text).replace(/\n/g, "<br/>")}</p>`;
+      // 머리말은 사진 안쪽에 (신랑=우하단 / 신부=좌상단)
       const frame = l.photo ? `
           <div class="lt__frame">
             <img class="lt__img" src="${l.photo}" alt="" loading="lazy" />
             <span class="lt__fade"></span>
+            ${tag}
           </div>` : "";
 
       // 신랑 → 사진이 위, 아래로 흐려지며 그 아래에 손글씨
@@ -256,7 +258,7 @@
       // 두 편지 모두 사진이 위, 아래로 흐려지며 그 자리에 손글씨가 앉습니다
       return `
         <div class="lt lt--${isGroom ? "groom" : "bride"} reveal">
-          ${isGroom ? frame + tag + hand : tag + frame + hand}
+          ${frame + hand}
         </div>`;
     }).join("");
   }

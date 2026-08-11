@@ -410,31 +410,19 @@ body {
 .lt:first-child { padding-top: 0; }
 .lt--groom, .lt--bride { padding-bottom: 58px; }
 
-/* 작은 머리말 (현진이에게, 형규가) */
+/* 머리말 (현진이에게, 형규가) — 사진 안쪽에 */
 .lt__tag {
   position: absolute;
   z-index: 4;
-  top: 20px;
   font-family: "Nanum Myeongjo", serif;
-  font-size: 13px;
-  letter-spacing: .08em;
-  color: #6b625e;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: #37322c;
+  text-shadow: 0 1px 8px rgba(255,255,255,.95), 0 0 18px rgba(255,255,255,.85);
 }
-/* 신랑 — 사진과 손글씨 사이 오른쪽 */
-.lt__tag--join {
-  position: relative;   /* 페이드 그라데이션 위로 올라오도록 */
-  z-index: 4;
-  display: block;
-  margin: 6px 9% 10px;
-  text-align: right;
-}
-/* 신부 — 사진 좌상단 (밝은 하늘이라 짙은 글씨) */
-.lt__tag--topleft {
-  left: 9%;
-  top: 68px;          /* .lt 위쪽 여백(46px) + 사진 안쪽 22px */
-  color: #4a4540;
-  text-shadow: 0 1px 6px rgba(255,255,255,.9);
-}
+.lt__tag--br { right: 9%; bottom: 19%; }     /* 신랑 — 사진 우하단 (손글씨와 겹치지 않게) */
+.lt__tag--tl { left: 9%; top: 5%; }          /* 신부 — 사진 좌상단 */
 
 /* 손글씨 */
 .lt__hand {
@@ -453,7 +441,7 @@ body {
 .lt--groom .lt__hand,
 .lt--bride .lt__hand { margin: 0 9%; }
 /* 사진이 사라진 자리로 글이 올라와 앉습니다 */
-.lt--groom .lt__tag--join { margin-top: -13%; }
+.lt--groom .lt__hand,
 .lt--bride .lt__hand { margin-top: -13%; }
 
 .lt__frame { position: relative; }
