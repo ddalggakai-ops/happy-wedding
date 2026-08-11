@@ -508,7 +508,8 @@
     if (!tabs.length) { sec.hidden = true; return; }
     sec.hidden = false;
 
-    $("#info-headline").textContent = I.headline || "";
+    // 줄바꿈은 그대로 살립니다
+    $("#info-headline").innerHTML = escapeHtml(I.headline || "").replace(/\n/g, "<br/>");
 
     $("#info-tabs").innerHTML = tabs.map((t, i) => `
       <button type="button" class="info__tab${i === 0 ? " is-active" : ""}"

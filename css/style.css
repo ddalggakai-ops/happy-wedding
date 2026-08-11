@@ -761,22 +761,39 @@ body {
 
 /* ═══════════ 7. 계좌번호 ═══════════ */
 /* ═══════════ 6.5 안내사항 (탭) ═══════════ */
-.info { background: var(--bg); }
-.info__headline {
-  font-size: 15px;
-  line-height: 1.95;
-  color: var(--ink-light);
-  margin: 18px 0 26px;
+/* 흰 레이스 바탕 — 밝은 섹션이라 글자색을 어둡게 씁니다 */
+.info {
+  background: #fbfafa url("../assets/info-bg.jpg") center top / 100% auto repeat-y;
+  color: #35292e;
 }
+.info .section__label { color: #c9566f; }
+.info .section__title { color: #2c2126; }
+.info .section__title::after { background: #c9566f; }
+/* 월계수 잎을 양옆에 둔 인사 문구 */
+.info__headline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0 26px;
+  font-size: 14.5px;
+  line-height: 1.95;
+  color: #6b5a60;
+}
+.info__headline-text { flex: 0 1 auto; }
+.info__laurel { flex: 0 0 auto; width: 46px; color: #d98ba0; }
+.info__laurel svg { display: block; width: 100%; height: auto; }
+.info__laurel--r { transform: scaleX(-1); }
 /* --- 탭 (알약형 세그먼트) --- */
 .info__tabs {
   display: flex;
   gap: 4px;
   padding: 5px;
-  margin-bottom: 22px;
-  background: rgba(255, 255, 255, .045);
-  border: 1px solid var(--line);
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, .72);
+  border: 1px solid rgba(120, 80, 95, .14);
   border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(120, 80, 95, .07);
 }
 .info__tab {
   flex: 1 1 0;
@@ -787,7 +804,7 @@ body {
   font-weight: 500;
   letter-spacing: -.01em;
   white-space: nowrap;
-  color: var(--ink-light);
+  color: #8a747c;
   background: transparent;
   border: 0;
   border-radius: 999px;
@@ -796,39 +813,19 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .info__tab.is-active {
-  color: #171214;
+  color: #fff;
   font-weight: 700;
-  background: var(--accent);
-  box-shadow: 0 3px 12px rgba(250, 137, 163, .28);
-}
-/* --- 탭 (밑줄형) — .info 에 info--underline 을 붙이면 이 모양이 됩니다 --- */
-.info--underline .info__tabs {
-  gap: 0;
-  padding: 0;
-  background: none;
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  border-radius: 0;
-}
-.info--underline .info__tab {
-  padding: 12px 4px;
-  border-radius: 0;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-}
-.info--underline .info__tab.is-active {
-  color: var(--accent);
-  background: none;
-  box-shadow: none;
-  border-bottom-color: var(--accent);
+  background: #e0798f;
+  box-shadow: 0 3px 12px rgba(200, 90, 120, .28);
 }
 /* --- 내용 --- */
 .info__panel {
   text-align: left;
   padding: 22px 22px 24px;
-  background: var(--card);
-  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .86);
+  border: 1px solid rgba(120, 80, 95, .13);
   border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(120, 80, 95, .08);
   animation: info-in .32s ease both;
 }
 @keyframes info-in {
@@ -848,14 +845,14 @@ body {
   font-size: 16px;
   font-weight: 700;
   line-height: 1.5;
-  color: var(--ink);
+  color: #2c2126;
   margin-bottom: 12px;
 }
 .info__icon { font-size: 17px; flex: 0 0 auto; }
 .info__text {
   font-size: 14.3px;
   line-height: 1.95;
-  color: var(--ink-light);
+  color: #6e5c63;
   white-space: pre-line;
 }
 /* 대절버스 시간표 */
@@ -865,28 +862,28 @@ body {
   align-items: baseline;
   gap: 10px;
   padding: 11px 0;
-  border-top: 1px dashed var(--line);
+  border-top: 1px dashed rgba(120, 80, 95, .22);
 }
-.info__stop:last-child { border-bottom: 1px dashed var(--line); }
+.info__stop:last-child { border-bottom: 1px dashed rgba(120, 80, 95, .22); }
 .info__stop-time {
   font-family: "Barlow Condensed", var(--kr);
   font-size: 19px;
   font-weight: 500;
   letter-spacing: .06em;
-  color: var(--accent);
+  color: #c9566f;
   flex: 0 0 auto;
 }
-.info__stop-place { font-size: 14.5px; color: var(--ink); font-weight: 500; }
+.info__stop-place { font-size: 14.5px; color: #2c2126; font-weight: 500; }
 .info__stop-desc {
   margin-left: auto;
   font-size: 12px;
-  color: var(--ink-light);
-  border: 1px solid var(--line);
+  color: #8a747c;
+  border: 1px solid rgba(120, 80, 95, .2);
   border-radius: 999px;
   padding: 2px 9px;
   flex: 0 0 auto;
 }
-/* 강조 한 줄 */
+/* 다정하게 덧붙이는 한 줄 */
 .info__note {
   display: flex;
   gap: 7px;
@@ -894,11 +891,11 @@ body {
   padding: 11px 13px;
   font-size: 13.2px;
   line-height: 1.7;
-  color: var(--accent-deep);
-  background: rgba(250, 137, 163, .09);
+  color: #b0546c;
+  background: rgba(224, 121, 143, .1);
   border-radius: 10px;
 }
-.info__note::before { content: "!"; font-weight: 700; opacity: .8; }
+.info__note::before { content: "♡"; flex: 0 0 auto; opacity: .85; }
 
 .accounts { background: var(--bg-soft); }
 .accounts__desc {
