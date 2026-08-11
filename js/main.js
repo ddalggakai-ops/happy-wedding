@@ -442,13 +442,10 @@
       setTimeout(() => toast("티맵 앱이 설치되어 있어야 합니다"), 1500);
     });
 
-    $("#copy-address").addEventListener("click", () =>
-      copyText(v.address, "주소가 복사되었습니다"));
-
     const transit = [
       { icon: "🚇", label: "지하철", text: v.transit.subway },
       { icon: "🚌", label: "버스", text: v.transit.bus },
-      { icon: "🚗", label: "주차", text: v.transit.parking },
+      { icon: "🅿️", label: "주차", text: v.transit.parking },
     ];
     $("#transit-list").innerHTML = transit.map((t) => `
       <div class="transit-item">
@@ -501,6 +498,27 @@
 
   /* ═══════════ 8. RSVP ═══════════ */
   function initRsvp() {
+    const modal = $("#rsvp-modal");
+    const open = () => { if (modal) modal.hidden = false; };
+    const close = () => { if (modal) modal.hidden = true; };
+    if (modal) {
+      $("#rsvp-x").addEventListener("click", close);
+      modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+      // 이미 보냈으면 다시 띄우지 않습니다
+      let sent = false;
+      try { sent = localStorage.getItem("wedding-rsvp-sent") === "1"; } catch (e) {}
+      const loc = document.querySelector(".location");
+      if (!sent && loc) {
+        // '오시는 길'을 완전히 지나쳐 스크롤하면 한 번만 띄웁니다
+        const onScroll = () => {
+          if (loc.getBoundingClientRect().bottom > 0) return;
+          window.removeEventListener("scroll", onScroll);
+          setTimeout(open, 350);
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+      }
+    }
+
     $("#rsvp-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = $("#rsvp-name").value.trim();
@@ -518,6 +536,8 @@
         await Storage.addRsvp(entry);
         $("#rsvp-form").hidden = true;
         $("#rsvp-done").hidden = false;
+        try { localStorage.setItem("wedding-rsvp-sent", "1"); } catch (err2) {}
+        setTimeout(() => { if (modal) modal.hidden = true; }, 1800);
       } catch (err) {
         toast("전송에 실패했습니다. 잠시 후 다시 시도해주세요");
       }

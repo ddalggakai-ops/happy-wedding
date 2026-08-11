@@ -178,7 +178,6 @@
             <span class="map-btn__dot map-btn__dot--tmap">T</span>티맵
           </a>
         </div>
-        <button class="btn btn--outline reveal" id="copy-address">주소 복사하기</button>
       </div>
 
       <!-- 하단(블러시): 지하철·버스·주차 -->
@@ -193,33 +192,6 @@
       <h2 class="section__title reveal">마음 전하실 곳</h2>
       <p class="accounts__desc reveal">멀리서도 축하의 마음을<br/>전하고 싶으신 분들을 위해 계좌번호를 기재하였습니다.<br/><br/>소중한 축하를 보내주셔서 감사드리며,<br/>좋은 부부의 모습으로 보답하겠습니다.  </p>
       <div id="accounts-list" class="reveal"></div>
-    </section>
-
-    <!-- ═══════════ 8. 참석 의사 전달 (RSVP) ═══════════ -->
-    <section class="section rsvp">
-      <p class="section__label reveal">RSVP</p>
-      <h2 class="section__title reveal">참석 의사 전달</h2>
-      <p class="rsvp__desc reveal">축하하는 마음으로 참석해 주시는<br/>모든 분들을 귀하게 모실 수 있도록<br/>참석 여부를 알려주시면 감사하겠습니다.</p>
-      <form id="rsvp-form" class="rsvp__form reveal">
-        <div class="form-row form-row--pair">
-          <label class="chip"><input type="radio" name="rsvp-side" value="신랑측" checked /><span>신랑측</span></label>
-          <label class="chip"><input type="radio" name="rsvp-side" value="신부측" /><span>신부측</span></label>
-        </div>
-        <div class="form-row form-row--pair">
-          <label class="chip"><input type="radio" name="rsvp-attend" value="참석" checked /><span>참석 가능</span></label>
-          <label class="chip"><input type="radio" name="rsvp-attend" value="불참" /><span>참석 어려움</span></label>
-        </div>
-        <div class="form-row">
-          <input type="text" id="rsvp-name" placeholder="성함" maxlength="20" required />
-          <input type="number" id="rsvp-count" placeholder="인원" min="1" max="20" value="1" required />
-        </div>
-        <div class="form-row form-row--pair">
-          <label class="chip"><input type="radio" name="rsvp-meal" value="식사함" checked /><span>식사 예정</span></label>
-          <label class="chip"><input type="radio" name="rsvp-meal" value="식사안함" /><span>식사 안 함</span></label>
-        </div>
-        <button type="submit" class="btn btn--fill">참석 의사 보내기</button>
-      </form>
-      <p class="rsvp__done" id="rsvp-done" hidden>소중한 마음 감사히 전달받았습니다 ♥</p>
     </section>
 
     <!-- ═══════════ 9.5 게스트 스냅 · 포토 빙고 ═══════════
@@ -267,6 +239,37 @@
 
   <!-- ═══════════ 연락하기 모달 ═══════════ -->
   <!-- ═══════════ 토스트 알림 ═══════════ -->
+
+  <!-- ═══════════ 참석 의사 전달 (오시는 길을 지나면 팝업) ═══════════ -->
+  <div class="modal modal--rsvp" id="rsvp-modal" hidden>
+    <div class="modal__panel modal__panel--rsvp">
+      <button type="button" class="modal__x" id="rsvp-x" aria-label="닫기">×</button>
+      <p class="section__label">RSVP</p>
+      <h2 class="modal__title">참석 의사 전달</h2>
+<p class="rsvp__desc">축하하는 마음으로 참석해 주시는<br/>모든 분들을 귀하게 모실 수 있도록<br/>참석 여부를 알려주시면 감사하겠습니다.</p>
+      <form id="rsvp-form" class="rsvp__form">
+        <div class="form-row form-row--pair">
+          <label class="chip"><input type="radio" name="rsvp-side" value="신랑측" checked /><span>신랑측</span></label>
+          <label class="chip"><input type="radio" name="rsvp-side" value="신부측" /><span>신부측</span></label>
+        </div>
+        <div class="form-row form-row--pair">
+          <label class="chip"><input type="radio" name="rsvp-attend" value="참석" checked /><span>참석 가능</span></label>
+          <label class="chip"><input type="radio" name="rsvp-attend" value="불참" /><span>참석 어려움</span></label>
+        </div>
+        <div class="form-row">
+          <input type="text" id="rsvp-name" placeholder="성함" maxlength="20" required />
+          <input type="number" id="rsvp-count" placeholder="인원" min="1" max="20" value="1" required />
+        </div>
+        <div class="form-row form-row--pair">
+          <label class="chip"><input type="radio" name="rsvp-meal" value="식사함" checked /><span>식사 예정</span></label>
+          <label class="chip"><input type="radio" name="rsvp-meal" value="식사안함" /><span>식사 안 함</span></label>
+        </div>
+        <button type="submit" class="btn btn--fill">참석 의사 보내기</button>
+      </form>
+      <p class="rsvp__done" id="rsvp-done" hidden>소중한 마음 감사히 전달받았습니다 ♥</p>
+        </div>
+  </div>
+
   <div class="toast" id="toast" hidden></div>
 
   <!-- 카카오 SDK (jsKey를 설정한 경우에만 초기화됨) -->
