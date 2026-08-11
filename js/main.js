@@ -519,6 +519,29 @@
       }
     }
 
+    // 인원 스테퍼
+    const countLabel = $("#rsvp-count-label");
+    const countInput = $("#rsvp-count");
+    const setCount = (n) => {
+      n = Math.min(20, Math.max(1, n));
+      countInput.value = String(n);
+      countLabel.textContent = String(n);
+      $("#rsvp-minus").disabled = n <= 1;
+      $("#rsvp-plus").disabled = n >= 20;
+    };
+    if (countLabel) {
+      $("#rsvp-minus").addEventListener("click", () => setCount(Number(countInput.value) - 1));
+      $("#rsvp-plus").addEventListener("click", () => setCount(Number(countInput.value) + 1));
+      setCount(1);
+    }
+    // 참석이 어려우면 인원·식사 질문은 감춥니다
+    const onlyAttend = $("#rsvp-only-attend");
+    document.querySelectorAll('input[name="rsvp-attend"]').forEach((r) =>
+      r.addEventListener("change", () => {
+        const going = document.querySelector('input[name="rsvp-attend"]:checked').value === "참석";
+        if (onlyAttend) onlyAttend.hidden = !going;
+      }));
+
     $("#rsvp-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = $("#rsvp-name").value.trim();

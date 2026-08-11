@@ -1092,15 +1092,63 @@ textarea { resize: none; }
 .modal__close { margin-top: 20px; }
 
 /* 참석 의사 전달 팝업 */
+.modal--rsvp { background: rgba(0, 0, 0, .82); }
 .modal__panel--rsvp {
   position: relative;
   max-width: 360px;
   text-align: center;
-  max-height: 86svh;
+  max-height: 88svh;
   overflow-y: auto;
+  background: #171315;
+  border: 1px solid rgba(250, 137, 163, .45);
+  border-radius: 20px;
+  padding: 24px 22px 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .7), 0 0 0 6px rgba(250, 137, 163, .07);
 }
 .modal__panel--rsvp .section__label { margin-bottom: 6px; }
-.modal__panel--rsvp .modal__title { margin-bottom: 16px; }
+.modal__panel--rsvp .modal__title { margin-bottom: 14px; }
+.modal__panel--rsvp .rsvp__desc { font-size: 13.5px; margin-bottom: 18px; }
+
+/* 질문별로 묶어서 고르기 쉽게 */
+.rsvp__field { text-align: left; }
+.rsvp__field + .rsvp__field { margin-top: 14px; }
+.rsvp__field[hidden] { display: none; }
+.rsvp__q {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: .01em;
+}
+.rsvp__q--gap { margin-top: 14px; }
+.rsvp__form .chip span { padding: 12px 0; font-size: 14.5px; }
+.rsvp__submit { margin-top: 20px; }
+
+/* 인원 선택 */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 12px;
+  padding: 6px;
+}
+.stepper__btn {
+  width: 42px;
+  height: 38px;
+  border: 0;
+  border-radius: 9px;
+  background: rgba(250, 137, 163, .16);
+  color: var(--accent-deep);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.stepper__btn:disabled { opacity: .3; cursor: default; }
+.stepper__value { flex: 1; text-align: center; font-size: 15px; color: var(--ink-light); }
+.stepper__value b { font-size: 18px; font-weight: 700; color: var(--ink); margin-right: 2px; }
 .modal__x {
   position: absolute;
   top: 8px; right: 12px;
@@ -1457,7 +1505,7 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 
 /* ═══════════ 3.5 부모님의 편지 (핑크 플로럴 · 미니멀) ═══════════ */
 .parents {
-  background: #fae1e9 url("../assets/parents-bg.jpg") center top / 100% auto repeat-y;
+  background: #f5b7c4 url("../assets/parents-bg.jpg") center top / 100% auto repeat-y;
   color: #3b2f34;
   padding-top: 40px;
   padding-bottom: 84px;
