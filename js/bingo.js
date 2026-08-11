@@ -723,7 +723,24 @@
     });
   }
 
+  /* 사진 자동 재시도 (불안정한 통신에서 깨진 아이콘 방지) */
+  function initImageRetry() {
+    const MAX = 3;
+    document.addEventListener("error", (e) => {
+      const img = e.target;
+      if (!img || img.tagName !== "IMG") return;
+      const src = img.getAttribute("src") || "";
+      if (!src || src.startsWith("data:") || src.startsWith("blob:")) return;
+      const n = Number(img.dataset.retry || 0);
+      if (n >= MAX) return;
+      img.dataset.retry = String(n + 1);
+      const base = src.split("?r=")[0];
+      setTimeout(() => { img.src = `${base}?r=${n + 1}`; }, 500 + 700 * n);
+    }, true);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
+    initImageRetry();
     renderHead();
     initBingo();
     initDebug((C.snap && C.snap.appsScriptUrl || "").trim());

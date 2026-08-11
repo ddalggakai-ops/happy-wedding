@@ -273,7 +273,7 @@
     const { images } = C.gallery;
     $("#gallery-grid").innerHTML = images.map((src, i) => `
       <a href="${src}" data-index="${i}">
-        <img src="${src}" alt="갤러리 사진 ${i + 1}" loading="lazy" />
+        <img src="${src}" alt="갤러리 사진 ${i + 1}" loading="lazy" decoding="async" />
       </a>`).join("");
 
     // 4줄(10장) 이상이면 3줄 반까지만 보여주고, 4번째 줄부터 그라데이션 + 펼침
@@ -818,9 +818,29 @@
     $("#bingo-go").href = "bingo.html" + location.search;
   }
 
+  /* ═══════════ 사진 자동 재시도 ═══════════
+     예식장 와이파이·카톡 인앱 브라우저처럼 불안정한 환경에서는 이미지 요청이
+     간헐적으로 끊깁니다. 그대로 두면 깨진 아이콘(X)이 영구히 남으므로
+     실패한 사진만 골라 잠깐 뒤 다시 불러옵니다. */
+  function initImageRetry() {
+    const MAX = 3;
+    document.addEventListener("error", (e) => {
+      const img = e.target;
+      if (!img || img.tagName !== "IMG") return;
+      const src = img.getAttribute("src") || "";
+      if (!src || src.startsWith("data:") || src.startsWith("blob:")) return;
+      const n = Number(img.dataset.retry || 0);
+      if (n >= MAX) return;
+      img.dataset.retry = String(n + 1);
+      const base = src.split("?r=")[0];
+      setTimeout(() => { img.src = `${base}?r=${n + 1}`; }, 500 + 700 * n);
+    }, true);   // img의 error 이벤트는 버블링되지 않아 캡처 단계에서 받습니다
+  }
+
   /* ═══════════ 초기화 ═══════════ */
   document.addEventListener("DOMContentLoaded", () => {
     document.title = `${C.groom.name} ♥ ${C.bride.name} 결혼합니다`;
+    initImageRetry();   // 다른 렌더링보다 먼저 걸어둡니다
     initSplash();
     renderIntro();
     renderGreeting();
