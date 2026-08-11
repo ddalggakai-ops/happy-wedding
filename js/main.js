@@ -499,6 +499,68 @@
       </div>`).join("");
   }
 
+  /* ═══════════ 6.5 안내사항 (탭) ═══════════ */
+  function renderInfo() {
+    const sec = document.getElementById("info-section");
+    if (!sec) return;
+    const I = C.info || {};
+    const tabs = (I.tabs || []).filter((t) => t && (t.text || t.stops));
+    if (!tabs.length) { sec.hidden = true; return; }
+    sec.hidden = false;
+
+    $("#info-headline").textContent = I.headline || "";
+
+    $("#info-tabs").innerHTML = tabs.map((t, i) => `
+      <button type="button" class="info__tab${i === 0 ? " is-active" : ""}"
+              role="tab" id="info-tab-${i}" aria-controls="info-panel-${i}"
+              aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">
+        ${escapeHtml(t.label || "")}
+      </button>`).join("");
+
+    $("#info-panels").innerHTML = tabs.map((t, i) => `
+      <div class="info__panel${i === 0 ? " is-active" : ""}" role="tabpanel"
+           id="info-panel-${i}" aria-labelledby="info-tab-${i}"${i === 0 ? "" : " hidden"}>
+        ${t.image ? `<img class="info__img" src="${t.image}" alt="" loading="lazy" />` : ""}
+        ${t.title ? `<p class="info__title">${t.icon ? `<span class="info__icon">${t.icon}</span>` : ""}${escapeHtml(t.title)}</p>` : ""}
+        ${t.text ? `<p class="info__text">${escapeHtml(t.text)}</p>` : ""}
+        ${(t.stops && t.stops.length) ? `
+        <div class="info__stops">
+          ${t.stops.map((s) => `
+          <div class="info__stop">
+            <span class="info__stop-time">${escapeHtml(s.time || "")}</span>
+            <span class="info__stop-place">${escapeHtml(s.place || "")}</span>
+            ${s.desc ? `<span class="info__stop-desc">${escapeHtml(s.desc)}</span>` : ""}
+          </div>`).join("")}
+        </div>` : ""}
+        ${t.note ? `<p class="info__note">${escapeHtml(t.note)}</p>` : ""}
+      </div>`).join("");
+
+    const tabEls = [...sec.querySelectorAll(".info__tab")];
+    const panels = [...sec.querySelectorAll(".info__panel")];
+    const select = (n) => {
+      tabEls.forEach((el, i) => {
+        el.classList.toggle("is-active", i === n);
+        el.setAttribute("aria-selected", String(i === n));
+        el.tabIndex = i === n ? 0 : -1;
+      });
+      panels.forEach((el, i) => {
+        el.classList.toggle("is-active", i === n);
+        el.hidden = i !== n;
+      });
+    };
+    tabEls.forEach((el, i) => {
+      el.addEventListener("click", () => select(i));
+      // 좌우 화살표로도 이동할 수 있게 (키보드·보조기기 대응)
+      el.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        e.preventDefault();
+        const n = (i + (e.key === "ArrowRight" ? 1 : -1) + tabEls.length) % tabEls.length;
+        select(n);
+        tabEls[n].focus();
+      });
+    });
+  }
+
   /* ═══════════ 7. 마음 전하실 곳 ═══════════ */
   function renderAccounts() {
     const groups = [
@@ -887,6 +949,7 @@
     renderGallery();
     renderCalendar();
     renderLocation();
+    renderInfo();
     renderAccounts();
     initRsvp();
     initShare();

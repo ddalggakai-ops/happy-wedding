@@ -288,6 +288,7 @@ body {
 /* ═══════════ 2.5 다이어리 꾸미기 (스크랩북 이미지) ═══════════ */
 .scrapbook {
   position: relative;
+  min-height: 300px;
   /* 인사말 섹션과 같은 구겨진 종이 질감 + 검은 반투명 레이어 */
   background: #0e0b0d url("../assets/paper-dark.jpg") center / cover no-repeat;
   font-size: 0;   /* 이미지 아래 여백 제거 */
@@ -463,16 +464,18 @@ body {
 .lt--groom .lt__hand,
 .lt--bride .lt__hand { margin-top: -13%; }
 
-.lt__frame { position: relative; }
-.lt__img { display: block; width: 100%; }
+/* overflow:hidden + 아래 -2px — 사진 맨 아랫줄이 검은 선처럼 보이는 것을 막습니다
+   (확대 배율에 따라 그라데이션이 마지막 1px를 못 덮는 경우가 있어 아예 잘라냅니다) */
+.lt__frame { position: relative; overflow: hidden; }
+.lt__img { display: block; width: 100%; margin-bottom: -2px; }
 
 /* 사진이 흰 종이로 서서히 사라지는 그라데이션
    신부: 사진 위쪽 / 신랑: 사진 아래쪽 */
 .lt__fade { position: absolute; left: 0; right: 0; height: 40%; pointer-events: none; }
 .lt--bride .lt__fade,
 .lt--groom .lt__fade {
-  bottom: 0;
-  height: 48%;
+  bottom: -1px;
+  height: calc(48% + 2px);
   background: linear-gradient(0deg,
     #fff 0%, rgba(255,255,255,.98) 18%, rgba(255,255,255,.82) 40%,
     rgba(255,255,255,.5) 62%, rgba(255,255,255,.18) 84%, rgba(255,255,255,0) 100%);
@@ -757,6 +760,146 @@ body {
 }
 
 /* ═══════════ 7. 계좌번호 ═══════════ */
+/* ═══════════ 6.5 안내사항 (탭) ═══════════ */
+.info { background: var(--bg); }
+.info__headline {
+  font-size: 15px;
+  line-height: 1.95;
+  color: var(--ink-light);
+  margin: 18px 0 26px;
+}
+/* --- 탭 (알약형 세그먼트) --- */
+.info__tabs {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  margin-bottom: 22px;
+  background: rgba(255, 255, 255, .045);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.info__tab {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 11px 4px;
+  font-family: var(--kr);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  color: var(--ink-light);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color .22s, background .22s;
+  -webkit-tap-highlight-color: transparent;
+}
+.info__tab.is-active {
+  color: #171214;
+  font-weight: 700;
+  background: var(--accent);
+  box-shadow: 0 3px 12px rgba(250, 137, 163, .28);
+}
+/* --- 탭 (밑줄형) — .info 에 info--underline 을 붙이면 이 모양이 됩니다 --- */
+.info--underline .info__tabs {
+  gap: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+.info--underline .info__tab {
+  padding: 12px 4px;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.info--underline .info__tab.is-active {
+  color: var(--accent);
+  background: none;
+  box-shadow: none;
+  border-bottom-color: var(--accent);
+}
+/* --- 내용 --- */
+.info__panel {
+  text-align: left;
+  padding: 22px 22px 24px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  animation: info-in .32s ease both;
+}
+@keyframes info-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.info__img {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+.info__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.info__icon { font-size: 17px; flex: 0 0 auto; }
+.info__text {
+  font-size: 14.3px;
+  line-height: 1.95;
+  color: var(--ink-light);
+  white-space: pre-line;
+}
+/* 대절버스 시간표 */
+.info__stops { margin-top: 16px; }
+.info__stop {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 11px 0;
+  border-top: 1px dashed var(--line);
+}
+.info__stop:last-child { border-bottom: 1px dashed var(--line); }
+.info__stop-time {
+  font-family: "Barlow Condensed", var(--kr);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+.info__stop-place { font-size: 14.5px; color: var(--ink); font-weight: 500; }
+.info__stop-desc {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--ink-light);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 9px;
+  flex: 0 0 auto;
+}
+/* 강조 한 줄 */
+.info__note {
+  display: flex;
+  gap: 7px;
+  margin-top: 16px;
+  padding: 11px 13px;
+  font-size: 13.2px;
+  line-height: 1.7;
+  color: var(--accent-deep);
+  background: rgba(250, 137, 163, .09);
+  border-radius: 10px;
+}
+.info__note::before { content: "!"; font-weight: 700; opacity: .8; }
+
 .accounts { background: var(--bg-soft); }
 .accounts__desc {
   font-size: 14px;
@@ -1657,13 +1800,13 @@ body.no-scroll { overflow: hidden; height: 100vh; }
    zoom 으로 카드 전체를 통째로 키워 비율은 그대로 두고 크기만 올립니다.
    (화면이 넓을수록 더 크게 — 태블릿 1.18배 → 데스크톱 1.34배 → 대형 1.5배) */
 @media (min-width: 700px) {
-  .invitation { zoom: 1.18; }
+  .invitation { zoom: 1.12; }
   /* zoom 만큼 나눠서 화면 높이를 넘지 않게 보정 */
-  .intro__stage { height: min(81svh, 720px); }
+  .intro__stage { height: min(86svh, 740px); }
   /* 지도만은 확대에서 제외합니다 — 네이버 지도가 확대된 크기를 한 번 더 반영해
      성당 위치가 오른쪽 아래로 밀리기 때문입니다. 보이는 크기는 그대로 유지됩니다. */
   .location__map .location__canvas,
-  .location__map iframe { zoom: .8475; height: 307px; }
+  .location__map iframe { zoom: .8929; height: 291px; }
   .splash__photo { --fw: min(78vw, 440px, calc(78svh * 0.7227)); }
   .bgm-btn { width: 50px; height: 50px; top: 22px; right: 22px; }
   .bgm-btn svg { width: 19px; height: 19px; }
@@ -1677,17 +1820,17 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   .splash__open { font-size: 15.5px; padding: 14px 40px; }
 }
 @media (min-width: 1000px) {
-  .invitation { zoom: 1.34; }
-  .intro__stage { height: min(71svh, 700px); }
+  .invitation { zoom: 1.22; }
+  .intro__stage { height: min(79svh, 720px); }
   .splash__photo { --fw: min(60vw, 470px, calc(80svh * 0.7227)); }
   .location__map .location__canvas,
-  .location__map iframe { zoom: .7463; height: 348px; }
+  .location__map iframe { zoom: .8197; height: 317px; }
 }
 @media (min-width: 1500px) {
-  .invitation { zoom: 1.5; }
-  .intro__stage { height: min(64svh, 680px); }
+  .invitation { zoom: 1.32; }
+  .intro__stage { height: min(73svh, 700px); }
   .location__map .location__canvas,
-  .location__map iframe { zoom: .6667; height: 390px; }
+  .location__map iframe { zoom: .7576; height: 343px; }
 }
 /* zoom 을 지원하지 않는 브라우저에서는 글자만이라도 키웁니다 */
 @supports not (zoom: 1.2) {

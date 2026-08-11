@@ -103,13 +103,10 @@
       <div class="greeting__family reveal" id="greeting-family"></div>
     </section>
 
-    <!-- ═══════════ 2.5 다이어리 꾸미기 (스크랩북 이미지) ═══════════
-         assets/scrapbook.jpg 파일을 넣으면 자동으로 표시되고,
-         파일이 없는 동안에는 영역 전체가 숨겨집니다. -->
-    <section class="scrapbook">
-      <img src="assets/scrapbook.jpg" alt="신랑 신부 스크랩북"
-           onerror="this.closest('section').style.display='none'" loading="lazy" />
-    </section>
+    <!-- ═══════════ 2.5 다이어리 꾸미기 (스크랩북) ═══════════
+         인사말과 같은 종이 질감 배경만 깔려 있는 빈 영역입니다.
+         여기에 사진·도장·스티커 같은 요소를 얹어 꾸밀 예정입니다. -->
+    <section class="scrapbook"></section>
 
     <!-- ═══════════ 3.5 부모님의 편지 ═══════════
          내용은 js/config.js 의 parents 항목에서 수정합니다.
@@ -189,6 +186,16 @@
       <div class="location__body">
         <div class="location__transit reveal" id="transit-list"></div>
       </div>
+    </section>
+
+    <!-- ═══════════ 6.5 안내사항 ═══════════
+         탭과 내용은 js/config.js 의 info 항목에서 수정합니다. -->
+    <section class="section info" id="info-section" hidden>
+      <p class="section__label reveal">INFORMATION</p>
+      <h2 class="section__title reveal">안내사항</h2>
+      <p class="info__headline reveal" id="info-headline"></p>
+      <div class="info__tabs reveal" id="info-tabs" role="tablist" aria-label="안내사항"></div>
+      <div class="info__panels reveal" id="info-panels"></div>
     </section>
 
     <!-- ═══════════ 7. 마음 전하실 곳 ═══════════ -->
