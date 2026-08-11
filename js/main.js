@@ -210,7 +210,12 @@
           ${babies[0] ? `<img class="parents__sticker parents__sticker--1" src="${babies[0]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
           ${doodleHtml(alt)}
         </div>` : ""}
-        ${s.letterImage ? `
+        ${(s.letterLines && s.letterLines.length) ? `
+        <div class="parents__lines">
+          ${s.letterLines.map((src, k) => `<img class="parents__line parents__line--${(k % 4) + 1}" src="${src}" alt="" loading="lazy" />`).join("")}
+          ${babies[1] ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
+        </div>`
+        : s.letterImage ? `
         <div class="parents__letter">
           <img src="${s.letterImage}" alt="${s.who} 부모님의 편지" loading="lazy" />
           ${babies[1] ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
@@ -235,9 +240,9 @@
           </div>`;
       }
 
+      // 신랑 머리말은 사진과 글 사이 오른쪽에, 신부 머리말은 사진 좌상단에
       const tag = l.tag
-        ? `<span class="lt__tag lt__tag--${isGroom ? "right lt__tag--light" : "left"}">`
-          + escapeHtml(l.tag) + "</span>"
+        ? `<span class="lt__tag lt__tag--${isGroom ? "join" : "topleft"}">` + escapeHtml(l.tag) + "</span>"
         : "";
       const hand = `<p class="lt__hand">${escapeHtml(l.text).replace(/\n/g, "<br/>")}</p>`;
       const frame = l.photo ? `
@@ -248,10 +253,10 @@
 
       // 신랑 → 사진이 위, 아래로 흐려지며 그 아래에 손글씨
       // 신부 → 손글씨가 위, 사진 윗부분이 흐려지며 이어짐
+      // 두 편지 모두 사진이 위, 아래로 흐려지며 그 자리에 손글씨가 앉습니다
       return `
         <div class="lt lt--${isGroom ? "groom" : "bride"} reveal">
-          ${tag}
-          ${isGroom ? frame + hand : hand + frame}
+          ${isGroom ? frame + tag + hand : tag + frame + hand}
         </div>`;
     }).join("");
   }

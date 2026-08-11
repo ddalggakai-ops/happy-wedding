@@ -112,6 +112,15 @@ const WEDDING_CONFIG = {
       who: "형규",
       family: "assets/parents/groom-family.jpg",
       letterImage: "assets/parents/groom-letter.jpg",
+      // 손편지를 한 줄씩 오려 붙이려면 아래에 줄 이미지들을 넣으세요 (있으면 letterImage 대신 사용)
+      letterLines: [
+        "assets/parents/groom-letter/1.png",
+        "assets/parents/groom-letter/2.png",
+        "assets/parents/groom-letter/3.png",
+        "assets/parents/groom-letter/4.png",
+        "assets/parents/groom-letter/5.png",
+        "assets/parents/groom-letter/6.png",
+      ],
       babies: ["assets/parents/groom-baby1.png", "assets/parents/groom-baby2.png"],
     },
   },
@@ -156,8 +165,8 @@ const WEDDING_CONFIG = {
     ],
     brideSide: [
       { holder: "방현진", relation: "신부", bank: "국민", number: "026402-04-147985", phone: "010-3198-2090", kakaopay: "" },
-      { holder: "방제연", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
-      { holder: "곽명임", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
+      { holder: "방제연", relation: "혼주", bank: "기업", number: "055-082229-01-014", phone: "010-7309-2468", kakaopay: "" },
+      { holder: "곽명임", relation: "혼주", bank: "국민", number: "093602-04-075617", phone: "010-5173-1170", kakaopay: "" },
     ],
   },
 
