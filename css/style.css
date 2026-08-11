@@ -763,7 +763,8 @@ body {
 /* ═══════════ 6.5 안내사항 (탭) ═══════════ */
 /* 흰 레이스 바탕 — 밝은 섹션이라 글자색을 어둡게 씁니다 */
 .info {
-  background: #fbfafa url("../assets/info-bg.jpg") center top / 100% auto repeat-y;
+  /* 레이스 무늬를 '오시는 길'과 같은 아이보리 종이색으로 물들여, 두 섹션이 자연스럽게 이어지게 */
+  background: #f4f1ea url("../assets/info-bg-ivory.jpg") center top / 100% auto repeat-y;
   color: #35292e;
 }
 .info .section__label { color: #c9566f; }
