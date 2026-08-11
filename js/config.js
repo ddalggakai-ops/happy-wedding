@@ -149,11 +149,11 @@ const WEDDING_CONFIG = {
   accounts: {
     groomSide: [
       { holder: "김형규", relation: "신랑", bank: "은행명", number: "계좌번호 입력", phone: "010-6383-1547", kakaopay: "" },
-      { holder: "김정수", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
-      { holder: "정인선", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
+      { holder: "김정수", relation: "혼주", bank: "농협", number: "421034-52-064544", phone: "010-5459-1547", kakaopay: "" },
+      { holder: "정인선", relation: "혼주", bank: "농협", number: "211-02-185444", phone: "010-4078-9153", kakaopay: "" },
     ],
     brideSide: [
-      { holder: "방현진", relation: "신부", bank: "은행명", number: "계좌번호 입력", phone: "010-3198-2090", kakaopay: "" },
+      { holder: "방현진", relation: "신부", bank: "국민", number: "026402-04-147985", phone: "010-3198-2090", kakaopay: "" },
       { holder: "방제연", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
       { holder: "곽명임", relation: "혼주", bank: "은행명", number: "계좌번호 입력", phone: "", kakaopay: "" },
     ],

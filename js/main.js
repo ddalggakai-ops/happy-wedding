@@ -160,31 +160,6 @@
       </p>`;
   }
 
-  /* ---------- 연락하기 모달 ---------- */
-  function renderContacts() {
-    const rows = [
-      { role: "신랑", name: C.groom.name, phone: C.groom.phone },
-      { role: "신부", name: C.bride.name, phone: C.bride.phone },
-    ];
-    $("#contact-list").innerHTML = rows.map((r) => `
-      <div class="contact-row">
-        <div>
-          <div class="contact-row__role">${r.role}</div>
-          <div>${r.name}</div>
-        </div>
-        <div class="contact-row__links">
-          <a href="tel:${r.phone}" aria-label="${r.role}에게 전화">📞</a>
-          <a href="sms:${r.phone}" aria-label="${r.role}에게 문자">✉️</a>
-        </div>
-      </div>`).join("");
-
-    $("#contact-open").addEventListener("click", () => ($("#contact-modal").hidden = false));
-    $("#contact-close").addEventListener("click", () => ($("#contact-modal").hidden = true));
-    $("#contact-modal").addEventListener("click", (e) => {
-      if (e.target === e.currentTarget) e.currentTarget.hidden = true;
-    });
-  }
-
   /* ═══════════ 3.5 부모님의 편지 ═══════════ */
 
   /* ── 아기 사진 옆 손그림 아이콘 (연필로 그려 스캔한 이미지) ── */
@@ -233,12 +208,12 @@
         <div class="parents__photo">
           <img src="${s.family}" alt="${s.who} 가족 사진" loading="lazy" />
           ${babies[0] ? `<img class="parents__sticker parents__sticker--1" src="${babies[0]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
-          ${babies[1] ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
           ${doodleHtml(alt)}
         </div>` : ""}
         ${s.letterImage ? `
         <div class="parents__letter">
           <img src="${s.letterImage}" alt="${s.who} 부모님의 편지" loading="lazy" />
+          ${babies[1] ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
         </div>` : ""}
       </div>`;
     };
@@ -268,6 +243,7 @@
           <div class="lt__frame">
             <img class="lt__img" src="${l.photo}" alt="" loading="lazy" />
             <span class="lt__fade"></span>
+            ${isGroom ? `<span class="lt__fade--bottom"></span>` : ""}
           </div>` : ""}
         </div>`;
     }).join("");
@@ -744,7 +720,6 @@
     initSplash();
     renderIntro();
     renderGreeting();
-    renderContacts();
     renderLetters();
     renderParents();
     renderGallery();

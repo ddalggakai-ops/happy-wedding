@@ -399,15 +399,15 @@ body {
 .letter {
   background: #fff;
   color: #1c1a1a;
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0 0 0;   /* 제목이 없으므로 위·아래 여백 없이 사진으로 바로 시작 */
 }
 .letter .section__label { color: #c0607a; }
 .letter .section__title { color: #1c1a1a; }
 .letter .section__title::after { background: #c0607a; opacity: .7; }
 
 .lt { margin-top: 46px; background: #fff; }
-.lt:first-child { margin-top: 30px; }
+.lt:first-child { margin-top: 0; }
+.lt:last-child .lt__frame { margin-bottom: 0; }
 /* 손글씨 — 사진 위 흰 여백에 */
 .lt__hand {
   margin: 0 9% 22px;
@@ -433,6 +433,19 @@ body {
     #fff 0%, rgba(255,255,255,.97) 12%, rgba(255,255,255,.78) 34%,
     rgba(255,255,255,.45) 58%, rgba(255,255,255,.16) 80%, rgba(255,255,255,0) 100%);
 }
+/* 첫 번째(신랑 → 신부) 편지는 사진 아래쪽도 흰색으로 사라지게 */
+.lt__fade--bottom {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 34%;
+  pointer-events: none;
+  background: linear-gradient(0deg,
+    #fff 0%, rgba(255,255,255,.95) 16%, rgba(255,255,255,.7) 42%,
+    rgba(255,255,255,.32) 70%, rgba(255,255,255,0) 100%);
+}
+/* 첫 편지 위쪽 여백 (제목을 없앤 자리) */
+.lt:first-child .lt__hand { margin-top: 64px; }
+
 /* 스캔한 손편지를 그대로 올릴 때 */
 .lt--scan { padding: 0 22px; }
 .lt--scan img { display: block; width: 100%; }
@@ -1428,13 +1441,13 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 .parents__photo {
   position: relative;
   display: inline-block;
-  max-width: 78%;
+  max-width: 92%;
   background: #fff;
-  padding: 9px 9px 13px;
+  padding: 6px 6px 9px;
   box-shadow: 0 10px 26px rgba(120, 60, 80, .2);
   transform: rotate(-1.6deg);
 }
-.parents__photo img:first-child { display: block; width: 100%; }
+.parents__photo > img:not(.parents__sticker) { display: block; width: 100%; }
 .parents__photo::after {
   content: "";
   position: absolute;
@@ -1450,17 +1463,19 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   z-index: 2;
   filter: drop-shadow(0 6px 12px rgba(90, 40, 55, .3));
 }
+/* 아기1 — 가족사진 좌상단 */
 .parents__sticker--1 {
-  width: 108px;
-  right: -30px;
-  bottom: -36px;
-  transform: rotate(7deg);
+  width: 104px;
+  left: -24px;
+  top: -32px;
+  transform: rotate(-8deg);
 }
+/* 아기2 — 부모님 편지 우하단 */
 .parents__sticker--2 {
-  width: 92px;
-  left: -28px;
-  top: -30px;
-  transform: rotate(-9deg);
+  width: 98px;
+  right: -20px;
+  bottom: -34px;
+  transform: rotate(7deg);
 }
 
 /* 아기 사진 주변 손그림 아이콘 (연필 스케치 스캔 이미지) */
@@ -1470,17 +1485,17 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   display: block;
   height: auto;
   pointer-events: none;
-  opacity: .78;
+  opacity: .9;
   mix-blend-mode: multiply;   /* 연필이 종이에 스며든 느낌 */
 }
 .parents__doodle--d1 { right: -36px; top: -26px; transform: rotate(9deg); }
 .parents__doodle--d2 { left: -46px; bottom: -32px; transform: rotate(-6deg); }
-.parents__doodle--d3 { left: -32px; top: 42%; transform: rotate(-14deg); opacity: .66; }
+.parents__doodle--d3 { left: -32px; top: 42%; transform: rotate(-14deg); opacity: .9; }
 .parents__doodle--d4 { left: 36%; bottom: -50px; transform: rotate(8deg); opacity: .7; }
 /* 별은 여기저기 흩뿌리듯 */
-.parents__doodle--d5 { right: -26px; top: 34%; transform: rotate(16deg); opacity: .58; }
-.parents__doodle--d6 { left: 22%; top: -30px; transform: rotate(-20deg); opacity: .5; }
-.parents__doodle--d7 { right: 16%; bottom: -40px; transform: rotate(24deg); opacity: .52; }
+.parents__doodle--d5 { right: -26px; top: 34%; transform: rotate(16deg); opacity: .82; }
+.parents__doodle--d6 { left: 22%; top: -30px; transform: rotate(-20deg); opacity: .74; }
+.parents__doodle--d7 { right: 16%; bottom: -40px; transform: rotate(24deg); opacity: .78; }
 
 /* 손편지 — 살짝 기울인 카드 + 테이프 */
 .parents__letter {
@@ -1491,7 +1506,7 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   box-shadow: 0 12px 28px rgba(120, 60, 80, .18);
   border-radius: 4px;
 }
-.parents__letter img { display: block; width: 100%; border-radius: 4px; }
+.parents__letter > img:not(.parents__sticker) { display: block; width: 100%; border-radius: 4px; }
 .parents__letter::before {
   content: "";
   position: absolute;
