@@ -535,10 +535,11 @@ body {
 
 /* 손글씨 */
 .lt__hand {
-  margin: 0 9% 22px;
-  text-align: left;
+  margin: 0 auto 22px;
+  width: 82%;
+  text-align: center;
   font-family: var(--hand);
-  font-size: clamp(21px, 6.4vw, 31px);
+  font-size: clamp(19px, 5.8vw, 28px);
   line-height: 1.66;
   letter-spacing: .01em;
   color: #17161a;
@@ -549,17 +550,17 @@ body {
 /* 글씨 대신 손글씨 이미지를 얹을 때 — 글과 같은 자리·같은 기울기 */
 .lt__hand-img {
   display: block;
-  width: 82%;
-  margin: 0 9% 22px;
-  transform: rotate(-1.2deg);
-  transform-origin: left center;
+  width: 72%;
+  margin: 0 auto 22px;
+  transform: rotate(-1deg);
+  transform-origin: center;
 }
 .lt--groom .lt__hand-img,
-.lt--bride .lt__hand-img { margin: -13% 9% 0; }
+.lt--bride .lt__hand-img { margin: -13% auto 0; }
 
 /* 신랑 편지는 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
-.lt--bride .lt__hand { margin: 0 9%; }
+.lt--bride .lt__hand { margin: 0 auto; }
 /* 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
 .lt--bride .lt__hand { margin-top: -13%; }
