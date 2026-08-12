@@ -405,11 +405,59 @@ body {
   width: 100%;
   border-radius: 3px;
 }
+/* ---------- 크림 레터프레스 카드 (봉투 대신) ---------- */
+.gcard {
+  position: relative;
+  width: min(100%, 392px);
+  margin: 26px auto 34px;
+  padding: 26px 26px 30px;
+  background: #ece6da url("../assets/paper-bg.jpg") center / 320px auto repeat;
+  background-blend-mode: multiply;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .5), 0 4px 12px rgba(0, 0, 0, .35);
+}
+/* 안쪽 가는 테두리선 */
+.gcard::after {
+  content: "";
+  position: absolute;
+  inset: 11px;
+  border: 1px solid rgba(120, 105, 90, .22);
+  pointer-events: none;
+}
+.gcard__corner {
+  position: absolute;
+  width: 19%;
+  max-width: 72px;
+  opacity: .78;
+  pointer-events: none;
+}
+.gcard__corner--tl { left: 9px;  top: 9px; }
+.gcard__corner--tr { right: 9px; top: 9px;    transform: scaleX(-1); }
+.gcard__corner--bl { left: 9px;  bottom: 9px; transform: scaleY(-1); }
+.gcard__corner--br { right: 9px; bottom: 9px; transform: scale(-1, -1); }
+.gcard__knot {
+  display: block;
+  width: 40px;
+  margin: 4px auto 14px;
+  opacity: .8;
+}
+/* 타원 사진 — 얇은 흰 링 */
+.gcard__oval {
+  position: relative;
+  width: 76%;
+  margin: 0 auto 22px;
+  aspect-ratio: 1.55 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #fffdf8;
+  box-shadow: 0 0 0 1px rgba(120, 105, 90, .3), 0 8px 18px rgba(60, 45, 35, .22);
+}
+.gcard__oval img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
 /* 손글씨 인사말 이미지 */
 .greeting__hand {
   display: block;
   width: 100%;
-  margin: 2px auto 8px;
+  margin: 2px auto 6px;
 }
 .greeting__message {
   font-family: var(--serif);

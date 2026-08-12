@@ -97,18 +97,17 @@
       <p class="section__label reveal">INVITATION</p>
       <h2 class="section__title reveal" id="greeting-title"></h2>
 
-      <!-- 봉투에서 편지가 나오는 구성 (스크롤에 따라 편지가 올라옵니다)
-           봉투 이미지는 assets/envelope.jpg 를 원하는 파일로 교체하면 됩니다.
-           기울기 조절: css/style.css 의 --letter-tilt / --env-tilt -->
-      <div class="envelope reveal">
-        <div class="envelope__slot">
-          <div class="envelope__letter">
-            <p class="greeting__message" id="greeting-message"></p>
-          </div>
-        </div>
-        <div class="envelope__frame">
-          <img class="envelope__img" src="assets/envelope.jpg" alt="편지 봉투" loading="lazy" />
-        </div>
+      <!-- 크림색 레터프레스 카드 — 모서리 양각 장식 + 타원 사진 + 손편지
+           장식 이미지: assets/deco/card-corner.png / card-knot.png
+           사진: js/config.js 의 greeting.photo -->
+      <div class="gcard reveal">
+        <img class="gcard__corner gcard__corner--tl" src="assets/deco/card-corner.png" alt="" aria-hidden="true" loading="lazy" />
+        <img class="gcard__corner gcard__corner--tr" src="assets/deco/card-corner.png" alt="" aria-hidden="true" loading="lazy" />
+        <img class="gcard__corner gcard__corner--bl" src="assets/deco/card-corner.png" alt="" aria-hidden="true" loading="lazy" />
+        <img class="gcard__corner gcard__corner--br" src="assets/deco/card-corner.png" alt="" aria-hidden="true" loading="lazy" />
+        <img class="gcard__knot" src="assets/deco/card-knot.png" alt="" aria-hidden="true" loading="lazy" />
+        <div class="gcard__oval"><img id="greeting-photo" alt="신랑 신부 사진" loading="lazy" /></div>
+        <p class="greeting__message" id="greeting-message"></p>
       </div>
 
       <div class="greeting__family reveal" id="greeting-family"></div>

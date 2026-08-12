@@ -177,6 +177,12 @@
   function renderGreeting() {
     const guest = getGuestName();
     $("#greeting-title").textContent = guest ? `Dear. ${guest}` : C.greeting.title;
+    // 카드 위쪽 타원 사진
+    const gphoto = document.getElementById("greeting-photo");
+    if (gphoto) {
+      if (C.greeting.photo) gphoto.src = C.greeting.photo;
+      else gphoto.closest(".gcard__oval").hidden = true;
+    }
     if (C.greeting.image) {
       // 손글씨 이미지 편지 (파일이 없으면 자동으로 글 인사말로 대체)
       const img = document.createElement("img");
