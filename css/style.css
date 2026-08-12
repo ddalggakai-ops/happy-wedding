@@ -367,7 +367,7 @@ body {
   --letter-tilt: -0deg;   /* 편지 기울기 */
   --env-tilt: 0deg;       /* 봉투 이미지 기울기 (이미지가 이미 기울어져 있으면 0) */
   position: relative;
-  width: min(100%, 340px);
+  width: min(100%, 372px);
   margin: 30px auto 36px; 
 }
 /* 편지가 이 틀 안에서만 보이므로, 내려가 있을 땐 봉투 속에 숨어 있는 것처럼 보임 */
@@ -382,8 +382,9 @@ body {
 }
 .envelope__letter {
   color: var(--paper-ink);
-  /* 레이스 편지지 (letter.png) — 테두리는 그대로 두고 가운데만 늘어나도록 border-image 사용 */
-  border: 44px solid transparent;
+  /* 레이스 편지지 (letter.png) — 테두리는 그대로 두고 가운데만 늘어나도록 border-image 사용
+     테두리를 얇게 하면 글이 들어가는 안쪽 면이 넓어집니다 */
+  border: 34px solid transparent;
   border-image: url("../assets/letter.png") 70 fill stretch;
   padding: 4px 2px 170px;   /* 아래 여유 = 봉투 속에 남는 부분 (편지가 3/4만 나오므로 넉넉히) */
   /* 그림자 반경 축소 — 스크롤 애니메이션 중 GPU 부하 절감 */
@@ -407,8 +408,8 @@ body {
 /* 손글씨 인사말 이미지 */
 .greeting__hand {
   display: block;
-  width: 92%;
-  margin: 6px auto;
+  width: 100%;
+  margin: 2px auto 8px;
 }
 .greeting__message {
   font-family: var(--serif);
