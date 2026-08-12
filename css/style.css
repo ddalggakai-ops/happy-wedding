@@ -168,9 +168,13 @@ body {
 }
 .intro__bg {
   position: absolute;
-  inset: 0;
+  /* 사진 위쪽을 5px 잘라냅니다 (위로 밀고 그만큼 아래를 늘려서 빈틈이 없게) */
+  top: -5px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% + 5px);
   object-fit: cover;
   /* 창이 짧아 사진이 가로로 넓게 잘릴 때, 두 사람이 글자 위로 올라오도록 아래쪽을 기준으로 자릅니다
      (세로가 긴 모바일에서는 사진 전체 높이가 보이므로 아무 영향이 없습니다) */
@@ -226,16 +230,16 @@ body {
   letter-spacing: .24em;
   text-indent: .24em;      /* 자간으로 밀린 중심 보정 */
   color: #efe5e8;
-  margin-bottom: 4px;
+  margin-bottom: 1px;
 }
 .intro__script {
   font-family: var(--script);
   font-weight: 400;
   font-size: 78px;
-  line-height: 1.2;
+  line-height: 1.08;
   color: var(--accent);
   text-shadow: 0 4px 28px rgba(0,0,0,.5);
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 /* 날짜·장소: 샘플처럼 고딕(Pretendard) + 아이콘 */
 .intro__date,
@@ -259,7 +263,7 @@ body {
 .intro__venue {
   font-size: 15px;
   font-weight: 500;
-  margin-top: 9px;
+  margin-top: 5px;
   color: rgba(255,255,255,.92);
 }
 .intro__icon {
