@@ -22,7 +22,7 @@ OUT_DIR = ROOT / "dist"
 USE_REPO_ASSETS = False  # 이 소스는 이미 저장소 이미지 경로를 사용합니다
 
 # 기존 저장소(happy-wedding)에 올라가 있는 갤러리 이미지 장수
-REPO_GALLERY_COUNT = 18
+REPO_GALLERY_COUNT = 12
 
 
 def read(rel: str) -> str:
@@ -78,9 +78,9 @@ def build() -> str:
     )
     script_block = "\n" + bundle
     html = re.sub(
-        r'\s*<script src="js/config\.js(?:\?[^"]*)?"></script>\s*'
-        r'<script src="js/storage\.js(?:\?[^"]*)?"></script>\s*'
-        r'<script src="js/main\.js(?:\?[^"]*)?"></script>',
+        r'\s*<script(?: defer)? src="js/config\.js(?:\?[^"]*)?"></script>\s*'
+        r'<script(?: defer)? src="js/storage\.js(?:\?[^"]*)?"></script>\s*'
+        r'<script(?: defer)? src="js/main\.js(?:\?[^"]*)?"></script>',
         lambda _m: script_block,
         html,
     )

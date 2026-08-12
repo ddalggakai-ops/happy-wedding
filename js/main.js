@@ -53,6 +53,38 @@
     }
   }
 
+  /* 무거운 외부 자원(지도·카카오 SDK)은 해당 섹션이 가까워질 때 불러옵니다.
+     초기 로딩에서 내려받는 양을 줄이기 위한 장치입니다. */
+  function whenNear(el, margin, fn) {
+    if (!el) return;
+    let done = false;
+    const run = () => { if (done) return; done = true; fn(); };
+    if (!("IntersectionObserver" in window)) { run(); return; }
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      run();
+    }, { rootMargin: `${margin}px 0px` });
+    io.observe(el);
+    // 스크롤을 하지 않는 분들을 위해 넉넉히 기다렸다가 어차피 불러옵니다
+    setTimeout(() => { io.disconnect(); run(); }, 12000);
+  }
+
+  /* 외부 스크립트를 한 번만 불러오는 도우미 */
+  const _loaded = {};
+  function loadScript(src) {
+    if (_loaded[src]) return _loaded[src];
+    _loaded[src] = new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = src;
+      s.crossOrigin = "anonymous";
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+    return _loaded[src];
+  }
+
   function escapeHtml(s) {
     return s.replace(/[&<>"']/g, (ch) => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
@@ -491,7 +523,8 @@
       };
       // 네이버가 인증 실패 시 호출하는 전역 함수 — 다음 방식으로 재시도, 끝내 안 되면 구글 지도
       window.navermap_authFailure = () => loadNaver();
-      loadNaver();
+      // 지도는 '오시는 길'이 가까워질 때 불러옵니다 (초기 로딩 단축)
+      whenNear(document.querySelector(".location"), 700, loadNaver);
     } else {
       $("#map-embed").src =
         `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
@@ -807,8 +840,17 @@
 
   /* ═══════════ 10. 공유하기 ═══════════ */
   function initShare() {
-    const hasKakao = window.Kakao && C.kakao.jsKey;
-    if (hasKakao && !Kakao.isInitialized()) Kakao.init(C.kakao.jsKey);
+    const KAKAO_SDK = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js";
+    let kakaoReady = false;
+    // 공유 영역이 가까워지면 그때 SDK를 불러옵니다 (초기 로딩 단축)
+    if (C.kakao && C.kakao.jsKey) {
+      whenNear(document.querySelector(".share") || $("#share-kakao"), 800, () => {
+        loadScript(KAKAO_SDK).then(() => {
+          if (window.Kakao && !Kakao.isInitialized()) Kakao.init(C.kakao.jsKey);
+          kakaoReady = !!window.Kakao;
+        }).catch(() => { kakaoReady = false; });
+      });
+    }
 
     // 네이티브 공유 시트 — 앱으로 넘어가지 않고 화면 하단에서 올라옴
     if (navigator.share) {
@@ -829,8 +871,9 @@
 
     const kakaoBtn = $("#share-kakao");
     if (kakaoBtn) kakaoBtn.addEventListener("click", () => {
-      if (!hasKakao) {
-        copyText(location.href, "카카오 키가 없어 링크를 복사했습니다");
+      if (!kakaoReady || !window.Kakao) {
+        // SDK가 아직 준비되지 않았으면 링크 복사로 대신합니다
+        copyText(location.href, "청첩장 주소가 복사되었습니다");
         return;
       }
       Kakao.Share.sendDefault({

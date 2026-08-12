@@ -13,13 +13,24 @@
   <meta property="og:url" content="https://hyeongkyu-and-hyunjin.life/" />
   <meta property="og:type" content="website" />
 
-  <!-- 폰트 -->
-  <!-- 한글 본문: Pretendard (모던 고딕) / 영문 라벨·날짜: Cormorant Garamond
-       커버 스크립트체: Pinyon Script / 손편지: Nanum Pen Script -->
+  <!-- 첫 화면(봉투) 이미지를 가장 먼저 받아옵니다 -->
+  <link rel="preload" as="image" href="assets/splash.jpg" fetchpriority="high" />
+
+  <!-- 폰트 — 실제로 쓰는 것만, 그리고 화면 그리기를 막지 않도록 전부 비동기로 불러옵니다.
+       (한글 본문: Pretendard / 영문 라벨·날짜: Cormorant Garamond · Barlow Condensed
+        커버 필기체: Imperial Script / 손편지: Nanum Pen Script / 봉투 이름: Nanum Myeongjo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=UnifrakturMaguntia&family=Imperial+Script&family=Pinyon+Script&family=Barlow+Condensed:wght@300;400&family=Nanum+Pen+Script&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic:wght@700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        media="print" onload="this.media='all'" />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Imperial+Script&family=Barlow+Condensed:wght@300;400&family=Nanum+Pen+Script&family=Nanum+Myeongjo:wght@400;700&display=swap"
+        media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Imperial+Script&family=Barlow+Condensed:wght@300;400&family=Nanum+Pen+Script&family=Nanum+Myeongjo:wght@400;700&display=swap" />
+  </noscript>
 
   <!-- 나눔스퀘어 — 렌더링을 막지 않도록 비동기로 불러옵니다 (실패해도 본문 폰트로 대체) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css"
@@ -309,11 +320,9 @@
 
   <div class="toast" id="toast" hidden></div>
 
-  <!-- 카카오 SDK (jsKey를 설정한 경우에만 초기화됨) -->
-  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous"></script>
-
-  <script src="js/config.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/main.js"></script>
+  <!-- 카카오 SDK는 공유 버튼이 가까워질 때 js/main.js 가 직접 불러옵니다 (초기 로딩 단축) -->
+  <script defer src="js/config.js"></script>
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/main.js"></script>
 </body>
 </html>
