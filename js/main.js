@@ -145,7 +145,8 @@
     const COUNT = 10;   // 인앱 브라우저 부하를 고려해 개수 제한
     for (let i = 0; i < COUNT; i++) {
       const p = document.createElement("span");
-      p.className = `petal petal--${1 + Math.floor(Math.random() * 3)}`;
+      // 1~3은 뾰족한 쪽이 위, 4~6은 뒤집힌 꽃잎 (빗방울처럼 보이지 않게 섞습니다)
+      p.className = `petal petal--${1 + Math.floor(Math.random() * 6)}`;
       const size = 13 + Math.random() * 13;             // 13~26px
       p.style.width = `${size.toFixed(1)}px`;
       p.style.height = `${(size * 1.35).toFixed(1)}px`;   // 꽃잎은 세로로 조금 길게
@@ -696,19 +697,13 @@
       const over = Date.now() > weddingDate.getTime() + 12 * 60 * 60 * 1000;
       const loc = document.querySelector(".info") || document.querySelector(".location");
       if (!sent && !over) {
-        /* 두 가지 경우에 한 번만 띄웁니다.
-           ① '안내사항'을 완전히 지나쳐 스크롤했을 때
-           ② 거기까지 내려가지 않는 분들을 위해, 초대장을 연 뒤 30초가 지났을 때
+        /* '안내사항'을 완전히 지나쳐 스크롤했을 때 한 번만 띄웁니다.
            (보내지 않고 닫으면 다음에 다시 열었을 때 또 나타납니다) */
-        const WAIT_MS = 30000;
         let done = false;
-        let timer = 0;
-
         const fire = () => {
           if (done) return;
           done = true;
           window.removeEventListener("scroll", onScroll);
-          clearTimeout(timer);
           // 다른 탭에 있는 동안에는 띄우지 않고, 돌아왔을 때 보여줍니다
           if (document.hidden) {
             document.addEventListener("visibilitychange", function again() {
@@ -726,18 +721,6 @@
           fire();
         };
         if (loc) window.addEventListener("scroll", onScroll, { passive: true });
-
-        // 봉투(스플래시)를 닫은 시점부터 시간을 셉니다
-        const startTimer = () => { timer = setTimeout(fire, WAIT_MS); };
-        if (document.getElementById("splash")) {
-          const watch = setInterval(() => {
-            if (document.getElementById("splash")) return;
-            clearInterval(watch);
-            startTimer();
-          }, 500);
-        } else {
-          startTimer();
-        }
       }
     }
 
