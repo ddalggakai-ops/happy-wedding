@@ -168,13 +168,13 @@ body {
 }
 .intro__bg {
   position: absolute;
-  /* 사진 위쪽을 5px 잘라냅니다 (위로 밀고 그만큼 아래를 늘려서 빈틈이 없게) */
-  top: -5px;
+  /* 사진 위쪽을 10px 잘라냅니다 (위로 밀고 그만큼 아래를 늘려서 빈틈이 없게) */
+  top: -10px;
   left: 0;
   right: 0;
   bottom: 0;
   width: 100%;
-  height: calc(100% + 5px);
+  height: calc(100% + 10px);
   object-fit: cover;
   /* 창이 짧아 사진이 가로로 넓게 잘릴 때, 두 사람이 글자 위로 올라오도록 아래쪽을 기준으로 자릅니다
      (세로가 긴 모바일에서는 사진 전체 높이가 보이므로 아무 영향이 없습니다) */
@@ -497,6 +497,17 @@ body {
   transform-origin: left center;
   word-break: keep-all;
 }
+/* 글씨 대신 손글씨 이미지를 얹을 때 — 글과 같은 자리·같은 기울기 */
+.lt__hand-img {
+  display: block;
+  width: 82%;
+  margin: 0 9% 22px;
+  transform: rotate(-1.2deg);
+  transform-origin: left center;
+}
+.lt--groom .lt__hand-img,
+.lt--bride .lt__hand-img { margin: -13% 9% 0; }
+
 /* 신랑 편지는 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
 .lt--bride .lt__hand { margin: 0 9%; }

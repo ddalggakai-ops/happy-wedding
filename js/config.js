@@ -75,6 +75,8 @@ const WEDDING_CONFIG = {
       photo: "assets/letter-groom.jpg",   // 손글씨가 올라갈 배경 사진
       tag: "현진이에게, 형규가",           // 사진 위 작은 머리말
       image: "",               // 실제 손편지를 스캔했다면 여기에 (넣으면 photo/text 대신 이미지만 표시)
+      // 사진은 그대로 두고 글씨만 손글씨 이미지로 바꾸고 싶을 때 (아래 text 대신 표시됩니다)
+      handImage: "assets/letter-groom-hand.png",
       text: `현진아, 처음 만난 날의 떨림을
 아직도 기억해.
 앞으로도 그 마음 그대로

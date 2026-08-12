@@ -297,7 +297,9 @@
       const tag = l.tag
         ? `<span class="lt__tag lt__tag--${isGroom ? "br" : "tl"}">` + escapeHtml(l.tag) + "</span>"
         : "";
-      const hand = `<p class="lt__hand">${escapeHtml(l.text).replace(/\n/g, "<br/>")}</p>`;
+      const hand = l.handImage
+        ? `<img class="lt__hand-img" src="${l.handImage}" alt="${who}가 쓴 손편지" loading="lazy" />`
+        : `<p class="lt__hand">${escapeHtml(l.text).replace(/\n/g, "<br/>")}</p>`;
       // 머리말은 사진 안쪽에 (신랑=우하단 / 신부=좌상단)
       const frame = l.photo ? `
           <div class="lt__frame">
