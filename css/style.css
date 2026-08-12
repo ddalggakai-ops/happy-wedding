@@ -517,7 +517,7 @@ body {
 /* margin 대신 padding — 위쪽 여백이 섹션 밖으로 새어 검은 띠가 생기지 않도록 */
 .lt { position: relative; padding-top: 46px; background: #fff; }
 .lt:first-child { padding-top: 0; }
-.lt--groom, .lt--bride { padding-bottom: 58px; }
+.lt--groom, .lt--bride { padding-bottom: 44px; }
 
 /* 머리말 (현진이에게, 형규가) — 사진 안쪽에 */
 .lt__tag {
@@ -555,15 +555,16 @@ body {
   transform: rotate(-1deg);
   transform-origin: center;
 }
+/* 사진이 흰 종이로 사라지는 그 흰 면의 한가운데에 글씨가 놓이도록 */
 .lt--groom .lt__hand-img,
-.lt--bride .lt__hand-img { margin: -13% auto 0; }
+.lt--bride .lt__hand-img { margin: -20% auto 0; }
 
 /* 신랑 편지는 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
 .lt--bride .lt__hand { margin: 0 auto; }
 /* 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
-.lt--bride .lt__hand { margin-top: -13%; }
+.lt--bride .lt__hand { margin-top: -20%; }
 
 /* overflow:hidden + 아래 -2px — 사진 맨 아랫줄이 검은 선처럼 보이는 것을 막습니다
    (확대 배율에 따라 그라데이션이 마지막 1px를 못 덮는 경우가 있어 아예 잘라냅니다) */
