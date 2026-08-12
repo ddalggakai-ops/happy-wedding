@@ -1664,8 +1664,8 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 .splash__photo {
   position: relative;
   /* 이미지 비율 0.75 — 화면 높이에 맞춰 줄어들되 너무 커지지 않게 */
-  --fw: min(94vw, 430px);
-  --fw: min(94vw, 430px, calc(82svh * 0.7227));
+  --fw: min(90vw, 400px);
+  --fw: min(90vw, 400px, calc(76svh * 0.7227));
   width: var(--fw);
 }
 .splash__photo > img {
@@ -1873,7 +1873,7 @@ body.no-scroll { overflow: hidden; height: 100vh; }
    (svh 값은 zoom 으로 나눠서 넣어야 실제 화면 비율과 맞습니다) */
 @media (min-width: 700px) {
   .invitation { zoom: 1.0; }
-  .splash__photo { --fw: min(82vw, 470px, calc(84svh * 0.7227)); }
+  .splash__photo { --fw: min(78vw, 440px, calc(78svh * 0.7227)); }
   .bgm-btn { width: 50px; height: 50px; top: 22px; right: 22px; }
   .bgm-btn svg { width: 19px; height: 19px; }
   .modal__panel--rsvp { max-width: 390px; }
@@ -1887,7 +1887,7 @@ body.no-scroll { overflow: hidden; height: 100vh; }
 }
 @media (min-width: 1000px) {
   .invitation { zoom: 1.06; }
-  .splash__photo { --fw: min(64vw, 500px, calc(85svh * 0.7227)); }
+  .splash__photo { --fw: min(60vw, 470px, calc(80svh * 0.7227)); }
   /* 지도만은 확대에서 제외합니다 — 네이버 지도가 확대된 크기를 한 번 더 반영해
      성당 위치가 오른쪽 아래로 밀리기 때문입니다. 보이는 크기는 그대로 유지됩니다. */
   .location__map .location__canvas,
