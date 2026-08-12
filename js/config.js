@@ -54,7 +54,7 @@ const WEDDING_CONFIG = {
   greeting: {
     title: "소중한 분들을 초대합니다",
     // 손글씨 이미지를 넣으면 편지지에 글 대신 이미지가 표시됩니다. 비우면 아래 message 사용.
-    image: "",
+    image: "assets/greeting-hand.png",
     message: `서로가 마주 보며 다져온 사랑을
 이제 함께 한 곳을 바라보며
 걸어갈 수 있는 큰 사랑으로 키우고자 합니다.
