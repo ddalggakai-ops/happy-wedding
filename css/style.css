@@ -550,7 +550,7 @@ body {
 /* 글씨 대신 손글씨 이미지를 얹을 때 — 글과 같은 자리·같은 기울기 */
 .lt__hand-img {
   display: block;
-  width: 72%;
+  width: 60%;
   margin: 0 auto 22px;
   transform: rotate(-1deg);
   transform-origin: center;
@@ -558,6 +558,8 @@ body {
 /* 사진이 흰 종이로 사라지는 그 흰 면의 한가운데에 글씨가 놓이도록 (실측으로 맞춘 값) */
 .lt--groom .lt__hand-img,
 .lt--bride .lt__hand-img { margin: -27% auto 0; }
+/* 신부 편지는 원본 글씨가 작아, 신랑 편지와 글자 크기가 같아 보이도록 더 크게 표시 */
+.lt--bride .lt__hand-img { width: 94%; }
 
 /* 신랑 편지는 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
