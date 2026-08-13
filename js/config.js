@@ -91,6 +91,7 @@ const WEDDING_CONFIG = {
       photo: "assets/letter-bride.jpg",
       tag: "형규에게, 현진이가",
       image: "",
+      handImage: "assets/letter-bride-hand.png",
       text: `함께한 모든 계절이
 참 따뜻했어.
 이제 매일의 아침을 같이 맞이하자.
