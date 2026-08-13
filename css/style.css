@@ -517,7 +517,7 @@ body {
 /* margin 대신 padding — 위쪽 여백이 섹션 밖으로 새어 검은 띠가 생기지 않도록 */
 .lt { position: relative; padding-top: 46px; background: #fff; }
 .lt:first-child { padding-top: 0; }
-.lt--groom, .lt--bride { padding-bottom: 44px; }
+.lt--groom, .lt--bride { padding-bottom: 120px; }
 
 /* 머리말 (현진이에게, 형규가) — 사진 안쪽에 */
 .lt__tag {
@@ -577,7 +577,7 @@ body {
 .lt--bride .lt__fade,
 .lt--groom .lt__fade {
   bottom: -1px;
-  height: calc(80% + 2px);
+  height: calc(30% + 2px);
   background: linear-gradient(0deg,
     #fff 0%, rgba(255,255,255,.98) 18%, rgba(255,255,255,.82) 40%,
     rgba(255,255,255,.5) 62%, rgba(255,255,255,.18) 84%, rgba(255,255,255,0) 100%);

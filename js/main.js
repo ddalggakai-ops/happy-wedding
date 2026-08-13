@@ -223,13 +223,13 @@
       // 그라데이션의 62% 지점부터는 사실상 흰 종이로 보입니다
       const whiteTop = f.top + f.height * 0.62;
       // margin 을 m 만큼 주면 글과 블록 아래끝이 함께 m 만큼 움직입니다
+      // (양수면 아래로, 음수면 위로 — 흰 면의 한가운데로 이동)
       let m = whiteTop + b.bottom - 2 * h.top - h.height;
-      m = Math.min(0, m);
       // 머리말(ㅇㅇ에게, ㅇㅇ이가)과 겹치지 않도록 안전거리 확보
       const tag = lt.querySelector(".lt__tag");
       if (tag) {
         const t = tag.getBoundingClientRect();
-        if (t.bottom > h.top + m - 10) m = Math.min(0, t.bottom + 10 - h.top);
+        if (h.top + m < t.bottom + 10) m = t.bottom + 10 - h.top;
       }
       hand.style.marginTop = `${Math.round(m)}px`;
     });
