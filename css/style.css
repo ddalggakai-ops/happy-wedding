@@ -539,7 +539,7 @@ body {
   width: 82%;
   text-align: center;
   font-family: var(--hand);
-  font-size: clamp(19px, 5.8vw, 28px);
+  font-size: clamp(21px, 6.3vw, 30px);
   line-height: 1.66;
   letter-spacing: .01em;
   color: #17161a;
@@ -550,7 +550,7 @@ body {
 /* 글씨 대신 손글씨 이미지를 얹을 때 — 글과 같은 자리·같은 기울기 */
 .lt__hand-img {
   display: block;
-  width: 64%;
+  width: 72%;
   margin: 0 auto 22px;
   transform: rotate(-1deg);
   transform-origin: center;
@@ -579,7 +579,7 @@ body {
   bottom: -1px;
   /* 드레스 밑자락은 그대로 보이고, 그 바로 아래(사진 높이 76% 지점)부터 흰 종이로 사라집니다.
      머리말(ㅇㅇ에게, ㅇㅇ이가)이 딱 그 시작점에 놓입니다 */
-  height: calc(24% + 52px);   /* 시작점을 50px 더 위로 */
+  height: calc(24% + 62px);   /* 시작점을 60px 더 위로 */
   background: linear-gradient(0deg,
     #fff 0%, rgba(255,255,255,.98) 18%, rgba(255,255,255,.82) 40%,
     rgba(255,255,255,.5) 62%, rgba(255,255,255,.18) 84%, rgba(255,255,255,0) 100%);
