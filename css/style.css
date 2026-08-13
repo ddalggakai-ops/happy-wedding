@@ -530,7 +530,7 @@ body {
   color: #37322c;
   text-shadow: 0 1px 8px rgba(255,255,255,.95), 0 0 18px rgba(255,255,255,.85);
 }
-.lt__tag--br { right: 5%; bottom: 17%; }     /* 신랑 — 사진 우하단 */
+.lt__tag--br { right: 5%; bottom: 27%; }     /* 신랑 — 사진 우하단 */
 .lt__tag--tl { left: 5%; top: 5%; }          /* 신부 — 사진 좌상단 */
 
 /* 손글씨 */
@@ -555,16 +555,16 @@ body {
   transform: rotate(-1deg);
   transform-origin: center;
 }
-/* 사진이 흰 종이로 사라지는 그 흰 면의 한가운데에 글씨가 놓이도록 */
+/* 사진이 흰 종이로 사라지는 그 흰 면의 한가운데에 글씨가 놓이도록 (실측으로 맞춘 값) */
 .lt--groom .lt__hand-img,
-.lt--bride .lt__hand-img { margin: -20% auto 0; }
+.lt--bride .lt__hand-img { margin: -27% auto 0; }
 
 /* 신랑 편지는 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
 .lt--bride .lt__hand { margin: 0 auto; }
 /* 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
-.lt--bride .lt__hand { margin-top: -20%; }
+.lt--bride .lt__hand { margin-top: -27%; }
 
 /* overflow:hidden + 아래 -2px — 사진 맨 아랫줄이 검은 선처럼 보이는 것을 막습니다
    (확대 배율에 따라 그라데이션이 마지막 1px를 못 덮는 경우가 있어 아예 잘라냅니다) */
@@ -577,7 +577,7 @@ body {
 .lt--bride .lt__fade,
 .lt--groom .lt__fade {
   bottom: -1px;
-  height: calc(62% + 2px);
+  height: calc(80% + 2px);
   background: linear-gradient(0deg,
     #fff 0%, rgba(255,255,255,.98) 18%, rgba(255,255,255,.82) 40%,
     rgba(255,255,255,.5) 62%, rgba(255,255,255,.18) 84%, rgba(255,255,255,0) 100%);

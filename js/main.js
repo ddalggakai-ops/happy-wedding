@@ -208,6 +208,33 @@
       </p>`;
   }
 
+  /* 서로에게 쓰는 편지 — 사진이 흰색으로 사라진 그 면의 정확히 한가운데에
+     편지 글이 놓이도록 계산해서 맞춥니다. (글 길이·화면 크기에 따라 달라지므로 JS로 계산) */
+  function centerLetterHands() {
+    document.querySelectorAll(".lt--groom, .lt--bride").forEach((lt) => {
+      const hand = lt.querySelector(".lt__hand-img, .lt__hand");
+      const fade = lt.querySelector(".lt__fade");
+      if (!hand || !fade) return;
+      hand.style.marginTop = "0px";
+      const f = fade.getBoundingClientRect();
+      const b = lt.getBoundingClientRect();
+      const h = hand.getBoundingClientRect();
+      if (!h.height) return;
+      // 그라데이션의 62% 지점부터는 사실상 흰 종이로 보입니다
+      const whiteTop = f.top + f.height * 0.62;
+      // margin 을 m 만큼 주면 글과 블록 아래끝이 함께 m 만큼 움직입니다
+      let m = whiteTop + b.bottom - 2 * h.top - h.height;
+      m = Math.min(0, m);
+      // 머리말(ㅇㅇ에게, ㅇㅇ이가)과 겹치지 않도록 안전거리 확보
+      const tag = lt.querySelector(".lt__tag");
+      if (tag) {
+        const t = tag.getBoundingClientRect();
+        if (t.bottom > h.top + m - 10) m = Math.min(0, t.bottom + 10 - h.top);
+      }
+      hand.style.marginTop = `${Math.round(m)}px`;
+    });
+  }
+
   /* ═══════════ 3.5 부모님의 편지 ═══════════ */
 
   /* ── 아기 사진 옆 손그림 아이콘 (연필로 그려 스캔한 이미지) ── */
@@ -1057,6 +1084,16 @@
     renderIntro();
     renderGreeting();
     renderLetters();
+    // 편지 글 위치는 이미지·폰트가 모두 준비된 뒤에 계산합니다
+    const recenter = () => centerLetterHands();
+    document.querySelectorAll(".lt__hand-img, .lt__img").forEach((im) => {
+      if (!im.complete) im.addEventListener("load", recenter, { once: true });
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(recenter);
+    window.addEventListener("load", recenter);
+    window.addEventListener("resize", () => { clearTimeout(window.__ltT); window.__ltT = setTimeout(recenter, 150); });
+    setTimeout(recenter, 400);
+    setTimeout(recenter, 1500);
     renderParents();
     renderGallery();
     renderCalendar();
