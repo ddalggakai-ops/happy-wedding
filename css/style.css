@@ -550,7 +550,7 @@ body {
 /* 글씨 대신 손글씨 이미지를 얹을 때 — 글과 같은 자리·같은 기울기 */
 .lt__hand-img {
   display: block;
-  width: 72%;
+  width: 64%;
   margin: 0 auto 22px;
   transform: rotate(-1deg);
   transform-origin: center;
@@ -577,7 +577,7 @@ body {
 .lt--bride .lt__fade,
 .lt--groom .lt__fade {
   bottom: -1px;
-  height: calc(48% + 2px);
+  height: calc(62% + 2px);
   background: linear-gradient(0deg,
     #fff 0%, rgba(255,255,255,.98) 18%, rgba(255,255,255,.82) 40%,
     rgba(255,255,255,.5) 62%, rgba(255,255,255,.18) 84%, rgba(255,255,255,0) 100%);

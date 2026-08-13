@@ -109,16 +109,13 @@ const WEDDING_CONFIG = {
       who: "현진",
       family: "assets/parents/bride-family.jpg",
       letterImage: "assets/parents/bride-letter.jpg",
-      // 손편지를 한 줄씩 오려 붙인 조각들 (있으면 letterImage 대신 사용)
+      // 손편지를 문장 단위로 오려 붙인 조각들 (있으면 letterImage 대신 사용)
       letterLines: [
         "assets/parents/bride-letter/1.png",
         "assets/parents/bride-letter/2.png",
         "assets/parents/bride-letter/3.png",
         "assets/parents/bride-letter/4.png",
         "assets/parents/bride-letter/5.png",
-        "assets/parents/bride-letter/6.png",
-        "assets/parents/bride-letter/7.png",
-        "assets/parents/bride-letter/8.png",
       ],
       babies: ["assets/parents/bride-baby1.png", "assets/parents/bride-baby2.png"],
     },

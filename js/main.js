@@ -284,6 +284,24 @@
     // 표시 순서는 config.js의 parents 항목 순서를 그대로 따릅니다
     document.getElementById("parents-list").innerHTML =
       Object.entries(P).map(([key, s]) => side(s, key)).join("");
+
+    /* 오려 붙인 편지 조각은 종이 길이가 제각각이라, 그대로 폭을 맞추면
+       짧은 문장일수록 글씨가 커 보입니다. 가장 긴 조각을 기준으로
+       원본 비율대로 폭을 지정해 어느 조각이든 글씨 크기가 같아지게 합니다. */
+    document.querySelectorAll(".parents__lines").forEach((box) => {
+      const imgs = [...box.querySelectorAll(".parents__line")];
+      if (!imgs.length) return;
+      let pending = imgs.length;
+      const fit = () => {
+        if (--pending > 0) return;
+        const max = Math.max(...imgs.map((i) => i.naturalWidth || 1));
+        imgs.forEach((i) => {
+          const w = i.naturalWidth || max;
+          i.style.width = `${(w / max * 100).toFixed(1)}%`;
+        });
+      };
+      imgs.forEach((i) => (i.complete ? fit() : (i.onload = i.onerror = fit)));
+    });
   }
 
   /* ═══════════ 3. 러브레터 (손글씨 편지) ═══════════ */
