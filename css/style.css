@@ -577,7 +577,7 @@ body {
 .lt--bride .lt__fade,
 .lt--groom .lt__fade {
   bottom: -1px;
-  height: calc(30% - 8px);   /* 아래쪽 10px 만큼 짧게 */
+  height: calc(20% - 8px);   /* 드레스 밑단 바로 아래(사진 높이 80% 지점)부터 흐려집니다 */
   background: linear-gradient(0deg,
     #fff 0%, rgba(255,255,255,.98) 18%, rgba(255,255,255,.82) 40%,
     rgba(255,255,255,.5) 62%, rgba(255,255,255,.18) 84%, rgba(255,255,255,0) 100%);
