@@ -525,7 +525,7 @@ body {
 /* margin 대신 padding — 위쪽 여백이 섹션 밖으로 새어 검은 띠가 생기지 않도록 */
 .lt { position: relative; padding-top: 46px; background: #fff; }
 .lt:first-child { padding-top: 0; }
-.lt--groom, .lt--bride { padding-bottom: 96px; }
+.lt--groom, .lt--bride { padding-bottom: 88px; }
 
 /* 머리말 (현진이에게, 형규가) — 사진 안쪽에 */
 .lt__tag {
@@ -567,7 +567,7 @@ body {
 .lt--groom .lt__hand-img,
 .lt--bride .lt__hand-img { margin: -27% auto 0; }
 /* 신부 편지는 원본 글씨가 작아, 신랑 편지와 글자 크기가 같아 보이도록 더 크게 표시 */
-.lt--bride .lt__hand-img { width: 94%; }
+.lt--bride .lt__hand-img { width: 84%; }
 
 /* 신랑 편지는 사진이 사라진 자리로 글이 올라와 앉습니다 */
 .lt--groom .lt__hand,
