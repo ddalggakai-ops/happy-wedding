@@ -413,59 +413,48 @@ body {
   width: 100%;
   border-radius: 3px;
 }
-/* ---------- 크림 레터프레스 카드 (봉투 대신) ---------- */
+/* ---------- 레터프레스 카드 (봉투 대신) ----------
+   카드 종이·모서리 양각 장식·타원 테두리는 배경 이미지 한 장으로 처리하고,
+   그 위에 사진과 손편지만 얹습니다. */
 .gcard {
   position: relative;
   width: min(100%, 392px);
+  aspect-ratio: 796 / 992;
   margin: 26px auto 34px;
-  padding: 26px 26px 30px;
-  background: #ece6da url("../assets/paper-bg.jpg") center / 320px auto repeat;
-  background-blend-mode: multiply;
-  box-shadow: 0 18px 42px rgba(0, 0, 0, .5), 0 4px 12px rgba(0, 0, 0, .35);
+  background: #ece6da url("../assets/deco/invite-card.jpg") center / 100% 100% no-repeat;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .5), 0 4px 12px rgba(0, 0, 0, .3);
 }
-/* 안쪽 가는 테두리선 */
-.gcard::after {
-  content: "";
-  position: absolute;
-  inset: 11px;
-  border: 1px solid rgba(120, 105, 90, .22);
-  pointer-events: none;
-}
-.gcard__corner {
-  position: absolute;
-  width: 19%;
-  max-width: 72px;
-  opacity: .78;
-  pointer-events: none;
-}
-.gcard__corner--tl { left: 9px;  top: 9px; }
-.gcard__corner--tr { right: 9px; top: 9px;    transform: scaleX(-1); }
-.gcard__corner--bl { left: 9px;  bottom: 9px; transform: scaleY(-1); }
-.gcard__corner--br { right: 9px; bottom: 9px; transform: scale(-1, -1); }
-.gcard__knot {
-  display: block;
-  width: 40px;
-  margin: 4px auto 14px;
-  opacity: .8;
-}
-/* 타원 사진 — 얇은 흰 링 */
+/* 카드에 인쇄된 타원 자리에 사진을 끼워 넣습니다 */
 .gcard__oval {
-  position: relative;
-  width: 76%;
-  margin: 0 auto 22px;
-  aspect-ratio: 1.55 / 1;
+  position: absolute;
+  left: 24.2%;
+  top: 20.2%;
+  width: 51.6%;
+  height: 20.4%;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid #fffdf8;
-  box-shadow: 0 0 0 1px rgba(120, 105, 90, .3), 0 8px 18px rgba(60, 45, 35, .22);
 }
 .gcard__oval img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* 손편지가 놓이는 자리 (카드 아래쪽 여백 안) */
+.gcard .greeting__message {
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  top: 47%;
+  bottom: 11%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
 
 /* 손글씨 인사말 이미지 */
 .greeting__hand {
   display: block;
   width: 100%;
-  margin: 2px auto 6px;
+  max-height: 100%;
+  object-fit: contain;
+  margin: 0 auto;
 }
 .greeting__message {
   font-family: var(--serif);
