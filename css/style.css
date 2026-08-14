@@ -595,6 +595,9 @@ body {
     rgba(255,255,255,.5) 62%, rgba(255,255,255,.18) 84%, rgba(255,255,255,0) 100%);
 }
 
+/* 신부 편지는 그라데이션 시작점을 20px 더 위로 */
+.lt--bride .lt__fade { height: calc(24% + 92px); }
+
 /* 스캔한 손편지를 그대로 올릴 때 */
 .lt--scan { padding: 0 22px; }
 .lt--scan img { display: block; width: 100%; }
