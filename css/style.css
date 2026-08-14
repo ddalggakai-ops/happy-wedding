@@ -41,7 +41,15 @@
 /* display 를 지정한 요소도 hidden 속성이 확실히 먹도록 */
 [hidden] { display: none !important; }
 
-html { -webkit-text-size-adjust: 100%; touch-action: manipulation; /* 더블탭 줌 방지 */ }
+html { -webkit-text-size-adjust: 100%; }
+
+/* 사진 보호 — 길게 누르기(저장 메뉴)·끌어서 저장·선택 방지 */
+img {
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
 
 body {
   font-family: var(--serif);
@@ -517,7 +525,7 @@ body {
 /* margin 대신 padding — 위쪽 여백이 섹션 밖으로 새어 검은 띠가 생기지 않도록 */
 .lt { position: relative; padding-top: 46px; background: #fff; }
 .lt:first-child { padding-top: 0; }
-.lt--groom, .lt--bride { padding-bottom: 120px; }
+.lt--groom, .lt--bride { padding-bottom: 96px; }
 
 /* 머리말 (현진이에게, 형규가) — 사진 안쪽에 */
 .lt__tag {
@@ -1261,13 +1269,17 @@ textarea { resize: none; }
 /* ═══════════ 라이트박스 ═══════════ */
 .lightbox {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
   z-index: 100;
   background: rgba(20,15,12,.94);
   display: flex;
   align-items: center;
   justify-content: center;
-  touch-action: none;   /* 라이트박스에서 핀치줌·스크롤 방지 */
+  touch-action: pinch-zoom;   /* 확대·축소는 허용 (갇히지 않도록) */
 }
 .lightbox[hidden] { display: none; }
 .lightbox img {

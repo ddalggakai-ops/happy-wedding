@@ -91,6 +91,17 @@
     }[ch]));
   }
 
+  /* 사진 보호 — 우클릭 저장·길게 눌러 저장·끌어서 저장을 막습니다.
+     (스크린샷 자체는 브라우저가 막을 방법이 없습니다) */
+  function initPhotoGuard() {
+    document.addEventListener("contextmenu", (e) => {
+      if (e.target.tagName === "IMG") e.preventDefault();
+    });
+    document.addEventListener("dragstart", (e) => {
+      if (e.target.tagName === "IMG") e.preventDefault();
+    });
+  }
+
   /* ═══════════ 1. 인트로 (풀블리드 커버) ═══════════ */
   const DAY_EN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -394,11 +405,6 @@
       openLightbox(Number(a.dataset.index));
     });
 
-    // 핀치 줌 방지 (iOS 사파리는 viewport 설정만으로는 안 막힘)
-    ["gesturestart", "gesturechange", "gestureend"].forEach((t) =>
-      document.addEventListener(t, (e) => e.preventDefault(), { passive: false })
-    );
-    $("#lightbox-img").addEventListener("dblclick", (e) => e.preventDefault());
 
     $("#lightbox-close").addEventListener("click", closeLightbox);
     $("#lightbox-prev").addEventListener("click", () => moveLightbox(-1));
@@ -408,12 +414,20 @@
     });
 
     // 스와이프 지원
-    let touchX = null;
-    $("#lightbox").addEventListener("touchstart", (e) => (touchX = e.touches[0].clientX), { passive: true });
+    let touchX = null, touchY = null;
+    $("#lightbox").addEventListener("touchstart", (e) => {
+      if (e.touches.length !== 1) { touchX = null; return; }   // 두 손가락(확대·축소)은 그대로 둡니다
+      touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+    }, { passive: true });
     $("#lightbox").addEventListener("touchend", (e) => {
       if (touchX === null) return;
       const dx = e.changedTouches[0].clientX - touchX;
-      if (Math.abs(dx) > 40) moveLightbox(dx > 0 ? -1 : 1);
+      const dy = e.changedTouches[0].clientY - touchY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) moveLightbox(dx > 0 ? -1 : 1);
+      else if (Math.abs(dx) < 12 && Math.abs(dy) < 12 &&
+               !e.target.closest(".lightbox__nav, .lightbox__close")) {
+        closeLightbox();   // 사진을 가볍게 톡 눌러도 닫히게 (확대된 상태에서 갇히지 않도록)
+      }
       touchX = null;
     }, { passive: true });
 
@@ -425,15 +439,38 @@
     });
   }
 
+  /* 화면을 확대(핀치줌)한 상태에서 라이트박스를 열면, position:fixed 요소는
+     '확대되기 전 화면' 기준으로 놓여서 닫기 버튼이 화면 밖으로 나가버립니다.
+     실제로 보이는 영역(visualViewport)에 맞춰 다시 배치해 항상 손이 닿게 합니다. */
+  function syncLightboxToView() {
+    const lb = $("#lightbox");
+    const vv = window.visualViewport;
+    if (!lb || lb.hidden || !vv) return;
+    lb.style.width = `${vv.width}px`;
+    lb.style.height = `${vv.height}px`;
+    lb.style.transform = `translate(${vv.offsetLeft}px, ${vv.offsetTop}px)`;
+  }
+
   function openLightbox(i) {
     lightboxIndex = i;
     updateLightbox();
     $("#lightbox").hidden = false;
     document.body.style.overflow = "hidden";
+    syncLightboxToView();
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", syncLightboxToView);
+      window.visualViewport.addEventListener("scroll", syncLightboxToView);
+    }
   }
   function closeLightbox() {
-    $("#lightbox").hidden = true;
+    const lb = $("#lightbox");
+    lb.hidden = true;
+    lb.style.width = lb.style.height = lb.style.transform = "";
     document.body.style.overflow = "";
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener("resize", syncLightboxToView);
+      window.visualViewport.removeEventListener("scroll", syncLightboxToView);
+    }
   }
   function moveLightbox(dir) {
     const n = C.gallery.images.length;
@@ -1079,7 +1116,8 @@
   /* ═══════════ 초기화 ═══════════ */
   document.addEventListener("DOMContentLoaded", () => {
     document.title = `${C.groom.name} ♥ ${C.bride.name} 결혼합니다`;
-    initImageRetry();   // 다른 렌더링보다 먼저 걸어둡니다
+    initImageRetry();
+    initPhotoGuard();   // 다른 렌더링보다 먼저 걸어둡니다
     initSplash();
     renderIntro();
     renderGreeting();
