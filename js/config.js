@@ -261,6 +261,11 @@ const WEDDING_CONFIG = {
     ],
   },
 
+  /* ---------- 방문·클릭 통계 ---------- */
+  // snap.appsScriptUrl 로 방문수·버튼 클릭을 보내 구글 시트에 쌓습니다.
+  // 끄고 싶으면 enabled를 false로 바꾸세요.
+  stats: { enabled: true },
+
   /* ---------- 인트로 스플래시 ---------- */
   // 접속 시 처음 보이는 베일 봉투 화면. false로 바꾸면 바로 청첩장이 보입니다.
   splash: {

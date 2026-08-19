@@ -426,11 +426,11 @@ body {
 }
 /* 카드에 인쇄된 타원 자리에 사진을 끼워 넣습니다 */
 .gcard__oval {
-  position: absolute;
-  left: 24.2%;
-  top: 20.2%;
-  width: 51.6%;
-  height: 20.4%;
+  position: absolute;   /* 카드에 인쇄된 타원 테두리 안쪽에 정확히 맞춘 값 */
+  left: 23.0%;
+  top: 18.6%;
+  width: 52.1%;
+  height: 24.0%;
   border-radius: 50%;
   overflow: hidden;
 }
@@ -1980,3 +1980,43 @@ body.no-scroll { overflow: hidden; height: 100vh; }
     .section { font-size: 16.5px; }
   }
 }
+
+
+/* ═══════════ 결혼식 당일 간략 보기 ═══════════
+   당일에는 하객이 필요한 것만 보이게 합니다 — 오시는 길 · 안내사항 · 포토 빙고 */
+.dayof-head {
+  padding: 30px 24px 26px;
+  text-align: center;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.dayof-head__names {
+  font-family: var(--kr);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.dayof-head__meta {
+  margin-top: 8px;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--ink-light);
+}
+.dayof-head__full {
+  margin-top: 16px;
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  color: var(--accent);
+  background: none;
+  border: 1px solid rgba(250, 137, 163, .4);
+  border-radius: 999px;
+  padding: 8px 18px;
+  cursor: pointer;
+}
+body.dayof .invitation > section { display: none; }
+body.dayof .invitation > .location,
+body.dayof .invitation > .info,
+body.dayof .invitation > .snap,
+body.dayof .invitation > footer.footer { display: block; }
+body.dayof .invitation > section.share { display: none; }
+body.dayof .modal--rsvp { display: none !important; }

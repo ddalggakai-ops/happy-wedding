@@ -91,6 +91,60 @@
     }[ch]));
   }
 
+  /* 방문·클릭 통계 — 구글 시트(Apps Script)로 조용히 보냅니다.
+     화면에는 아무 영향이 없고, 실패해도 무시합니다. */
+  function logStat(event, detail) {
+    try {
+      const url = (C.snap && C.snap.appsScriptUrl || "").trim();
+      if (!url || (C.stats && C.stats.enabled === false)) return;
+      const body = new URLSearchParams({
+        kind: "stat",
+        event,
+        detail: detail || "",
+        guest: getGuestName().slice(0, 20),
+        ref: (document.referrer || "").slice(0, 120),
+        ua: navigator.userAgent.slice(0, 160),
+        screen: `${window.innerWidth}x${window.innerHeight}`,
+      });
+      if (navigator.sendBeacon) navigator.sendBeacon(url, body);
+      else fetch(url, { method: "POST", mode: "no-cors", body, keepalive: true });
+    } catch (e) { /* 통계는 실패해도 무시 */ }
+  }
+
+  /* 한 번 방문에 한 번만 기록 */
+  function logVisitOnce() {
+    try {
+      if (sessionStorage.getItem("wedding-visit") === "1") return;
+      sessionStorage.setItem("wedding-visit", "1");
+    } catch (e) { /* 프라이빗 모드 등 */ }
+    logStat("view");
+  }
+
+  /* 얼마나 내려 읽었는지 · 얼마나 머물렀는지 — 페이지를 떠날 때 한 번만 보냅니다. */
+  function initEngagementStat() {
+    const start = Date.now();
+    let maxDepth = 0;
+    const measure = () => {
+      const doc = document.documentElement;
+      const total = Math.max(1, doc.scrollHeight - window.innerHeight);
+      const pct = Math.min(100, Math.round((window.scrollY / total) * 100));
+      if (pct > maxDepth) maxDepth = pct;
+    };
+    measure();
+    window.addEventListener("scroll", measure, { passive: true });
+    let sent = false;
+    const flush = () => {
+      if (sent) return;
+      sent = true;
+      measure();
+      logStat("depth", `${maxDepth}% / ${Math.round((Date.now() - start) / 1000)}초`);
+    };
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") flush();
+    });
+  }
+
   /* 사진 보호 — 우클릭 저장·길게 눌러 저장·끌어서 저장을 막습니다.
      (스크린샷 자체는 브라우저가 막을 방법이 없습니다) */
   function initPhotoGuard() {
@@ -100,6 +154,40 @@
     document.addEventListener("dragstart", (e) => {
       if (e.target.tagName === "IMG") e.preventDefault();
     });
+  }
+
+  /* ═══════════ 결혼식 당일 간략 보기 ═══════════
+     당일에는 오시는 길 · 안내사항 · 포토 빙고만 보여줍니다.
+     주소 끝에 ?full=1 을 붙이면 전체 청첩장을, ?day=1 이면 미리 간략 화면을 볼 수 있습니다. */
+  function isWeddingDay() {
+    const p = new URLSearchParams(location.search);
+    if (p.get("full") === "1") return false;
+    if (p.get("day") === "1") return true;
+    try { if (sessionStorage.getItem("wedding-full") === "1") return false; } catch (e) {}
+    const now = new Date();
+    return now.getFullYear() === C.wedding.year
+      && now.getMonth() === C.wedding.month - 1
+      && now.getDate() === C.wedding.day;
+  }
+
+  function initDayMode() {
+    if (!isWeddingDay()) return false;
+    document.body.classList.add("dayof");
+    const head = document.createElement("div");
+    head.className = "dayof-head";
+    head.innerHTML = `
+      <p class="dayof-head__names">${C.groom.name} <span style="color:var(--accent)">♥</span> ${C.bride.name}</p>
+      <p class="dayof-head__meta">${formatKoreanDate()}<br/>${C.venue.name} ${C.venue.hall}</p>
+      <button type="button" class="dayof-head__full">청첩장 전체 보기</button>`;
+    const inv = document.querySelector(".invitation");
+    inv.insertBefore(head, inv.firstChild);
+    head.querySelector(".dayof-head__full").addEventListener("click", () => {
+      try { sessionStorage.setItem("wedding-full", "1"); } catch (e) {}
+      logStat("view_full");
+      location.search = location.search ? location.search + "&full=1" : "?full=1";
+    });
+    logStat("view_dayof");
+    return true;
   }
 
   /* ═══════════ 1. 인트로 (풀블리드 커버) ═══════════ */
@@ -145,7 +233,7 @@
       document.body.classList.remove("no-scroll");
       setTimeout(() => el.remove(), 900);
     };
-    el.addEventListener("click", close);   // 아무 곳이나 눌러도 열림
+    el.addEventListener("click", () => { logStat("open"); close(); });   // 아무 곳이나 눌러도 열림
   }
 
   /* ═══════════ 1.5 커버 꽃잎 흩날리기 ═══════════ */
@@ -627,6 +715,10 @@
     $("#map-kakao").href = `https://map.kakao.com/link/map/${q},${v.lat},${v.lng}`;
     $("#map-tmap").href =
       `tmap://route?goalname=${q}&goaly=${v.lat}&goalx=${v.lng}`;
+    ["#map-naver", "#map-kakao", "#map-tmap"].forEach((sel) => {
+      const el = $(sel);
+      if (el) el.addEventListener("click", () => logStat("map", sel.replace("#map-", "")));
+    });
     $("#map-tmap").addEventListener("click", () => {
       // 티맵 미설치 시 안내
       setTimeout(() => toast("티맵 앱이 설치되어 있어야 합니다"), 1500);
@@ -698,7 +790,7 @@
       });
     };
     tabEls.forEach((el, i) => {
-      el.addEventListener("click", () => select(i));
+      el.addEventListener("click", () => { select(i); logStat("info_tab", tabs[i].label || String(i)); });
       // 좌우 화살표로도 이동할 수 있게 (키보드·보조기기 대응)
       el.addEventListener("keydown", (e) => {
         if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
@@ -745,8 +837,12 @@
       btn.addEventListener("click", () => btn.parentElement.classList.toggle("is-open")));
 
     document.querySelectorAll(".acc-card__num").forEach((btn) =>
-      btn.addEventListener("click", () =>
-        copyText(btn.dataset.copy, "계좌번호가 복사되었습니다")));
+      btn.addEventListener("click", () => {
+        copyText(btn.dataset.copy, "계좌번호가 복사되었습니다");
+        const card = btn.closest(".acc-card");
+        const who = card ? card.querySelector(".acc-card__name")?.textContent || "" : "";
+        logStat("account_copy", who);
+      }));
   }
 
   /* ═══════════ 8. RSVP ═══════════ */
@@ -966,6 +1062,8 @@
       });
     });
 
+    if (kakaoBtn) kakaoBtn.addEventListener("click", () => logStat("share", "kakao"));
+    $("#share-link").addEventListener("click", () => logStat("share", "link"));
     $("#share-link").addEventListener("click", () =>
       copyText(location.href, "청첩장 주소가 복사되었습니다"));
   }
@@ -1092,6 +1190,7 @@
 
     // 손님 이름(?to=)을 빙고 페이지로 그대로 넘겨줍니다
     $("#bingo-go").href = "bingo.html" + location.search;
+    $("#bingo-go").addEventListener("click", () => logStat("bingo_go"));
   }
 
   /* ═══════════ 사진 자동 재시도 ═══════════
@@ -1117,8 +1216,11 @@
   document.addEventListener("DOMContentLoaded", () => {
     document.title = `${C.groom.name} ♥ ${C.bride.name} 결혼합니다`;
     initImageRetry();
-    initPhotoGuard();   // 다른 렌더링보다 먼저 걸어둡니다
-    initSplash();
+    initPhotoGuard();
+    const dayof = initDayMode();     // 결혼식 당일에는 간략 화면
+    logVisitOnce();   // 다른 렌더링보다 먼저 걸어둡니다
+    initEngagementStat();
+    if (!dayof) initSplash(); else document.getElementById("splash")?.remove();
     renderIntro();
     renderGreeting();
     renderLetters();
@@ -1138,7 +1240,7 @@
     renderLocation();
     renderInfo();
     renderAccounts();
-    initRsvp();
+    if (!dayof) initRsvp();
     initShare();
     initBgm();
     renderBingoTeaser();
