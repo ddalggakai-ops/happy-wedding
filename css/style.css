@@ -1107,6 +1107,12 @@ body {
 }
 .acc-card__num svg { width: 17px; height: 17px; flex: 0 0 auto; color: var(--ink-light); }
 .acc-card__num:active { background: rgba(255, 255, 255, .1); }
+.acc-card__num.is-copied {
+  color: var(--accent);
+  border-color: rgba(250, 137, 163, .55);
+  background: rgba(250, 137, 163, .1);
+}
+.acc-card__num.is-copied svg { color: var(--accent); }
 
 /* ═══════════ 8. RSVP ═══════════ */
 .rsvp__desc {

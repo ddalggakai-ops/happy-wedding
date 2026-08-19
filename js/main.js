@@ -37,6 +37,26 @@
     toastTimer = setTimeout(() => (el.hidden = true), 2200);
   }
 
+  /* 안내 문구 없이 조용히 복사만 합니다 (성공 여부만 알려줍니다) */
+  async function copyQuiet(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (e) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand("copy"); } catch (e2) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+  }
+
   async function copyText(text, doneMsg) {
     try {
       await navigator.clipboard.writeText(text);
@@ -91,57 +111,116 @@
     }[ch]));
   }
 
-  /* 방문·클릭 통계 — 구글 시트(Apps Script)로 조용히 보냅니다.
-     화면에는 아무 영향이 없고, 실패해도 무시합니다. */
-  function logStat(event, detail) {
+  /* ═══════════ 방문 통계 ═══════════
+     한 번 열 때마다 시트에 "한 줄"이 만들어지고, 그 줄이 갱신됩니다.
+     새로고침하거나 다른 앱에 갔다 돌아오면 새로운 줄로 기록됩니다.
+     줄에는 구간별로 머문 시간(초)과 버튼을 누른 횟수가 함께 담깁니다. */
+  const STAT_SECTIONS = [
+    [".intro", "인트로"], [".greeting", "인사말"], [".parents", "부모님"],
+    [".letter", "편지"], [".gallery", "갤러리"], [".calendar", "캘린더"],
+    [".location", "오시는 길"], [".info", "안내사항"], [".accounts", "마음 전하실 곳"],
+    [".snap", "포토 빙고"], [".share", "공유"],
+  ];
+
+  const visit = { id: "", secs: {}, clicks: {}, ticks: 0, depth: 0, tick: null, hold: null, dead: false };
+
+  function statUrl() {
+    if (C.stats && C.stats.enabled === false) return "";
+    return (C.snap && C.snap.appsScriptUrl || "").trim();
+  }
+
+  function newVisitId() {
+    try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID().slice(0, 8); } catch (e) {}
+    return Math.random().toString(36).slice(2, 10);
+  }
+
+  function sendVisit() {
+    const url = statUrl();
+    if (!url || !visit.id) return;
     try {
-      const url = (C.snap && C.snap.appsScriptUrl || "").trim();
-      if (!url || (C.stats && C.stats.enabled === false)) return;
+      const pack = (o) => Object.keys(o).map((k) => k + ":" + Math.round(o[k])).join("|");
       const body = new URLSearchParams({
         kind: "stat",
-        event,
-        detail: detail || "",
+        visit: visit.id,
         guest: getGuestName().slice(0, 20),
-        ref: (document.referrer || "").slice(0, 120),
         ua: navigator.userAgent.slice(0, 160),
         screen: `${window.innerWidth}x${window.innerHeight}`,
+        ref: (document.referrer || "").slice(0, 120),
+        mode: document.body.classList.contains("dayof") ? "당일 간략" : "전체",
+        dwell: String(visit.ticks),
+        depth: String(visit.depth),
+        secs: pack(visit.secs),
+        clicks: pack(visit.clicks),
       });
       if (navigator.sendBeacon) navigator.sendBeacon(url, body);
       else fetch(url, { method: "POST", mode: "no-cors", body, keepalive: true });
     } catch (e) { /* 통계는 실패해도 무시 */ }
   }
 
-  /* 한 번 방문에 한 번만 기록 */
-  function logVisitOnce() {
-    try {
-      if (sessionStorage.getItem("wedding-visit") === "1") return;
-      sessionStorage.setItem("wedding-visit", "1");
-    } catch (e) { /* 프라이빗 모드 등 */ }
-    logStat("view");
+  /* 잦은 전송을 막기 위해 몇 초 모았다가 한 번에 보냅니다 */
+  function sendVisitSoon(ms) {
+    clearTimeout(visit.hold);
+    visit.hold = setTimeout(sendVisit, ms || 3000);
   }
 
-  /* 얼마나 내려 읽었는지 · 얼마나 머물렀는지 — 페이지를 떠날 때 한 번만 보냅니다. */
-  function initEngagementStat() {
-    const start = Date.now();
-    let maxDepth = 0;
-    const measure = () => {
-      const doc = document.documentElement;
-      const total = Math.max(1, doc.scrollHeight - window.innerHeight);
-      const pct = Math.min(100, Math.round((window.scrollY / total) * 100));
-      if (pct > maxDepth) maxDepth = pct;
-    };
-    measure();
-    window.addEventListener("scroll", measure, { passive: true });
-    let sent = false;
-    const flush = () => {
-      if (sent) return;
-      sent = true;
-      measure();
-      logStat("depth", `${maxDepth}% / ${Math.round((Date.now() - start) / 1000)}초`);
-    };
-    window.addEventListener("pagehide", flush);
+  function logClick(name) {
+    if (!visit.id) return;
+    visit.clicks[name] = (visit.clicks[name] || 0) + 1;
+    sendVisitSoon(2500);
+  }
+
+  /* 화면 한가운데에 걸쳐 있는 구간을 1초마다 확인해 시간을 더합니다 */
+  function measureSection() {
+    const cy = window.innerHeight / 2;
+    for (let i = 0; i < STAT_SECTIONS.length; i++) {
+      const el = document.querySelector(STAT_SECTIONS[i][0]);
+      if (!el || !el.offsetParent) continue;
+      const r = el.getBoundingClientRect();
+      if (r.top <= cy && r.bottom > cy) return STAT_SECTIONS[i][1];
+    }
+    return "";
+  }
+
+  function measureDepth() {
+    const total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const pct = Math.min(100, Math.round((window.scrollY / total) * 100));
+    if (pct > visit.depth) visit.depth = pct;
+  }
+
+  function startVisit() {
+    if (!statUrl()) return;
+    visit.id = newVisitId();
+    visit.secs = {}; visit.clicks = {}; visit.ticks = 0; visit.depth = 0; visit.dead = false;
+    measureDepth();
+    sendVisit();                     // 열자마자 한 줄 만들어 둡니다
+    clearInterval(visit.tick);
+    visit.tick = setInterval(() => {
+      if (document.hidden) return;
+      visit.ticks++;
+      const name = measureSection();
+      if (name) visit.secs[name] = (visit.secs[name] || 0) + 1;
+      measureDepth();
+      if (visit.ticks % 20 === 0) sendVisit();   // 오래 머무는 분도 중간에 저장
+    }, 1000);
+  }
+
+  function endVisit() {
+    if (!visit.id || visit.dead) return;
+    visit.dead = true;
+    clearInterval(visit.tick);
+    clearTimeout(visit.hold);
+    measureDepth();
+    sendVisit();
+  }
+
+  function initVisitStat() {
+    if (!statUrl()) return;
+    startVisit();
+    window.addEventListener("scroll", measureDepth, { passive: true });
+    window.addEventListener("pagehide", endVisit);
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") flush();
+      if (document.hidden) endVisit();
+      else startVisit();             // 다시 돌아오면 새로운 줄로 기록합니다
     });
   }
 
@@ -183,10 +262,8 @@
     inv.insertBefore(head, inv.firstChild);
     head.querySelector(".dayof-head__full").addEventListener("click", () => {
       try { sessionStorage.setItem("wedding-full", "1"); } catch (e) {}
-      logStat("view_full");
       location.search = location.search ? location.search + "&full=1" : "?full=1";
     });
-    logStat("view_dayof");
     return true;
   }
 
@@ -233,7 +310,7 @@
       document.body.classList.remove("no-scroll");
       setTimeout(() => el.remove(), 900);
     };
-    el.addEventListener("click", () => { logStat("open"); close(); });   // 아무 곳이나 눌러도 열림
+    el.addEventListener("click", () => { logClick("초대장 열기"); close(); });   // 아무 곳이나 눌러도 열림
   }
 
   /* ═══════════ 1.5 커버 꽃잎 흩날리기 ═══════════ */
@@ -717,7 +794,7 @@
       `tmap://route?goalname=${q}&goaly=${v.lat}&goalx=${v.lng}`;
     ["#map-naver", "#map-kakao", "#map-tmap"].forEach((sel) => {
       const el = $(sel);
-      if (el) el.addEventListener("click", () => logStat("map", sel.replace("#map-", "")));
+      if (el) el.addEventListener("click", () => logClick("지도앱"));
     });
     $("#map-tmap").addEventListener("click", () => {
       // 티맵 미설치 시 안내
@@ -790,7 +867,7 @@
       });
     };
     tabEls.forEach((el, i) => {
-      el.addEventListener("click", () => { select(i); logStat("info_tab", tabs[i].label || String(i)); });
+      el.addEventListener("click", () => { select(i); logClick("안내사항 탭"); });
       // 좌우 화살표로도 이동할 수 있게 (키보드·보조기기 대응)
       el.addEventListener("keydown", (e) => {
         if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
@@ -836,12 +913,21 @@
     document.querySelectorAll(".acc-group__head").forEach((btn) =>
       btn.addEventListener("click", () => btn.parentElement.classList.toggle("is-open")));
 
+    /* 복사 안내는 버튼 자리에서만 알려드립니다.
+       휴대폰이 스스로 띄우는 "클립보드에 복사됨" 안내와 겹치지 않도록 토스트는 쓰지 않습니다. */
     document.querySelectorAll(".acc-card__num").forEach((btn) =>
-      btn.addEventListener("click", () => {
-        copyText(btn.dataset.copy, "계좌번호가 복사되었습니다");
-        const card = btn.closest(".acc-card");
-        const who = card ? card.querySelector(".acc-card__name")?.textContent || "" : "";
-        logStat("account_copy", who);
+      btn.addEventListener("click", async () => {
+        const label = btn.querySelector("span");
+        if (!label || btn.classList.contains("is-copied")) return;
+        const original = label.textContent;
+        const ok = await copyQuiet(btn.dataset.copy);
+        label.textContent = ok ? "복사되었습니다" : "복사에 실패했습니다";
+        btn.classList.add("is-copied");
+        setTimeout(() => {
+          label.textContent = original;
+          btn.classList.remove("is-copied");
+        }, 1500);
+        if (ok) logClick("계좌번호 복사");
       }));
   }
 
@@ -1062,8 +1148,8 @@
       });
     });
 
-    if (kakaoBtn) kakaoBtn.addEventListener("click", () => logStat("share", "kakao"));
-    $("#share-link").addEventListener("click", () => logStat("share", "link"));
+    if (kakaoBtn) kakaoBtn.addEventListener("click", () => logClick("공유"));
+    $("#share-link").addEventListener("click", () => logClick("공유"));
     $("#share-link").addEventListener("click", () =>
       copyText(location.href, "청첩장 주소가 복사되었습니다"));
   }
@@ -1190,7 +1276,7 @@
 
     // 손님 이름(?to=)을 빙고 페이지로 그대로 넘겨줍니다
     $("#bingo-go").href = "bingo.html" + location.search;
-    $("#bingo-go").addEventListener("click", () => logStat("bingo_go"));
+    $("#bingo-go").addEventListener("click", () => logClick("포토빙고 이동"));
   }
 
   /* ═══════════ 사진 자동 재시도 ═══════════
@@ -1218,8 +1304,6 @@
     initImageRetry();
     initPhotoGuard();
     const dayof = initDayMode();     // 결혼식 당일에는 간략 화면
-    logVisitOnce();   // 다른 렌더링보다 먼저 걸어둡니다
-    initEngagementStat();
     if (!dayof) initSplash(); else document.getElementById("splash")?.remove();
     renderIntro();
     renderGreeting();
@@ -1247,5 +1331,6 @@
     initReveal();   // 동적 요소 생성 후 마지막에 실행
     initEnvelopeScroll();
     initPetals();
+    initVisitStat();   // 구간별 머문 시간 기록 (화면이 모두 준비된 뒤)
   });
 })();
