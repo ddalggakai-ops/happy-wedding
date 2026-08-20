@@ -54,7 +54,7 @@ const WEDDING_CONFIG = {
   greeting: {
     title: "소중한 분들을 초대합니다",
     // 카드 위쪽 타원 안에 들어갈 사진
-    photo: "assets/gallery/04.jpg",
+    photo: "assets/gallery/08.jpg",
     // 손글씨 이미지를 넣으면 카드에 글 대신 이미지가 표시됩니다. 비우면 아래 message 사용.
     image: "assets/greeting-hand.png",
     message: `서로가 마주 보며 다져온 사랑을
@@ -162,6 +162,17 @@ const WEDDING_CONFIG = {
       "assets/gallery/16.jpg",
       "assets/gallery/17.jpg",
       "assets/gallery/18.jpg",
+      "assets/gallery/19.jpg",
+      "assets/gallery/20.jpg",
+      "assets/gallery/21.jpg",
+      "assets/gallery/22.jpg",
+      "assets/gallery/23.jpg",
+      "assets/gallery/24.jpg",
+      "assets/gallery/25.jpg",
+      "assets/gallery/26.jpg",
+      "assets/gallery/27.jpg",
+      "assets/gallery/28.jpg",
+      "assets/gallery/29.jpg",
     ],
   },
 
