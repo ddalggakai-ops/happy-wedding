@@ -173,6 +173,10 @@ const WEDDING_CONFIG = {
       "assets/gallery/27.jpg",
       "assets/gallery/28.jpg",
       "assets/gallery/29.jpg",
+      "assets/gallery/30.jpg",
+      "assets/gallery/31.jpg",
+      "assets/gallery/32.jpg",
+      "assets/gallery/33.jpg",
     ],
   },
 
