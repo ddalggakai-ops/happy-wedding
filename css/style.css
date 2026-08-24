@@ -51,8 +51,11 @@ img {
   -webkit-user-select: none;
 }
 
-/* 사진이나 버튼을 톡톡 두 번 눌렀을 때 화면이 제멋대로 확대되지 않도록 합니다.
-   (손가락 두 개로 벌려서 하는 확대·축소는 그대로 됩니다) */
+/* 확대(줌) 금지 — 손가락 두 개로 벌려도, 두 번 톡톡 눌러도 화면이 커지지 않습니다.
+   위아래로 넘기는 스크롤만 됩니다. */
+html, body {
+  touch-action: pan-x pan-y;
+}
 a, button, label, input, select, textarea, summary,
 .gallery__grid a, .gallery__grid img, .snap__cell, .info__tab {
   touch-action: manipulation;
@@ -1285,7 +1288,7 @@ textarea { resize: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  touch-action: pinch-zoom;   /* 확대·축소는 허용 (갇히지 않도록) */
+  touch-action: manipulation;   /* 자세히 보기 안에서도 확대되지 않습니다 */
 }
 .lightbox[hidden] { display: none; }
 .lightbox img {

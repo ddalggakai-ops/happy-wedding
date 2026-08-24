@@ -224,6 +224,28 @@
     });
   }
 
+  /* 확대(줌) 막기 — 아이폰 사파리는 화면 설정(user-scalable=no)을 무시하기 때문에
+     손가락 두 개로 벌리는 동작과 두 번 톡톡 누르는 동작을 직접 막아줍니다. */
+  function initZoomGuard() {
+    ["gesturestart", "gesturechange", "gestureend"].forEach((type) =>
+      document.addEventListener(type, (e) => e.preventDefault(), { passive: false }));
+
+    document.addEventListener("touchmove", (e) => {
+      if (e.touches.length > 1) e.preventDefault();          // 두 손가락 확대
+    }, { passive: false });
+
+    let lastTap = 0;
+    document.addEventListener("touchend", (e) => {
+      const now = Date.now();
+      // 버튼·링크는 빠르게 두 번 누를 수 있어야 하므로 제외합니다
+      if (now - lastTap <= 350 &&
+          !e.target.closest("a, button, input, label, select, textarea")) {
+        e.preventDefault();                                   // 두 번 톡톡 눌러 확대
+      }
+      lastTap = now;
+    }, { passive: false });
+  }
+
   /* 사진 보호 — 우클릭 저장·길게 눌러 저장·끌어서 저장을 막습니다.
      (스크린샷 자체는 브라우저가 막을 방법이 없습니다) */
   function initPhotoGuard() {
@@ -1303,6 +1325,7 @@
     document.title = `${C.groom.name} ♥ ${C.bride.name} 결혼합니다`;
     initImageRetry();
     initPhotoGuard();
+    initZoomGuard();
     const dayof = initDayMode();     // 결혼식 당일에는 간략 화면
     if (!dayof) initSplash(); else document.getElementById("splash")?.remove();
     renderIntro();
