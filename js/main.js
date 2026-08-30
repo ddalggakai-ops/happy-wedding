@@ -126,6 +126,10 @@
 
   function statUrl() {
     if (C.stats && C.stats.enabled === false) return "";
+    // 결혼식 당일에는 구글 스크립트의 하루 실행 시간을 사진 업로드·참석 확인에 양보합니다.
+    // (하객이 한꺼번에 몰리면 통계 기록이 업로드를 밀어낼 수 있습니다)
+    if (document.body.classList.contains("dayof") &&
+        !(C.stats && C.stats.onWeddingDay)) return "";
     return (C.snap && C.snap.appsScriptUrl || "").trim();
   }
 
@@ -157,16 +161,11 @@
     } catch (e) { /* 통계는 실패해도 무시 */ }
   }
 
-  /* 잦은 전송을 막기 위해 몇 초 모았다가 한 번에 보냅니다 */
-  function sendVisitSoon(ms) {
-    clearTimeout(visit.hold);
-    visit.hold = setTimeout(sendVisit, ms || 3000);
-  }
-
+  /* 버튼을 누른 횟수는 세어만 두고, 떠날 때 한 번에 보냅니다.
+     (하객이 한꺼번에 몰릴 때 구글 스크립트에 부담이 가지 않도록) */
   function logClick(name) {
     if (!visit.id) return;
     visit.clicks[name] = (visit.clicks[name] || 0) + 1;
-    sendVisitSoon(2500);
   }
 
   /* 화면 한가운데에 걸쳐 있는 구간을 1초마다 확인해 시간을 더합니다 */
@@ -192,7 +191,7 @@
     visit.id = newVisitId();
     visit.secs = {}; visit.clicks = {}; visit.ticks = 0; visit.depth = 0; visit.dead = false;
     measureDepth();
-    sendVisit();                     // 열자마자 한 줄 만들어 둡니다
+    sendVisit();                     // ① 열자마자 한 줄 (떠날 때 ②로 채워집니다)
     clearInterval(visit.tick);
     visit.tick = setInterval(() => {
       if (document.hidden) return;
@@ -200,7 +199,6 @@
       const name = measureSection();
       if (name) visit.secs[name] = (visit.secs[name] || 0) + 1;
       measureDepth();
-      if (visit.ticks % 20 === 0) sendVisit();   // 오래 머무는 분도 중간에 저장
     }, 1000);
   }
 
@@ -208,7 +206,6 @@
     if (!visit.id || visit.dead) return;
     visit.dead = true;
     clearInterval(visit.tick);
-    clearTimeout(visit.hold);
     measureDepth();
     sendVisit();
   }
@@ -222,28 +219,6 @@
       if (document.hidden) endVisit();
       else startVisit();             // 다시 돌아오면 새로운 줄로 기록합니다
     });
-  }
-
-  /* 확대(줌) 막기 — 아이폰 사파리는 화면 설정(user-scalable=no)을 무시하기 때문에
-     손가락 두 개로 벌리는 동작과 두 번 톡톡 누르는 동작을 직접 막아줍니다. */
-  function initZoomGuard() {
-    ["gesturestart", "gesturechange", "gestureend"].forEach((type) =>
-      document.addEventListener(type, (e) => e.preventDefault(), { passive: false }));
-
-    document.addEventListener("touchmove", (e) => {
-      if (e.touches.length > 1) e.preventDefault();          // 두 손가락 확대
-    }, { passive: false });
-
-    let lastTap = 0;
-    document.addEventListener("touchend", (e) => {
-      const now = Date.now();
-      // 버튼·링크는 빠르게 두 번 누를 수 있어야 하므로 제외합니다
-      if (now - lastTap <= 350 &&
-          !e.target.closest("a, button, input, label, select, textarea")) {
-        e.preventDefault();                                   // 두 번 톡톡 눌러 확대
-      }
-      lastTap = now;
-    }, { passive: false });
   }
 
   /* 사진 보호 — 우클릭 저장·길게 눌러 저장·끌어서 저장을 막습니다.
@@ -1325,7 +1300,6 @@
     document.title = `${C.groom.name} ♥ ${C.bride.name} 결혼합니다`;
     initImageRetry();
     initPhotoGuard();
-    initZoomGuard();
     const dayof = initDayMode();     // 결혼식 당일에는 간략 화면
     if (!dayof) initSplash(); else document.getElementById("splash")?.remove();
     renderIntro();
