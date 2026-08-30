@@ -864,6 +864,7 @@ body {
 .transit-item__text {
   font-size: 13px;
   color: var(--ink-light);
+  white-space: pre-line;   /* 설정 파일의 줄바꿈을 그대로 보여줍니다 */
 }
 
 /* ═══════════ 7. 계좌번호 ═══════════ */
