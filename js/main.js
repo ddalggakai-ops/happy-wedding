@@ -111,6 +111,11 @@
     }[ch]));
   }
 
+  /* 설정 파일에서 **이렇게** 감싼 부분을 굵게 보여줍니다 */
+  function richText(s) {
+    return escapeHtml(s || "").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  }
+
   /* ═══════════ 방문 통계 ═══════════
      한 번 열 때마다 시트에 "한 줄"이 만들어지고, 그 줄이 갱신됩니다.
      새로고침하거나 다른 앱에 갔다 돌아오면 새로운 줄로 기록됩니다.
@@ -837,7 +842,7 @@
            id="info-panel-${i}" aria-labelledby="info-tab-${i}"${i === 0 ? "" : " hidden"}>
         ${t.image ? `<img class="info__img" src="${t.image}" alt="" loading="lazy" />` : ""}
         ${t.title ? `<p class="info__title">${t.icon ? `<span class="info__icon">${t.icon}</span>` : ""}${escapeHtml(t.title)}</p>` : ""}
-        ${t.text ? `<p class="info__text">${escapeHtml(t.text)}</p>` : ""}
+        ${t.text ? `<p class="info__text">${richText(t.text)}</p>` : ""}
         ${(t.stops && t.stops.length) ? `
         <div class="info__stops">
           ${t.stops.map((s) => `
@@ -847,7 +852,7 @@
             ${s.desc ? `<span class="info__stop-desc">${escapeHtml(s.desc)}</span>` : ""}
           </div>`).join("")}
         </div>` : ""}
-        ${t.note ? `<p class="info__note">${escapeHtml(t.note)}</p>` : ""}
+        ${t.note ? `<p class="info__note">${richText(t.note)}</p>` : ""}
       </div>`).join("");
 
     const tabEls = [...sec.querySelectorAll(".info__tab")];
