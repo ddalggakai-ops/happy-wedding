@@ -51,16 +51,6 @@ img {
   -webkit-user-select: none;
 }
 
-/* 확대(줌) 금지 — 손가락 두 개로 벌려도, 두 번 톡톡 눌러도 화면이 커지지 않습니다.
-   위아래로 넘기는 스크롤만 됩니다. */
-html, body {
-  touch-action: pan-x pan-y;
-}
-a, button, label, input, select, textarea, summary,
-.gallery__grid a, .gallery__grid img, .snap__cell, .info__tab {
-  touch-action: manipulation;
-}
-
 body {
   font-family: var(--serif);
   background: var(--outer);
@@ -874,6 +864,7 @@ body {
 .transit-item__text {
   font-size: 13px;
   color: var(--ink-light);
+  white-space: pre-line;   /* 설정 파일의 줄바꿈을 그대로 보여줍니다 */
 }
 
 /* ═══════════ 7. 계좌번호 ═══════════ */
@@ -1288,7 +1279,7 @@ textarea { resize: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  touch-action: manipulation;   /* 자세히 보기 안에서도 확대되지 않습니다 */
+  touch-action: pinch-zoom;   /* 확대·축소는 허용 (갇히지 않도록) */
 }
 .lightbox[hidden] { display: none; }
 .lightbox img {
