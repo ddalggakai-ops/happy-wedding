@@ -34,6 +34,7 @@ def build() -> str:
     css = read("css/style.css")
     # CSS를 HTML에 인라인하면 기준 경로가 css/ 에서 문서 위치로 바뀌므로 보정
     css = css.replace('url("../assets/', 'url("assets/')
+    sizes_js = read("js/sizes.js")
     config_js = read("js/config.js")
     storage_js = read("js/storage.js")
     main_js = read("js/main.js")
@@ -70,6 +71,7 @@ def build() -> str:
     bundle = "\n".join(
         [
             "  <script>",
+            sizes_js,
             config_js,
             storage_js,
             main_js,
@@ -78,7 +80,8 @@ def build() -> str:
     )
     script_block = "\n" + bundle
     html = re.sub(
-        r'\s*<script(?: defer)? src="js/config\.js(?:\?[^"]*)?"></script>\s*'
+        r'\s*<script(?: defer)? src="js/sizes\.js(?:\?[^"]*)?"></script>\s*'
+        r'<script(?: defer)? src="js/config\.js(?:\?[^"]*)?"></script>\s*'
         r'<script(?: defer)? src="js/storage\.js(?:\?[^"]*)?"></script>\s*'
         r'<script(?: defer)? src="js/main\.js(?:\?[^"]*)?"></script>',
         lambda _m: script_block,

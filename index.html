@@ -147,7 +147,7 @@
     <section class="section calendar">
       <p class="section__label reveal">SAVE THE DATE</p>
       <h2 class="section__title reveal" id="calendar-title"></h2>
-      <img class="cal-photo reveal" src="assets/calendar.jpg" alt="2026년 11월 캘린더" loading="lazy" />
+      <img class="cal-photo reveal" src="assets/calendar.jpg" alt="2026년 11월 캘린더" loading="lazy" width="1080" height="1623" />
 
       <!-- 카운트다운 (일 : 시 : 분 : 초) -->
       <div class="countdown reveal">
@@ -176,7 +176,7 @@
         <p class="location__address reveal" id="venue-address"></p>
 
         <!-- 콜라주: 일러스트 아래를 지도 카드가 살짝 덮으며 올라옴 -->
-        <img class="location__illust reveal" src="assets/venue-bg.png" alt="명동성당 일러스트" loading="lazy" />
+        <img class="location__illust reveal" src="assets/venue-bg.png" alt="명동성당 일러스트" loading="lazy" width="1080" height="1094" />
 
         <!-- 실제 지도 (네이버 지도 — config의 naverClientId 사용) -->
         <div class="location__map reveal">
@@ -325,6 +325,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <!-- 카카오 SDK는 공유 버튼이 가까워질 때 js/main.js 가 직접 불러옵니다 (초기 로딩 단축) -->
+  <script defer src="js/sizes.js"></script>
   <script defer src="js/config.js"></script>
   <script defer src="js/storage.js"></script>
   <script defer src="js/main.js"></script>

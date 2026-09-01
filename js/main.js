@@ -111,6 +111,13 @@
     }[ch]));
   }
 
+  /* 사진이 도착하기 전에도 자리를 잡아두기 위해, 원래 비율을 미리 알려줍니다.
+     (js/sizes.js — make-sizes.py 가 만들어 둔 표) */
+  function ar(src) {
+    const z = (window.ASSET_SIZES || {})[src];
+    return z ? ` style="aspect-ratio:${z[0]}/${z[1]}"` : "";
+  }
+
   /* 설정 파일에서 **이렇게** 감싼 부분을 굵게 보여줍니다 */
   function richText(s) {
     return escapeHtml(s || "").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
@@ -460,7 +467,7 @@
         : (s.who || "");
       const hasLines = !!(s.letterLines && s.letterLines.length);
       const baby2 = babies[1]
-        ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy" />`
+        ? `<img class="parents__sticker parents__sticker--2" src="${babies[1]}" alt="${s.who} 어린 시절" loading="lazy"${ar(babies[1])} />`
         : "";
       // 편지를 한 줄씩 오려 붙인 쪽은 아기2를 가족사진 우하단에 걸쳐 놓고,
       // 편지 첫 줄이 그 위로 살짝 올라오게 합니다 (DOM 순서상 편지가 위에 그려짐)
@@ -470,18 +477,18 @@
         <p class="parents__who">${fullName}</p>
         ${s.family ? `
         <div class="parents__photo">
-          <img src="${s.family}" alt="${s.who} 가족 사진" loading="lazy" />
-          ${babies[0] ? `<img class="parents__sticker parents__sticker--1" src="${babies[0]}" alt="${s.who} 어린 시절" loading="lazy" />` : ""}
+          <img src="${s.family}" alt="${s.who} 가족 사진" loading="lazy"${ar(s.family)} />
+          ${babies[0] ? `<img class="parents__sticker parents__sticker--1" src="${babies[0]}" alt="${s.who} 어린 시절" loading="lazy"${ar(babies[0])} />` : ""}
           ${hasLines ? baby2 : ""}
           ${doodleHtml(alt)}
         </div>` : ""}
         ${hasLines ? `
         <div class="parents__lines">
-          ${s.letterLines.map((src, k) => `<img class="parents__line parents__line--${(k % 4) + 1}" src="${src}" alt="" loading="lazy" />`).join("")}
+          ${s.letterLines.map((src, k) => `<img class="parents__line parents__line--${(k % 4) + 1}" src="${src}" alt="" loading="lazy"${ar(src)} />`).join("")}
         </div>`
         : s.letterImage ? `
         <div class="parents__letter">
-          <img src="${s.letterImage}" alt="${s.who} 부모님의 편지" loading="lazy" />
+          <img src="${s.letterImage}" alt="${s.who} 부모님의 편지" loading="lazy"${ar(s.letterImage)} />
           ${baby2}
         </div>` : ""}
       </div>`;
@@ -518,7 +525,7 @@
       if (l.image) {
         return `
           <div class="lt lt--scan reveal">
-            <img src="${l.image}" alt="${who}의 손편지" loading="lazy" />
+            <img src="${l.image}" alt="${who}의 손편지" loading="lazy"${ar(l.image)} />
           </div>`;
       }
 
@@ -527,12 +534,12 @@
         ? `<span class="lt__tag lt__tag--${isGroom ? "br" : "tl"}">` + escapeHtml(l.tag) + "</span>"
         : "";
       const hand = l.handImage
-        ? `<img class="lt__hand-img" src="${l.handImage}" alt="${who}가 쓴 손편지" loading="lazy" />`
+        ? `<img class="lt__hand-img" src="${l.handImage}" alt="${who}가 쓴 손편지" loading="lazy"${ar(l.handImage)} />`
         : `<p class="lt__hand">${escapeHtml(l.text).replace(/\n/g, "<br/>")}</p>`;
       // 머리말은 사진 안쪽에 (신랑=우하단 / 신부=좌상단)
       const frame = l.photo ? `
           <div class="lt__frame">
-            <img class="lt__img" src="${l.photo}" alt="" loading="lazy" />
+            <img class="lt__img" src="${l.photo}" alt="" loading="lazy"${ar(l.photo)} />
             <span class="lt__fade"></span>
             ${tag}
           </div>` : "";
@@ -558,11 +565,17 @@
     const F = C.film || {};
     if (!F.src) { sec.hidden = true; return; }
     sec.hidden = false;
-    $("#film-label").textContent = F.label || "";
+    const lab = $("#film-label");
+    lab.textContent = F.label || "";
+    lab.hidden = !F.label;
     $("#film-title").textContent = F.title || "";
     $("#film-caption").textContent = F.caption || "";
     const v = $("#film-video");
-    if (F.poster) v.poster = F.poster;
+    if (F.poster) {
+      v.poster = F.poster;
+      const sz = (window.ASSET_SIZES || {})[F.poster];
+      if (sz) v.style.aspectRatio = `${sz[0]}/${sz[1]}`;   // 영상 자리를 미리 잡아둡니다
+    }
     v.src = F.src;
     v.addEventListener("play", () => {
       // 소리가 겹치지 않도록 배경음악은 잠시 멈춥니다
@@ -867,7 +880,7 @@
     $("#info-panels").innerHTML = tabs.map((t, i) => `
       <div class="info__panel${i === 0 ? " is-active" : ""}" role="tabpanel"
            id="info-panel-${i}" aria-labelledby="info-tab-${i}"${i === 0 ? "" : " hidden"}>
-        ${t.image ? `<img class="info__img" src="${t.image}" alt="" loading="lazy" />` : ""}
+        ${t.image ? `<img class="info__img" src="${t.image}" alt="" loading="lazy"${ar(t.image)} />` : ""}
         ${t.title ? `<p class="info__title">${t.icon ? `<span class="info__icon">${t.icon}</span>` : ""}${escapeHtml(t.title)}</p>` : ""}
         ${t.text ? `<p class="info__text">${richText(t.text)}</p>` : ""}
         ${(t.stops && t.stops.length) ? `
