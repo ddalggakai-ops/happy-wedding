@@ -124,6 +124,17 @@
       <div id="letter-list"></div>
     </section>
 
+    <!-- ═══════════ 3.7 영상 ═══════════
+         js/config.js 의 film 항목에 파일 경로를 넣으면 나타납니다. 비우면 섹션이 숨겨집니다. -->
+    <section class="section film" id="film-section" hidden>
+      <p class="section__label reveal" id="film-label"></p>
+      <h2 class="section__title reveal" id="film-title"></h2>
+      <div class="film__frame reveal">
+        <video id="film-video" playsinline preload="none" controls controlslist="nodownload"></video>
+      </div>
+      <p class="film__caption reveal" id="film-caption"></p>
+    </section>
+
     <!-- ═══════════ 4. 갤러리 (풀블리드 바둑판) ═══════════ -->
     <section class="gallery">
       <div class="gallery__wrap" id="gallery-wrap">

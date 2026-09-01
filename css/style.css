@@ -592,6 +592,39 @@ body {
 .lt--scan { padding: 0 22px; }
 .lt--scan img { display: block; width: 100%; }
 
+/* ═══════════ 3.7 영상 ═══════════ */
+.film {
+  background: #14100f;
+  color: #efe7e4;
+  padding-top: 54px;
+  padding-bottom: 54px;
+}
+.film .section__label { color: var(--accent); }
+.film .section__title { color: #f4ecea; }
+.film .section__title::after { background: var(--accent); opacity: .75; }
+.film__frame {
+  margin: 26px auto 0;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .45);
+}
+.film__frame video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #000;
+}
+.film__caption {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #b7a7a4;
+  white-space: pre-line;
+}
+
 /* ═══════════ 4. 갤러리 (풀블리드 바둑판) ═══════════ */
 .gallery {
   background: var(--bg);

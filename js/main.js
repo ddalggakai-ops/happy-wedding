@@ -549,6 +549,33 @@
   /* ═══════════ 4. 갤러리 + 라이트박스 ═══════════ */
   let lightboxIndex = 0;
 
+  /* ═══════════ 3.7 영상 ═══════════
+     config.js 의 film.src 가 비어 있으면 섹션이 통째로 숨겨집니다.
+     자동재생은 하지 않고, 재생 버튼을 눌렀을 때만 내려받습니다. */
+  function renderFilm() {
+    const sec = document.getElementById("film-section");
+    if (!sec) return;
+    const F = C.film || {};
+    if (!F.src) { sec.hidden = true; return; }
+    sec.hidden = false;
+    $("#film-label").textContent = F.label || "";
+    $("#film-title").textContent = F.title || "";
+    $("#film-caption").textContent = F.caption || "";
+    const v = $("#film-video");
+    if (F.poster) v.poster = F.poster;
+    v.src = F.src;
+    v.addEventListener("play", () => {
+      // 소리가 겹치지 않도록 배경음악은 잠시 멈춥니다
+      const bgm = $("#bgm");
+      if (bgm && !bgm.paused) {
+        bgm.pause();
+        const btn = $("#bgm-toggle");
+        if (btn) btn.classList.remove("is-playing");
+      }
+      logClick("영상 재생");
+    });
+  }
+
   function renderGallery() {
     const { images } = C.gallery;
     $("#gallery-grid").innerHTML = images.map((src, i) => `
@@ -1310,6 +1337,7 @@
     renderIntro();
     renderGreeting();
     renderLetters();
+    renderFilm();
     // 편지 글 위치는 이미지·폰트가 모두 준비된 뒤에 계산합니다
     const recenter = () => centerLetterHands();
     document.querySelectorAll(".lt__hand-img, .lt__img").forEach((im) => {

@@ -138,6 +138,17 @@ const WEDDING_CONFIG = {
     },
   },
 
+  /* ---------- 영상 ---------- */
+  // 신부의 편지 다음에 나오는 영상 섹션입니다.
+  // src를 비우면 섹션이 통째로 숨겨집니다. poster는 재생 전에 보이는 사진입니다.
+  film: {
+    label: "OUR FILM",
+    title: "함께 걸어온 겨울",
+    src: "assets/video/letter.mp4",
+    poster: "assets/video/letter-poster.jpg",
+    caption: "재생 버튼을 누르면 소리와 함께 재생됩니다",
+  },
+
   /* ---------- 갤러리 이미지 ---------- */
   // assets/images 폴더에 사진을 넣고 파일명을 맞춰주세요.
   // firstVisible: 처음에 보여줄 개수 (나머지는 "더보기"로 펼침)
