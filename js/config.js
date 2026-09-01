@@ -142,8 +142,6 @@ const WEDDING_CONFIG = {
   // 신부의 편지 다음에 나오는 영상 섹션입니다.
   // src를 비우면 섹션이 통째로 숨겨집니다. poster는 재생 전에 보이는 사진입니다.
   film: {
-    label: "",
-    title: "Our Film",
     src: "assets/video/letter.mp4",
     poster: "assets/video/letter-poster.jpg",
     caption: "재생 버튼을 누르면 소리와 함께 재생됩니다",

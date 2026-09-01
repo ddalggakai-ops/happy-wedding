@@ -124,17 +124,6 @@
       <div id="letter-list"></div>
     </section>
 
-    <!-- ═══════════ 3.7 영상 ═══════════
-         js/config.js 의 film 항목에 파일 경로를 넣으면 나타납니다. 비우면 섹션이 숨겨집니다. -->
-    <section class="section film" id="film-section" hidden>
-      <p class="section__label reveal" id="film-label"></p>
-      <h2 class="section__title reveal" id="film-title"></h2>
-      <div class="film__frame reveal">
-        <video id="film-video" playsinline preload="none" controls controlslist="nodownload"></video>
-      </div>
-      <p class="film__caption reveal" id="film-caption"></p>
-    </section>
-
     <!-- ═══════════ 4. 갤러리 (풀블리드 바둑판) ═══════════ -->
     <section class="gallery">
       <div class="gallery__wrap" id="gallery-wrap">
@@ -143,11 +132,20 @@
       </div>
     </section>
 
+    <!-- ═══════════ 4.5 영상 ═══════════
+         js/config.js 의 film 항목에 파일 경로를 넣으면 나타납니다. 비우면 섹션이 숨겨집니다. -->
+    <section class="section film" id="film-section" hidden>
+      <div class="film__frame reveal">
+        <video id="film-video" playsinline preload="none" controls controlslist="nodownload"></video>
+      </div>
+      <p class="film__caption reveal" id="film-caption"></p>
+    </section>
+
     <!-- ═══════════ 5. 달력 · 예식 안내 ═══════════ -->
     <section class="section calendar">
       <p class="section__label reveal">SAVE THE DATE</p>
       <h2 class="section__title reveal" id="calendar-title"></h2>
-      <img class="cal-photo reveal" src="assets/calendar.jpg" alt="2026년 11월 캘린더" loading="lazy" width="1080" height="1623" />
+      <img class="cal-photo reveal" src="assets/calendar.jpg" alt="2026년 11월 캘린더" loading="lazy" style="aspect-ratio:1080/1623" />
 
       <!-- 카운트다운 (일 : 시 : 분 : 초) -->
       <div class="countdown reveal">
@@ -176,7 +174,7 @@
         <p class="location__address reveal" id="venue-address"></p>
 
         <!-- 콜라주: 일러스트 아래를 지도 카드가 살짝 덮으며 올라옴 -->
-        <img class="location__illust reveal" src="assets/venue-bg.png" alt="명동성당 일러스트" loading="lazy" width="1080" height="1094" />
+        <img class="location__illust reveal" src="assets/venue-bg.png" alt="명동성당 일러스트" loading="lazy" style="aspect-ratio:1080/1094" />
 
         <!-- 실제 지도 (네이버 지도 — config의 naverClientId 사용) -->
         <div class="location__map reveal">

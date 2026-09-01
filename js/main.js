@@ -565,10 +565,6 @@
     const F = C.film || {};
     if (!F.src) { sec.hidden = true; return; }
     sec.hidden = false;
-    const lab = $("#film-label");
-    lab.textContent = F.label || "";
-    lab.hidden = !F.label;
-    $("#film-title").textContent = F.title || "";
     $("#film-caption").textContent = F.caption || "";
     const v = $("#film-video");
     if (F.poster) {
