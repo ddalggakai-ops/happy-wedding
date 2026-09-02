@@ -365,8 +365,11 @@
     // 카드 위쪽 타원 사진
     const gphoto = document.getElementById("greeting-photo");
     if (gphoto) {
-      if (C.greeting.photo) gphoto.src = C.greeting.photo;
-      else gphoto.closest(".gcard__oval").hidden = true;
+      if (C.greeting.photo) {
+        gphoto.src = C.greeting.photo;
+        // 타원 안에서 사진의 어느 부분을 보여줄지 (예: "50% 10%" — 위쪽을 더 보여줌)
+        if (C.greeting.photoPosition) gphoto.style.objectPosition = C.greeting.photoPosition;
+      } else gphoto.closest(".gcard__oval").hidden = true;
     }
     if (C.greeting.image) {
       // 손글씨 이미지 편지 (파일이 없으면 자동으로 글 인사말로 대체)
