@@ -333,27 +333,6 @@ body {
   to   { transform: translateX(15px) rotate(38deg) scaleX(.62); }
 }
 
-/* ═══════════ 2.5 다이어리 꾸미기 (스크랩북 이미지) ═══════════ */
-.scrapbook {
-  position: relative;
-  min-height: 300px;
-  /* 인사말 섹션과 같은 구겨진 종이 질감 + 검은 반투명 레이어 */
-  background: #0e0b0d url("../assets/paper-dark.jpg") center / cover no-repeat;
-  font-size: 0;   /* 이미지 아래 여백 제거 */
-}
-.scrapbook::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 7, 9, .82);
-  pointer-events: none;
-}
-.scrapbook img {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  display: block;
-}
 /* ═══════════ 2. 인사말 ═══════════ */
 /* 구겨진 종이 질감 배경 + 검은 반투명 레이어 (밝은 텍스처를 어둡게 눌러줌) */
 .greeting {
