@@ -843,9 +843,9 @@
     });
 
     const transit = [
+      { icon: "🅿️", label: "주차", text: v.transit.parking },
       { icon: "🚇", label: "지하철", text: v.transit.subway },
       { icon: "🚌", label: "버스", text: v.transit.bus },
-      { icon: "🅿️", label: "주차", text: v.transit.parking },
     ];
     $("#transit-list").innerHTML = transit.map((t) => `
       <div class="transit-item">
