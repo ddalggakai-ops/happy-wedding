@@ -136,8 +136,28 @@
 
   const visit = { id: "", secs: {}, clicks: {}, ticks: 0, depth: 0, tick: null, hold: null, dead: false };
 
+  /* 통계에서 빼야 할 방문인지 판단합니다.
+     - 클로드·자동화 프로그램이나 미리보기로 여는 경우
+     - 주소 뒤에 ?nostat=1 을 붙여 "내 방문은 빼줘"라고 표시해둔 기기 (?nostat=0 으로 해제) */
+  function isExcludedVisitor() {
+    try {
+      const p = new URLSearchParams(location.search);
+      if (p.get("nostat") === "1") { localStorage.setItem("wedding-nostat", "1"); return true; }
+      if (p.get("nostat") === "0") localStorage.removeItem("wedding-nostat");
+      if (localStorage.getItem("wedding-nostat") === "1") return true;
+    } catch (e) { /* 프라이빗 모드 등 */ }
+    try {
+      if (navigator.webdriver) return true;               // 자동으로 조작되는 브라우저
+      if (window.top !== window.self) return true;        // 미리보기(틀 안에서 열린 화면)
+      const ua = navigator.userAgent || "";
+      if (/Headless|Electron|Claude|Anthropic|GPTBot|bot|crawler|spider|scrap|curl|wget|python/i.test(ua)) return true;
+    } catch (e) { /* 접근이 막힌 경우는 그냥 통과 */ }
+    return false;
+  }
+
   function statUrl() {
     if (C.stats && C.stats.enabled === false) return "";
+    if (isExcludedVisitor()) return "";
     // 결혼식 당일에는 구글 스크립트의 하루 실행 시간을 사진 업로드·참석 확인에 양보합니다.
     // (하객이 한꺼번에 몰리면 통계 기록이 업로드를 밀어낼 수 있습니다)
     if (document.body.classList.contains("dayof") &&
