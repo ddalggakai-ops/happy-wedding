@@ -158,7 +158,7 @@
       const body = new URLSearchParams({
         kind: "stat",
         visit: visit.id,
-        guest: getGuestName().slice(0, 20),
+        guest: (getLinkTag() || getGuestName()).slice(0, 30),
         ua: navigator.userAgent.slice(0, 160),
         screen: `${window.innerWidth}x${window.innerHeight}`,
         ref: (document.referrer || "").slice(0, 120),
@@ -349,6 +349,15 @@
   // URL로 받는 손님 이름:  ...?to=김철수  또는  ...#김철수
   // (GitHub Pages 같은 정적 호스팅은 /이름 형태의 경로를 지원하지 않아
   //  쿼리(?to=)와 해시(#) 두 가지를 지원합니다)
+  /* 주소 뒤 ?link=... 로 붙인 꼬리표 — 어느 경로로 보낸 링크인지 통계에 남기기 위한 값 */
+  function getLinkTag() {
+    try {
+      const q = new URLSearchParams(location.search).get("link");
+      if (q && q.trim()) return q.trim();
+    } catch (e) { /* 잘못된 인코딩은 무시 */ }
+    return "";
+  }
+
   function getGuestName() {
     try {
       const q = new URLSearchParams(location.search).get("to");
