@@ -119,8 +119,12 @@
   }
 
   /* 설정 파일에서 **이렇게** 감싼 부분을 굵게 보여줍니다 */
+  /* 설정 파일의 글을 화면에 옮깁니다.
+     **양쪽을 별표 두 개로 감싼 부분**은 굵게 나옵니다.
+     설정 파일에서 줄을 맞추려고 넣은 앞뒤 공백은 화면에 나오지 않도록 지웁니다. */
   function richText(s) {
-    return escapeHtml(s || "").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    const lines = String(s == null ? "" : s).split("\n").map((l) => l.trim()).join("\n");
+    return escapeHtml(lines).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   }
 
   /* ═══════════ 방문 통계 ═══════════
