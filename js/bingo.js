@@ -115,13 +115,17 @@
   const UP = {
     maxPx: 1280,        // 긴 변 최대 픽셀
     quality: 0.72,      // JPEG 품질
-    parallel: 4,        // 동시에 올리는 장수
+    parallel: 2,        // 동시에 올리는 장수 (예식 당일 한꺼번에 몰릴 때를 감안해 낮춰둡니다)
     maxFiles: 100,      // 자유 업로드 최대 장수
+    retries: 4,         // 실패했을 때 다시 시도하는 횟수
+    retryBase: 1200,    // 재시도 대기 시간(ms) — 회차마다 두 배씩 늘어납니다
   };
+
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   /* Apps Script 전송 — 응답을 실제로 확인해서 실패를 실패로 알립니다.
      (CORS가 막히는 환경에서만 no-cors로 재시도하고, 그 건은 '확인 불가'로 셉니다) */
-  async function postScript(url, params) {
+  async function postOnce(url, params) {
     try {
       const r = await fetch(url, { method: "POST", body: new URLSearchParams(params) });
       const text = await r.text();
@@ -142,6 +146,19 @@
       }
       throw e;
     }
+  }
+
+  /* 예식 당일처럼 여러 분이 한꺼번에 올리면 구글 쪽에서 "잠시 기다리라"며 거절할 때가 있습니다.
+     그럴 때 바로 실패로 처리하지 않고, 기다리는 시간을 조금씩 늘려가며 다시 보냅니다.
+     기다리는 시간에 약간의 무작위를 섞어, 여러 사람이 동시에 재시도해 다시 부딪히는 것을 막습니다. */
+  async function postScript(url, params) {
+    let last;
+    for (let n = 0; n < UP.retries; n++) {
+      if (n) await sleep(Math.round(UP.retryBase * Math.pow(2, n - 1) * (0.7 + Math.random() * 0.6)));
+      try { return await postOnce(url, params); }
+      catch (e) { last = e; }
+    }
+    throw last;
   }
 
   /* 여러 건을 동시에(최대 limit개) 처리 — 하나씩 올리면 너무 느립니다 */
@@ -389,6 +406,8 @@
     const shots = new Array(9).fill(null);   // { blob, url }
     let pending = -1;
     let busy = false;
+    const uploaded = new Set();   // 이미 올라간 칸 — 다시 누르면 남은 것만 보냅니다
+    let retryLeft = 0;            // 아직 못 올린 장수 (버튼 문구에 씁니다)
 
     /* --- 판 그리기 --- */
     grid.innerHTML = CELLS.map((c, i) => `
@@ -426,7 +445,9 @@
       }
 
       btn.disabled = busy || !lines.length;
-      if (!busy) btn.textContent = lines.length ? "빙고 응모하기" : "한 줄을 먼저 완성해주세요";
+      if (busy) return;
+      if (retryLeft) btn.textContent = `남은 ${retryLeft}장 다시 올리기`;
+      else btn.textContent = lines.length ? "빙고 응모하기" : "한 줄을 먼저 완성해주세요";
     }
 
     /* --- 칸 선택 → 사진 담기 --- */
@@ -507,13 +528,11 @@
 
       busy = true;
       btn.disabled = true;
-      const idx = [];
-      shots.forEach((s, i) => { if (s) idx.push(i); });
 
-      // 콜라주를 먼저 만들어 함께 올립니다
-      btn.textContent = "콜라주 만드는 중...";
-      let collage = null;
-      try { collage = await buildCollage(shots, CELLS, guest, lines); } catch (err) { /* 없어도 진행 */ }
+      const all = [];
+      shots.forEach((s, i) => { if (s) all.push(i); });
+      // 앞서 이미 올라간 칸은 건너뛰고, 못 올린 것만 다시 보냅니다
+      const idx = all.filter((i) => !uploaded.has(i));
 
       let sent = 0;
       btn.textContent = `사진 올리는 중... (0/${idx.length})`;
@@ -529,14 +548,36 @@
           cell: String(i + 1),
           mission: CELLS[i].text,
         });
+        uploaded.add(i);
         btn.textContent = `사진 올리는 중... (${++sent}/${idx.length})`;
         return r;
       });
 
-      const ok = results.filter((r) => r && r.ok).length;
       // 응답을 실제로 읽어 성공을 확인한 건수 (no-cors로 보낸 건 확인 불가)
       const verified = results.filter((r) => r && r.ok && r.value && !r.value.unverified).length;
       const firstError = (results.find((r) => r && !r.ok) || {}).error;
+      const failed = idx.filter((i, k) => !(results[k] && results[k].ok));
+      const ok = all.length - failed.length;
+
+      /* 한 장이라도 못 올라갔으면 여기서 멈춥니다.
+         담아둔 사진을 그대로 두고, 버튼을 다시 눌러 남은 것만 보낼 수 있게 합니다.
+         (예전에는 한 장이라도 성공하면 완료 처리하면서 실패한 사진이 조용히 사라졌습니다) */
+      if (failed.length) {
+        busy = false;
+        retryLeft = failed.length;
+        refresh();
+        btn.disabled = false;
+        toast(ok
+          ? `사진 ${ok}장은 올라갔고 ${failed.length}장이 남았어요. 버튼을 한 번 더 눌러주세요`
+          : (firstError ? `업로드 실패: ${firstError.message}` : "업로드에 실패했습니다. 잠시 후 다시 시도해주세요"));
+        return;
+      }
+      retryLeft = 0;
+
+      // 사진이 다 올라간 뒤에 콜라주를 만들어 함께 올립니다
+      btn.textContent = "콜라주 만드는 중...";
+      let collage = null;
+      try { collage = await buildCollage(shots, CELLS, guest, lines); } catch (err) { /* 없어도 진행 */ }
 
       if (collage) {
         btn.textContent = "빙고판 저장 중...";
@@ -555,16 +596,11 @@
           guest: guest, phone: phone, side: side,
           lines: String(lines.length),
           photos: String(ok),
-          missions: idx.map((i) => CELLS[i].text).join(" / "),
+          missions: all.map((i) => CELLS[i].text).join(" / "),
         });
       } catch (err) { /* 기록 실패해도 사진은 올라갔습니다 */ }
 
       busy = false;
-      if (!ok) {
-        refresh();
-        toast(firstError ? `업로드 실패: ${firstError.message}` : "업로드에 실패했습니다. 잠시 후 다시 시도해주세요");
-        return;
-      }
       try {
         localStorage.setItem("wedding-bingo-entry", JSON.stringify({ guest: guest, lines: lines.length }));
       } catch (err) { /* 사파리 프라이빗 모드 등 */ }
@@ -660,11 +696,20 @@
       });
 
       const ok = results.filter((r) => r && r.ok).length;
+      const bad = files.length - ok;
       const firstError = (results.find((r) => r && !r.ok) || {}).error;
+      // 낱장 사진은 시트에 남기지 않으므로, 한 번 올릴 때마다 요약 한 줄만 기록합니다
+      if (ok) {
+        try {
+          await postScript(url, { kind: "free-entry", guest: who, phone: whoPhone, photos: String(ok) });
+        } catch (err) { /* 기록 실패해도 사진은 올라갔습니다 */ }
+      }
+
       freeStatus.textContent = "";
       freeInput.value = "";
       freeBusy = false;
-      if (ok) toast(`사진 ${ok}장이 전달되었습니다. 감사합니다 ♥`);
+      if (ok && !bad) toast(`사진 ${ok}장이 전달되었습니다. 감사합니다 ♥`);
+      else if (ok) toast(`사진 ${ok}장이 전달됐어요. ${bad}장은 실패했으니 그 사진만 다시 올려주세요`);
       else toast(firstError ? `업로드 실패: ${firstError.message}` : "업로드에 실패했습니다");
     });
 

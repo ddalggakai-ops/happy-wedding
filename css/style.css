@@ -417,10 +417,10 @@ body {
 /* 손편지가 놓이는 자리 (카드 아래쪽 여백 안) */
 .gcard .greeting__message {
   position: absolute;
-  left: 13%;
-  right: 13%;
-  top: 47%;
-  bottom: 11%;
+  left: 10.5%;
+  right: 10.5%;
+  top: 45.5%;
+  bottom: 8%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -976,6 +976,61 @@ body {
   color: #6e5c63;
   white-space: pre-line;
 }
+/* 문단이 여러 개일 때 사이를 벌리고, 첫 문단은 조금 크고 진하게 */
+.info__text + .info__text { margin-top: 15px; }
+.info__text--lead {
+  font-size: 15.2px;
+  font-weight: 500;
+  color: #4b3a41;
+}
+/* 제목 아래 한눈에 들어오는 핵심 칩 */
+.info__points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 15px;
+}
+.info__point {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px 6px;
+  font-size: 12.3px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #a5556c;
+  background: rgba(224, 121, 143, .12);
+  border-radius: 999px;
+}
+.info__point-icon { font-style: normal; font-size: 12.5px; }
+/* ※ 로 시작한 줄들 — 본문과 떼어 참고 상자로 */
+.info__marks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 17px;
+  padding: 13px 15px 14px;
+  background: rgba(150, 120, 105, .09);
+  border-radius: 10px;
+}
+.info__marks li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 12.9px;
+  line-height: 1.75;
+  color: #7d6a71;
+}
+.info__marks li::before {
+  content: "※";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 11.5px;
+  color: #b98a99;
+}
+.info__marks strong { font-weight: 700; color: #55444b; }
+
 /* 설정 파일에서 **강조**한 부분 */
 .info__text strong, .info__note strong {
   font-weight: 700;
@@ -2138,3 +2193,88 @@ body.dayof .modal--rsvp { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .snap--invite .bingo__go.is-visible::after { animation: none; }
 }
+
+/* ═══════════ 포토 빙고 페이지 (bingo.html) — 청첩장 빙고 섹션과 같은 베이지 편지지 ═══════════
+   청첩장 본문은 어두운 톤 그대로 두고, 이 페이지에서만 밝게 바꿉니다. */
+.bingo-page .invitation {
+  background: #f4f1ea url("../assets/paper-bg.jpg") top left / 300px auto repeat;
+  color: #4a3b32;
+}
+.bingo-page .bingo-page__head,
+.bingo-page .bingo-page__foot,
+.bingo-page .snap { background: transparent; }
+.bingo-page .bingo-page__head { padding-top: 40px; }
+
+.bingo-page .bingo-page__label { color: #b07a52; }
+.bingo-page .bingo-page__names { color: #33261f; }
+.bingo-page .bingo-page__date,
+.bingo-page .bingo-page__back { color: #8a7563; }
+.bingo-page .bingo-page__back { border-bottom-color: rgba(120, 95, 70, .3); }
+
+.bingo-page .section__title { color: #33261f; }
+.bingo-page .section__title::after { background: #b07a52; }
+.bingo-page .snap__desc { color: #6b5949; }
+
+/* 미션 칸 */
+.bingo-page .bingo-cell {
+  background: rgba(255, 253, 248, .94);
+  border-color: rgba(120, 95, 70, .18);
+  box-shadow: 0 6px 16px rgba(120, 95, 70, .10);
+}
+.bingo-page .bingo-cell__text { color: #6b5949; }
+.bingo-page .bingo-cell.is-filled .bingo-cell__text { color: #fff; }
+.bingo-page .bingo-cell.is-line {
+  border-color: #d4566f;
+  box-shadow: 0 0 0 1px #d4566f, 0 0 14px rgba(212, 86, 111, .3);
+}
+.bingo-page .bingo-cell__check { background: #d4566f; color: #fff; }
+
+/* 안내 문구 */
+.bingo-page .bingo__status { color: #6b5949; }
+.bingo-page .bingo__status b,
+.bingo-page .bingo__notice { color: #c14a62; }
+.bingo-page .bingo__note,
+.bingo-page .bingo__extra-desc,
+.bingo-page .bingo__collage-note,
+.bingo-page .snap__status,
+.bingo-page .bingo__again { color: #8a7563; }
+.bingo-page .bingo__done { color: #b06a4a; }
+.bingo-page .bingo__extra { border-top-color: rgba(120, 95, 70, .18); }
+.bingo-page .bingo__collage img { border-color: rgba(120, 95, 70, .2); }
+
+/* 입력칸 · 선택 버튼 */
+.bingo-page .chip span {
+  background: rgba(255, 253, 248, .9);
+  border-color: rgba(120, 95, 70, .2);
+  color: #7a6857;
+}
+.bingo-page .chip input:checked + span {
+  border-color: #d4566f;
+  color: #c14a62;
+  background: rgba(212, 86, 111, .1);
+  font-weight: 600;
+}
+.bingo-page input[type="text"],
+.bingo-page input[type="tel"] {
+  background: rgba(255, 253, 248, .94);
+  border-color: rgba(120, 95, 70, .2);
+  color: #33261f;
+}
+.bingo-page input::placeholder { color: #a99a8c; }
+.bingo-page input:focus { border-color: #d4566f; }
+
+/* 버튼 — 기본 배경이 어두운 색이라 밝은 종이색으로 바꿔줍니다 */
+.bingo-page .btn {
+  background: rgba(255, 253, 248, .92);
+  border-color: rgba(120, 95, 70, .22);
+  color: #4a3b32;
+}
+.bingo-page .btn--fill {
+  background: #d4566f;
+  border-color: #d4566f;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(190, 70, 100, .22);
+}
+.bingo-page .btn--fill:hover { background: #c14a62; border-color: #c14a62; }
+.bingo-page .btn--outline { border-color: rgba(120, 95, 70, .3); color: #7a6857; }
+.bingo-page .btn--outline:hover { border-color: #d4566f; color: #c14a62; }

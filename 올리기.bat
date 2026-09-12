@@ -7,7 +7,7 @@ if exist ".git\HEAD.lock"  del /f /q ".git\HEAD.lock"
 if exist ".git\index.lock" del /f /q ".git\index.lock"
 if exist "assets\snap-lace.jpg" git rm -q -f "assets/snap-lace.jpg"
 git add -A
-git -c user.name="Hyunjin" -c user.email="ttykopi@gmail.com" commit -m "photo bingo: beige letter-paper background" --author="Hyunjin <ttykopi@gmail.com>"
+git -c user.name="Hyunjin" -c user.email="ttykopi@gmail.com" commit -m "new handwritten invitation message" --author="Hyunjin <ttykopi@gmail.com>"
 git push
 echo.
 echo ---- finished. press any key to close ----

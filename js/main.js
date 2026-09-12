@@ -895,6 +895,33 @@
   }
 
   /* ═══════════ 6.5 안내사항 (탭) ═══════════ */
+
+  /* 안내 본문을 읽기 쉽게 나눕니다.
+     · 빈 줄로 나뉜 덩어리 = 문단 (첫 문단은 조금 크고 진하게)
+     · ※ 또는 * 로 시작하는 줄 = 맨 아래 '참고' 상자로 모음 */
+  function infoBody(text) {
+    const paras = [];
+    const marks = [];
+    let cur = [];
+    const flush = () => { if (cur.length) { paras.push(cur.join("\n")); cur = []; } };
+    String(text == null ? "" : text).split("\n").forEach((raw) => {
+      const l = raw.trim();
+      if (!l) { flush(); return; }
+      // ※ 또는 홑별표로 시작하는 줄만 참고 상자로 (**굵게** 표시는 건드리지 않습니다)
+      const MARK = /^(?:※|\*(?!\*))\s*/;
+      if (MARK.test(l)) { marks.push(l.replace(MARK, "")); return; }
+      cur.push(l);
+    });
+    flush();
+
+    let html = paras.map((p, i) =>
+      `<p class="info__text${i === 0 ? " info__text--lead" : ""}">${richText(p)}</p>`).join("");
+    if (marks.length) {
+      html += `<ul class="info__marks">${marks.map((m) => `<li>${richText(m)}</li>`).join("")}</ul>`;
+    }
+    return html;
+  }
+
   function renderInfo() {
     const sec = document.getElementById("info-section");
     if (!sec) return;
@@ -918,7 +945,14 @@
            id="info-panel-${i}" aria-labelledby="info-tab-${i}"${i === 0 ? "" : " hidden"}>
         ${t.image ? `<img class="info__img" src="${t.image}" alt="" loading="lazy"${ar(t.image)} />` : ""}
         ${t.title ? `<p class="info__title">${t.icon ? `<span class="info__icon">${t.icon}</span>` : ""}${escapeHtml(t.title)}</p>` : ""}
-        ${t.text ? `<p class="info__text">${richText(t.text)}</p>` : ""}
+        ${(t.points && t.points.length) ? `
+        <div class="info__points">
+          ${t.points.map((pt) => `
+          <span class="info__point">
+            ${pt.icon ? `<i class="info__point-icon">${escapeHtml(pt.icon)}</i>` : ""}${escapeHtml(pt.text || "")}
+          </span>`).join("")}
+        </div>` : ""}
+        ${t.text ? infoBody(t.text) : ""}
         ${t.copy ? `
         <button type="button" class="info__copy" data-copy="${escapeHtml(t.copy)}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h9"/></svg>
