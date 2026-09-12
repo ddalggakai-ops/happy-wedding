@@ -856,7 +856,11 @@
         `https://maps.google.com/maps?q=${v.lat},${v.lng}&z=16&hl=ko&output=embed`;
     }
 
-    const q = encodeURIComponent(v.name);
+    // 지도 앱에서 검색될 문구 — config 의 venue.mapQuery 를 쓰고, 없으면 이름+홀+주소로 만듭니다
+    const q = encodeURIComponent(
+      (v.mapQuery || "").trim() ||
+      [v.name, v.hall].filter(Boolean).join(" ") + (v.address ? `, ${v.address}` : "")
+    );
     // 지도 앱/웹 연동
     $("#map-naver").href = `https://map.naver.com/p/search/${q}`;
     $("#map-kakao").href = `https://map.kakao.com/link/map/${q},${v.lat},${v.lng}`;
@@ -881,7 +885,7 @@
         <div class="transit-item__icon">${t.icon}</div>
         <div>
           <div class="transit-item__label">${t.label}</div>
-          <div class="transit-item__text">${t.text}</div>
+          <div class="transit-item__text">${richText(t.text)}</div>
         </div>
       </div>`).join("");
   }
@@ -911,6 +915,11 @@
         ${t.image ? `<img class="info__img" src="${t.image}" alt="" loading="lazy"${ar(t.image)} />` : ""}
         ${t.title ? `<p class="info__title">${t.icon ? `<span class="info__icon">${t.icon}</span>` : ""}${escapeHtml(t.title)}</p>` : ""}
         ${t.text ? `<p class="info__text">${richText(t.text)}</p>` : ""}
+        ${t.copy ? `
+        <button type="button" class="info__copy" data-copy="${escapeHtml(t.copy)}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h9"/></svg>
+          <span>${escapeHtml(t.copy)}</span>
+        </button>` : ""}
         ${(t.stops && t.stops.length) ? `
         <div class="info__stops">
           ${t.stops.map((s) => `
@@ -922,6 +931,23 @@
         </div>` : ""}
         ${t.note ? `<p class="info__note">${richText(t.note)}</p>` : ""}
       </div>`).join("");
+
+    /* 주소 복사 버튼 — 계좌번호와 같은 방식으로, 버튼 자리에서만 조용히 알려드립니다 */
+    sec.querySelectorAll(".info__copy").forEach((btn) =>
+      btn.addEventListener("click", async () => {
+        const label = btn.querySelector("span");
+        if (!label || btn.classList.contains("is-copied")) return;
+        const original = label.textContent;
+        const ok = await copyQuiet(btn.dataset.copy);
+        label.textContent = ok ? "복사되었습니다" : "복사에 실패했습니다";
+        btn.classList.add("is-copied");
+        setTimeout(() => {
+          label.textContent = original;
+          btn.classList.remove("is-copied");
+        }, 1500);
+        if (ok) logClick("주차장 주소 복사");
+      })
+    );
 
     const tabEls = [...sec.querySelectorAll(".info__tab")];
     const panels = [...sec.querySelectorAll(".info__panel")];

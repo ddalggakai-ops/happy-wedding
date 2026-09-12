@@ -1009,6 +1009,29 @@ body {
   padding: 2px 9px;
   flex: 0 0 auto;
 }
+/* 주소 복사 버튼 — 누르면 글자가 '복사되었습니다'로 잠깐 바뀝니다 */
+.info__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 9px 15px;
+  font-family: var(--kr);
+  font-size: 13px;
+  font-weight: 600;
+  color: #b0546c;
+  background: rgba(255, 255, 255, .9);
+  border: 1px solid rgba(200, 90, 120, .28);
+  border-radius: 999px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.info__copy svg { width: 14px; height: 14px; flex: 0 0 auto; }
+.info__copy:hover { background: #fff; border-color: rgba(200, 90, 120, .5); }
+.info__copy.is-copied { color: #fff; background: #e0798f; border-color: #e0798f; }
+
 /* 다정하게 덧붙이는 한 줄 */
 .info__note {
   display: flex;
