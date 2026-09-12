@@ -417,10 +417,10 @@ body {
 /* 손편지가 놓이는 자리 (카드 아래쪽 여백 안) */
 .gcard .greeting__message {
   position: absolute;
-  left: 10.5%;
-  right: 10.5%;
-  top: 45.5%;
-  bottom: 8%;
+  left: 13%;
+  right: 13%;
+  top: 47%;
+  bottom: 11%;
   display: flex;
   align-items: center;
   justify-content: center;
