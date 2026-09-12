@@ -8,7 +8,9 @@ from PIL import Image
 ROOT = os.path.dirname(os.path.abspath(__file__))
 EXT = (".jpg", ".jpeg", ".png", ".webp", ".gif")
 sizes = {}
-for dirpath, _, files in os.walk(os.path.join(ROOT, "assets")):
+SKIP_DIRS = {"_원본백업", "_oldbg"}
+for dirpath, dirnames, files in os.walk(os.path.join(ROOT, "assets")):
+    dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
     for f in sorted(files):
         if not f.lower().endswith(EXT):
             continue

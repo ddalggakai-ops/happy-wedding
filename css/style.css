@@ -499,7 +499,7 @@ body {
 .lt__tag {
   position: absolute;
   z-index: 4;
-  font-family: "NanumSquare", "Nanum Gothic", var(--kr);
+  font-family: var(--kr);   /* 예전엔 NanumSquare를 따로 받아왔지만, 한 곳에만 쓰여 본문 폰트로 통일 */
   font-size: 15px;
   font-weight: 700;
   letter-spacing: .02em;
