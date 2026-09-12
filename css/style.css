@@ -2044,3 +2044,69 @@ body.dayof .invitation > .snap,
 body.dayof .invitation > footer.footer { display: block; }
 body.dayof .invitation > section.share { display: none; }
 body.dayof .modal--rsvp { display: none !important; }
+
+/* ═══════════ 포토 빙고 — 핑크 레이스 배경 (청첩장 안 미리보기 전용) ═══════════
+   앞뒤 섹션이 모두 어두워서, 여기만 밝게 만들어 눈에 띄게 합니다.
+   bingo.html 의 빙고판은 그대로 어두운 톤을 유지하므로 .snap--invite 로만 한정합니다. */
+.snap--invite {
+  background: #fbe4ea url("../assets/snap-lace.jpg") center top / 100% auto repeat-y;
+  color: #4a2b34;
+}
+.snap--invite .section__label { color: #b8465f; }
+.snap--invite .section__title { color: #3a212a; }
+.snap--invite .section__title::after { background: #b8465f; }
+.snap--invite .snap__desc { color: #7a4f5b; }
+.snap--invite .bingo-cell {
+  background: rgba(255, 255, 255, .9);
+  border-color: rgba(150, 70, 95, .15);
+  box-shadow: 0 6px 16px rgba(150, 70, 95, .12);
+}
+.snap--invite .bingo-cell__text { color: #7a4f5b; }
+.snap--invite .bingo__go-note { color: #8a5a67; opacity: 1; }
+
+/* 경품 추첨 배지 — 제목보다 먼저 눈에 들어오게 */
+.snap__prize {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 6px 15px 7px;
+  border-radius: 999px;
+  background: #fff;
+  color: #c14a62;
+  border: 1px solid rgba(200, 90, 120, .28);
+  font-family: var(--kr);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  box-shadow: 0 4px 12px rgba(150, 70, 95, .18);
+}
+
+/* 분홍 바탕에서는 연분홍 버튼이 묻혀서, 한 톤 진한 장미색으로 */
+.snap--invite .bingo__go.btn--fill {
+  background: #d4566f;
+  border-color: #d4566f;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(190, 70, 100, .28);
+}
+.snap--invite .bingo__go.btn--fill:hover { background: #c14a62; border-color: #c14a62; }
+
+/* 버튼에서 핑크 링이 잠깐 퍼지게 — 화면에 들어올 때 세 번만 */
+.snap--invite .bingo__go { position: relative; }
+.snap--invite .bingo__go::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid #d4566f;
+  opacity: 0;
+  pointer-events: none;
+}
+.snap--invite .bingo__go.is-visible::after {
+  animation: snap-ring 1.7s ease-out .7s 3;
+}
+@keyframes snap-ring {
+  0%        { transform: scale(1);    opacity: .6; }
+  70%, 100% { transform: scale(1.16); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .snap--invite .bingo__go.is-visible::after { animation: none; }
+}
