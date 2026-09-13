@@ -1659,6 +1659,7 @@ textarea { resize: none; }
   line-height: 1.35;
   color: var(--ink-light);
   word-break: keep-all;
+  white-space: pre-line;   /* 설정 파일에서 \n 을 넣으면 그 자리에서 줄이 바뀝니다 */
 }
 .bingo-cell__img {
   position: absolute;
