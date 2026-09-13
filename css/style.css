@@ -1597,10 +1597,36 @@ textarea { resize: none; }
 }
 
 /* --- 3×3 미션 판 --- */
+/* 빙고판 — 진짜 빙고 카드처럼 이중선 틀을 두르고, 위쪽에 BINGO 글자를 얹습니다 */
 .bingo__grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 7px;
+  margin-top: 16px;
+  padding: 14px;
+  border: 2.5px solid #cf7d92;
+  border-radius: 16px;
+  background: rgba(255, 253, 248, .55);
+  /* 안쪽에 얇은 선을 한 겹 더 — 인쇄한 카드 느낌 */
+  box-shadow: inset 0 0 0 4px rgba(255, 253, 248, .9),
+              inset 0 0 0 5px rgba(207, 125, 146, .45);
+}
+.bingo__grid::before {
+  content: "B I N G O";
+  position: absolute;
+  left: 50%;
+  top: -1px;
+  transform: translate(-50%, -50%);
+  padding: 2px 14px;
+  font-family: var(--en);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  color: #b8546c;
+  /* 글자 뒤로 선이 지나가지 않도록 종이 바탕을 깔아 가립니다 (섹션과 같은 종이결) */
+  background: #f4f1ea url("../assets/paper-bg.jpg") top left / 300px auto repeat;
+  white-space: nowrap;
 }
 .bingo-cell {
   position: relative;
