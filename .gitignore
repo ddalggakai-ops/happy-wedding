@@ -6,3 +6,4 @@ node_modules/
 _to_delete/
 auto-push.bat
 dist/
+commit-request.txt
