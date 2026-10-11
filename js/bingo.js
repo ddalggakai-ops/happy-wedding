@@ -394,7 +394,8 @@
     $("#bingo-desc").innerHTML = String(B.desc || "").replace(/\n/g, "<br/>");
     $("#bingo-note").innerHTML =
       "담은 사진은 자동 저장되어 새로고침해도 남아 있습니다.<br/>"
-      + "사진은 신랑·신부의 구글 드라이브에만 저장되며, 연락처는 경품 안내 외에는 사용하지 않습니다."
+      + "사진은 신랑·신부의 구글 드라이브에만 저장되며,<br/>"
+      + "연락처는 경품 안내 외에는 사용하지 않습니다."
       + (B.prize ? "<br/>" + B.prize : "");
 
     const grid = $("#bingo-grid");
