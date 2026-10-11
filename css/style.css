@@ -1210,18 +1210,6 @@ body {
 }
 .acc-card__num.is-copied svg { color: var(--accent); }
 
-/* ═══════════ 8. RSVP ═══════════ */
-.rsvp__desc {
-  font-size: 14px;
-  color: var(--ink-light);
-  margin-bottom: 28px;
-}
-.rsvp__form, .guestbook__form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  text-align: left;
-}
 .form-row { display: flex; gap: 10px; }
 .form-row--pair .chip { flex: 1; }
 .chip {
@@ -1264,12 +1252,6 @@ input[type="text"], input[type="number"], input[type="tel"], input[type="passwor
 }
 input:focus, textarea:focus { border-color: var(--accent); }
 textarea { resize: none; }
-.rsvp__done {
-  margin-top: 20px;
-  font-family: var(--serif);
-  color: var(--accent-deep);
-  font-size: 15px;
-}
 
 /* ═══════════ 9. 방명록 ═══════════ */
 .guestbook { background: var(--bg-soft); }
@@ -1467,82 +1449,9 @@ textarea { resize: none; }
 }
 .modal__close { margin-top: 20px; }
 
-/* 참석 의사 전달 팝업 */
-.modal--rsvp { background: rgba(0, 0, 0, .82); }
-.modal__panel--rsvp {
-  position: relative;
-  max-width: 340px;
-  text-align: center;
-  max-height: 92svh;
-  overflow-y: auto;
-  background: #171315;
-  border: 1px solid rgba(250, 137, 163, .45);
-  border-radius: 20px;
-  /* 작은 화면에서도 스크롤 없이 한 번에 보이도록 여백을 줄였습니다 */
-  padding: 18px 18px 18px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, .7), 0 0 0 6px rgba(250, 137, 163, .07);
-}
-.modal__panel--rsvp .section__label { margin-bottom: 3px; font-size: 12px; }
-.modal__panel--rsvp .modal__title { margin-bottom: 8px; font-size: 18px; }
-.modal__panel--rsvp .rsvp__desc { font-size: 12.5px; line-height: 1.6; margin-bottom: 14px; }
 
 /* 질문별로 묶어서 고르기 쉽게 */
-.rsvp__field { text-align: left; }
-.rsvp__field + .rsvp__field { margin-top: 10px; }
-.rsvp__field[hidden] { display: none; }
-.rsvp__q {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 5px;
-  letter-spacing: .01em;
-}
-.rsvp__q--gap { margin-top: 10px; }
-.rsvp__form .chip span { padding: 9px 0; font-size: 13.5px; }
-.rsvp__submit { margin-top: 14px; padding: 11px 26px; }
-.modal__panel--rsvp .rsvp__form { gap: 8px; }
-.modal__panel--rsvp input[type="text"] { padding: 9px 12px; font-size: 13.5px; }
-.modal__panel--rsvp .stepper { padding: 4px; }
-.modal__panel--rsvp .stepper__btn { width: 38px; height: 32px; font-size: 18px; }
-.modal__panel--rsvp .stepper__value { font-size: 13.5px; }
-.modal__panel--rsvp .stepper__value b { font-size: 16px; }
-/* 화면이 짧은 기기(구형 폰 등)에서는 설명을 접고 여백을 더 줄여 한 번에 다 보이게 */
-@media (max-height: 720px) {
-  .modal__panel--rsvp { padding: 14px 16px; }
-  .modal__panel--rsvp .rsvp__desc { display: none; }
-  .modal__panel--rsvp .modal__title { margin-bottom: 10px; }
-  .rsvp__field + .rsvp__field { margin-top: 8px; }
-  .rsvp__form .chip span { padding: 8px 0; }
-  .modal__panel--rsvp input[type="text"] { padding: 8px 12px; }
-  .modal__panel--rsvp .stepper__btn { height: 30px; }
-  .rsvp__submit { margin-top: 11px; padding: 10px 26px; }
-}
 
-/* 인원 선택 */
-.stepper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  border-radius: 12px;
-  padding: 6px;
-}
-.stepper__btn {
-  width: 42px;
-  height: 38px;
-  border: 0;
-  border-radius: 9px;
-  background: rgba(250, 137, 163, .16);
-  color: var(--accent-deep);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-}
-.stepper__btn:disabled { opacity: .3; cursor: default; }
-.stepper__value { flex: 1; text-align: center; font-size: 15px; color: var(--ink-light); }
-.stepper__value b { font-size: 18px; font-weight: 700; color: var(--ink); margin-right: 2px; }
 .modal__x {
   position: absolute;
   top: 8px; right: 12px;
@@ -2080,12 +1989,6 @@ body.no-scroll { overflow: hidden; height: 100vh; }
   .splash__photo { --fw: min(78vw, 440px, calc(78svh * 0.7227)); }
   .bgm-btn { width: 50px; height: 50px; top: 22px; right: 22px; }
   .bgm-btn svg { width: 19px; height: 19px; }
-  .modal__panel--rsvp { max-width: 390px; }
-  .modal__panel--rsvp .modal__title { font-size: 20px; }
-  .modal__panel--rsvp .rsvp__desc { font-size: 13.5px; }
-  .rsvp__q { font-size: 13.5px; }
-  .rsvp__form .chip span { padding: 11px 0; font-size: 15px; }
-  .modal__panel--rsvp input[type="text"] { font-size: 14.5px; padding: 11px 14px; }
   .toast { font-size: 15px; padding: 13px 22px; }
   .splash__open { font-size: 15.5px; padding: 14px 40px; }
 }
@@ -2148,7 +2051,6 @@ body.dayof .invitation > .info,
 body.dayof .invitation > .snap,
 body.dayof .invitation > footer.footer { display: block; }
 body.dayof .invitation > section.share { display: none; }
-body.dayof .modal--rsvp { display: none !important; }
 
 /* ═══════════ 포토 빙고 — 핑크 레이스 배경 (청첩장 안 미리보기 전용) ═══════════
    앞뒤 섹션이 모두 어두워서, 여기만 밝게 만들어 눈에 띄게 합니다.

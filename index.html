@@ -261,57 +261,6 @@
   <!-- ═══════════ 연락하기 모달 ═══════════ -->
   <!-- ═══════════ 토스트 알림 ═══════════ -->
 
-  <!-- ═══════════ 참석 의사 전달 (오시는 길을 지나면 팝업) ═══════════ -->
-  <div class="modal modal--rsvp" id="rsvp-modal" hidden>
-    <div class="modal__panel modal__panel--rsvp">
-      <button type="button" class="modal__x" id="rsvp-x" aria-label="닫기">×</button>
-      <p class="section__label">RSVP</p>
-      <h2 class="modal__title">참석 의사 전달</h2>
-<p class="rsvp__desc">참석 여부를 미리 알려주시면<br/>정성껏 준비하여 모시겠습니다.</p>
-      <form id="rsvp-form" class="rsvp__form">
-        <div class="rsvp__field">
-          <p class="rsvp__q">참석하실 수 있나요?</p>
-          <div class="form-row form-row--pair">
-            <label class="chip"><input type="radio" name="rsvp-attend" value="참석" checked /><span>참석할게요</span></label>
-            <label class="chip"><input type="radio" name="rsvp-attend" value="불참" /><span>어려울 것 같아요</span></label>
-          </div>
-        </div>
-
-        <div class="rsvp__field">
-          <p class="rsvp__q">어느 쪽 하객이신가요?</p>
-          <div class="form-row form-row--pair">
-            <label class="chip"><input type="radio" name="rsvp-side" value="신랑측" checked /><span>신랑측</span></label>
-            <label class="chip"><input type="radio" name="rsvp-side" value="신부측" /><span>신부측</span></label>
-          </div>
-        </div>
-
-        <div class="rsvp__field">
-          <p class="rsvp__q">성함을 알려주세요</p>
-          <input type="text" id="rsvp-name" placeholder="예) 김철수" maxlength="20" required />
-        </div>
-
-        <div class="rsvp__field" id="rsvp-only-attend">
-          <p class="rsvp__q">몇 분이 함께 오시나요?</p>
-          <div class="stepper">
-            <button type="button" class="stepper__btn" id="rsvp-minus" aria-label="한 명 줄이기">−</button>
-            <span class="stepper__value"><b id="rsvp-count-label">1</b>명</span>
-            <button type="button" class="stepper__btn" id="rsvp-plus" aria-label="한 명 늘리기">+</button>
-          </div>
-          <input type="hidden" id="rsvp-count" value="1" />
-
-          <p class="rsvp__q rsvp__q--gap">식사도 하고 가시나요?</p>
-          <div class="form-row form-row--pair">
-            <label class="chip"><input type="radio" name="rsvp-meal" value="식사함" checked /><span>식사할게요</span></label>
-            <label class="chip"><input type="radio" name="rsvp-meal" value="식사안함" /><span>안 할게요</span></label>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn--fill rsvp__submit">참석 의사 보내기</button>
-      </form>
-      <p class="rsvp__done" id="rsvp-done" hidden>소중한 마음 감사히 전달받았습니다 ♥</p>
-        </div>
-  </div>
-
   <div class="toast" id="toast" hidden></div>
 
   <!-- 카카오 SDK는 공유 버튼이 가까워질 때 js/main.js 가 직접 불러옵니다 (초기 로딩 단축) -->
